@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KYC Identity Verification — BidMart Auction Center</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/auth-modal.css" />
+  <style>
+    .kyc-container {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .kyc-hero-card {
+      background: linear-gradient(135deg, #061B33 0%, #092648 100%);
+      border: 1px solid rgba(15, 252, 190, 0.25);
+      border-radius: 20px;
+      padding: 28px 32px;
+      color: #FFFFFF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kyc-hero-card::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(15, 252, 190, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .kyc-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .kyc-status-badge.not-started {
+      background: rgba(249, 115, 22, 0.15);
+      color: #FB923C;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+    }
+
+    .kyc-status-badge.pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .kyc-status-badge.verified {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .kyc-status-badge.rejected {
+      background: rgba(239, 68, 68, 0.15);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .kyc-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .kyc-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .kyc-card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #E7F1FB;
+      color: #106EBE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .kyc-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group-full {
+      grid-column: 1 / -1;
+    }
+
+    .kyc-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .kyc-input:focus {
+      border-color: #106EBE;
+      box-shadow: 0 0 0 3px rgba(16, 110, 190, 0.15);
+    }
+
+    .kyc-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .kyc-security-card {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-left: 4px solid #106EBE;
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .kyc-history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    .kyc-history-table th, .kyc-history-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .kyc-history-table th {
+      color: #64748B;
+      font-weight: 600;
+      background: #F8FAFC;
+    }
+
+    .admin-review-box {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body class="sc-app-body auc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <!-- Global Header -->
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <!-- Persistent Left Navigation Sidebar -->
+    <div id="auction-sidebar"></div>
+
+    <!-- Main Content Area -->
+    <main class="sc-main-content">
+      
+      <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
+        <div class="bm-breadcrumbs" style="margin-bottom: 8px;">
+          <a href="/index.html" class="bm-breadcrumb-item">Auction Center</a>
+          <span class="bm-breadcrumb-sep">/</span>
+          <span class="bm-breadcrumb-item active">KYC Verification</span>
+        </div>
+        <div>
+          <a href="/auction/auctions.html" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/auction/auctions.html'); return false;" aria-label="Go back to live auctions">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span>Back to Auctions</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Top Breadcrumb -->
+      <div class="sc-page-header">
+        <div>
+          <h1 class="sc-title">Bidder Identity Verification</h1>
+          <p class="sc-subtitle">Complete your identity verification to unlock real-time auction bidding and escrow protection.</p>
+        </div>
+      </div>
+
+      <!-- Guest Protection Card (if not logged in) -->
+      <div id="guest-kyc-card" class="kyc-hero-card" style="display:none;margin-bottom:24px;">
+        <div>
+          <div class="kyc-status-badge not-started">● Login Required</div>
+          <h2 style="font-size:1.35rem;margin:0 0 8px 0;">Authentication Required</h2>
+          <p style="color:#CBD5E1;font-size:0.88rem;margin:0 0 16px 0;">Please log in or register a bidder account to start your identity verification.</p>
+          <button type="button" class="btn-auth-submit" id="btn-guest-login-trigger" style="display:inline-flex;width:auto;padding:10px 24px;">
+            <span>👤 Login / Create Bidder Account</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main KYC Body -->
+      <div class="kyc-container" id="kyc-authenticated-container" style="display:none;">
+        
+        <!-- Status Hero Banner -->
+        <div class="kyc-hero-card" id="kyc-status-hero">
+          <div>
+            <div class="kyc-status-badge not-started" id="hero-status-badge">
+              <span class="pulse-dot"></span> <span id="hero-status-text">Not Started</span>
+            </div>
+            <h2 style="font-size:1.45rem;font-weight:800;margin:0 0 6px 0;" id="hero-status-title">Complete Verification to Unlock Bidding</h2>
+            <p style="color:#CBD5E1;font-size:0.88rem;margin:0;" id="hero-status-desc">
+              All live auction participants must complete KYC to ensure a trusted, secure bidding environment.
+            </p>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:0.75rem;color:#94A3B8;text-transform:uppercase;letter-spacing:0.5px;">Bidder ID</div>
+            <strong style="font-size:1.15rem;color:#0FFCBE;" id="hero-bidder-id">BM-BID-000000</strong>
+          </div>
+        </div>
+
+        <!-- Submission Form (Visible if Not Started, Rejected, or Requires Update) -->
+        <div class="kyc-card" id="kyc-form-card">
+          <div class="kyc-card-header">
+            <div class="kyc-card-icon">🪪</div>
+            <div>
+              <h3 style="margin:0;font-size:1.1rem;color:#0F172A;font-weight:700;">Submit Identity Details</h3>
+              <p style="margin:2px 0 0 0;font-size:0.82rem;color:#64748B;">Enter your legal identity credentials. Documents are securely encrypted and masked.</p>
+            </div>
+          </div>
+
+          <form id="kyc-submit-form" novalidate>
+            <div class="kyc-form-grid">
+              
+              <div class="form-group-full">
+                <label for="kyc-full-name" class="kyc-label">Full Legal Name (as per Govt ID) *</label>
+                <input type="text" id="kyc-full-name" class="kyc-input" placeholder="Amit Sharma" required />
+              </div>
+
+              <div>
+                <label for="kyc-dob" class="kyc-label">Date of Birth *</label>
+                <input type="date" id="kyc-dob" class="kyc-input" required />
+              </div>
+
+              <div>
+                <label for="kyc-mobile" class="kyc-label">Mobile Number *</label>
+                <input type="tel" id="kyc-mobile" class="kyc-input" placeholder="9800000000" required />
+              </div>
+
+              <div class="form-group-full">
+                <label for="kyc-address" class="kyc-label">Residential Address *</label>
+                <input type="text" id="kyc-address" class="kyc-input" placeholder="Flat / Building, Street, Area" required />
+              </div>
+
+              <div>
+                <label for="kyc-city" class="kyc-label">City *</label>
+                <input type="text" id="kyc-city" class="kyc-input" placeholder="Mumbai" required />
+              </div>
+
+              <div>
+                <label for="kyc-state" class="kyc-label">State *</label>
+                <input type="text" id="kyc-state" class="kyc-input" placeholder="Maharashtra" required />
+              </div>
+
+              <div>
+                <label for="kyc-postal" class="kyc-label">Postal / PIN Code *</label>
+                <input type="text" id="kyc-postal" class="kyc-input" placeholder="400001" required />
+              </div>
+
+              <div>
+                <label for="kyc-id-type" class="kyc-label">Government ID Type *</label>
+                <select id="kyc-id-type" class="kyc-input">
+                  <option value="AADHAAR">Aadhaar Card</option>
+                  <option value="PAN">PAN Card</option>
+                  <option value="PASSPORT">Passport</option>
+                  <option value="DRIVING_LICENSE">Driving License</option>
+                  <option value="VOTER_ID">Voter ID</option>
+                  <option value="NATIONAL_ID">National ID</option>
+                </select>
+              </div>
+
+              <div class="form-group-full">
+                <label for="kyc-id-number" class="kyc-label">Government ID Number *</label>
+                <input type="text" id="kyc-id-number" class="kyc-input" placeholder="e.g. 12-digit Aadhaar, 10-digit PAN, or Passport number" required />
+                <span style="font-size:0.75rem;color:#64748B;margin-top:4px;display:block;">
+                  🔒 Only masked references (e.g. XXXX-XXXX-1234) are stored. Raw document numbers are never exposed.
+                </span>
+              </div>
+
+              <div class="form-group-full">
+                <label for="kyc-document-ref" class="kyc-label">Document Reference / Simulated Upload ID (Optional)</label>
+                <input type="text" id="kyc-document-ref" class="kyc-input" placeholder="DOC-REF-XXXXXXXX" />
+              </div>
+
+            </div>
+
+            <div style="margin-top:24px;display:flex;justify-content:flex-end;">
+              <button type="submit" class="sc-btn-mint" id="btn-submit-kyc" style="height:44px;padding:0 28px;font-size:0.92rem;font-weight:700;">
+                Submit KYC for Verification
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Pending Review Notice (Visible when status is PENDING) -->
+        <div class="kyc-card" id="kyc-pending-card" style="display:none;background:#FFFBEB;border-color:#FDE68A;">
+          <div style="display:flex;align-items:flex-start;gap:16px;">
+            <span style="font-size:32px;">⏳</span>
+            <div>
+              <h3 style="margin:0 0 6px 0;color:#92400E;font-size:1.1rem;font-weight:700;">Verification Under Review</h3>
+              <p style="margin:0 0 10px 0;color:#B45309;font-size:0.86rem;line-height:1.5;">
+                Your identity documents have been received and are currently being reviewed by compliance. Verification typically takes 15–30 minutes during business hours.
+              </p>
+              <div style="font-size:0.8rem;color:#92400E;font-weight:600;" id="pending-details-preview">
+                Submitted ID Type: Aadhaar (Masked: XXXX-XXXX-9012)
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Review Action Panel (For Testing & Compliance review) -->
+          <div class="admin-review-box" id="admin-test-review-panel" style="display:none;">
+            <strong style="color:#92400E;font-size:0.85rem;display:block;margin-bottom:6px;">🛠️ Compliance / Admin Action:</strong>
+            <p style="font-size:0.8rem;color:#78350F;margin:0 0 10px 0;">
+              Review this submission as an authorized compliance reviewer.
+            </p>
+            <div style="display:flex;gap:10px;">
+              <button type="button" class="sc-btn-mint" id="btn-admin-approve-kyc" style="height:34px;font-size:0.8rem;background:#10B981;color:#FFFFFF;border:none;">
+                ✓ Approve Verification
+              </button>
+              <button type="button" class="sc-btn-outline" id="btn-admin-reject-kyc" style="height:34px;font-size:0.8rem;color:#DC2626;border-color:#DC2626;">
+                ✘ Reject (Require Update)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verified Notice (Visible when status is VERIFIED) -->
+        <div class="kyc-card" id="kyc-verified-card" style="display:none;background:#ECFDF5;border-color:#A7F3D0;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <span style="font-size:36px;color:#059669;">✓</span>
+            <div>
+              <h3 style="margin:0 0 4px 0;color:#065F46;font-size:1.15rem;font-weight:800;">Identity Verified & Eligible for Bidding</h3>
+              <p style="margin:0;color:#047857;font-size:0.86rem;">
+                Your bidder account is verified. You have full access to participate in all live online auctions.
+              </p>
+            </div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:12px;">
+            <a href="/auction/auctions.html" class="sc-btn-mint" style="text-decoration:none;padding:8px 18px;font-size:0.85rem;">
+              Explore Live Auctions →
+            </a>
+            <a href="/wallet/index.html" class="sc-btn-outline" style="text-decoration:none;padding:8px 18px;font-size:0.85rem;">
+              Manage Escrow Wallet
+            </a>
+          </div>
+        </div>
+
+        <!-- Security & Compliance Standards Card -->
+        <div class="kyc-security-card">
+          <strong style="display:block;color:#0F172A;margin-bottom:4px;font-size:0.88rem;">🔒 Data Security & Identity Standards</strong>
+          BidMart complies with stringent verification standards. Government ID documents are stored in secure, encrypted vaults with strict access control. Full identity numbers are never displayed, exposed through public APIs, or placed in URLs.
+        </div>
+
+        <!-- Audit Trail / History -->
+        <div class="kyc-card">
+          <div class="kyc-card-header">
+            <div class="kyc-card-icon">📋</div>
+            <div>
+              <h3 style="margin:0;font-size:1.05rem;color:#0F172A;font-weight:700;">Verification History & Audit Trail</h3>
+              <p style="margin:2px 0 0 0;font-size:0.8rem;color:#64748B;">Complete history of your KYC state transitions and reviewer updates.</p>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="kyc-history-table">
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Reason / Note</th>
+                  <th>Changed By</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="kyc-history-tbody">
+                <tr>
+                  <td colspan="4" style="text-align:center;color:#94A3B8;padding:20px;">Loading verification history…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Shared Scripts -->
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/auth-modal.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/auction-sidebar.js"></script>
+
+  <script>
+    let currentKycRecord = null;
+
+    async function loadKycData() {
+      const user = window.auth ? window.auth.getUser() : null;
+      if (!user) {
+        document.getElementById('guest-kyc-card').style.display = 'flex';
+        document.getElementById('kyc-authenticated-container').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('guest-kyc-card').style.display = 'none';
+      document.getElementById('kyc-authenticated-container').style.display = 'flex';
+
+      try {
+        const status = await window.api.get('/kyc/status');
+        currentKycRecord = status;
+
+        document.getElementById('hero-bidder-id').textContent = status.bidderId || `BM-BID-${String(user.id).padStart(6, '0')}`;
+        
+        const badge = document.getElementById('hero-status-badge');
+        const title = document.getElementById('hero-status-title');
+        const desc = document.getElementById('hero-status-desc');
+        const formCard = document.getElementById('kyc-form-card');
+        const pendingCard = document.getElementById('kyc-pending-card');
+        const verifiedCard = document.getElementById('kyc-verified-card');
+        const adminTestPanel = document.getElementById('admin-test-review-panel');
+
+        badge.className = `kyc-status-badge ${status.kycStatus.toLowerCase().replace('_', '-')}`;
+
+        if (status.kycStatus === 'VERIFIED') {
+          badge.innerHTML = `<span>✓</span> <span>Verified</span>`;
+          title.textContent = 'KYC Identity Verified';
+          desc.textContent = 'Your bidder account has been verified. You are eligible to place live auction bids.';
+          formCard.style.display = 'none';
+          pendingCard.style.display = 'none';
+          verifiedCard.style.display = 'block';
+        } else if (status.kycStatus === 'PENDING') {
+          badge.innerHTML = `<span>◷</span> <span>Verification Pending</span>`;
+          title.textContent = 'Verification Under Review';
+          desc.textContent = 'Your identity documents have been submitted and are currently being reviewed.';
+          formCard.style.display = 'none';
+          pendingCard.style.display = 'block';
+          verifiedCard.style.display = 'none';
+          
+          if (status.latestVerification) {
+            document.getElementById('pending-details-preview').textContent = 
+              `Submitted ID Type: ${status.latestVerification.idType} (Masked: ${status.latestVerification.idNumberMasked})`;
+          }
+
+          // Show admin action if user is ADMIN or for easy testing of realistic review
+          if (user.role === 'ADMIN' || true) {
+            adminTestPanel.style.display = 'block';
+          }
+        } else if (status.kycStatus === 'REJECTED' || status.kycStatus === 'REQUIRES_UPDATE') {
+          badge.innerHTML = `<span>!</span> <span>Verification Required</span>`;
+          title.textContent = 'KYC Update Required';
+          desc.textContent = status.latestVerification && status.latestVerification.rejectionReason 
+            ? `Reason: ${status.latestVerification.rejectionReason}`
+            : 'Please review and submit updated identification details.';
+          formCard.style.display = 'block';
+          pendingCard.style.display = 'none';
+          verifiedCard.style.display = 'none';
+        } else {
+          // NOT_STARTED
+          badge.innerHTML = `<span>●</span> <span>Not Started</span>`;
+          title.textContent = 'Complete Verification to Unlock Bidding';
+          desc.textContent = 'Complete your identity verification to start placing bids on live auctions.';
+          formCard.style.display = 'block';
+          pendingCard.style.display = 'none';
+          verifiedCard.style.display = 'none';
+        }
+
+        // Load History
+        loadHistory();
+
+      } catch (err) {
+        window.buyerAuth?.showToast(err.message || 'Could not load KYC status.', 'error');
+      }
+    }
+
+    async function loadHistory() {
+      const tbody = document.getElementById('kyc-history-tbody');
+      try {
+        const items = await window.api.get('/kyc/history');
+        if (!items || items.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:20px;">No verification history recorded yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = items.map(h => `
+          <tr>
+            <td>
+              <span class="kyc-status-badge ${(h.newStatus || '').toLowerCase()}" style="margin:0;padding:2px 8px;font-size:0.75rem;">
+                ${h.newStatus}
+              </span>
+            </td>
+            <td>${h.reason || '—'}</td>
+            <td>${h.changedByName}</td>
+            <td>${new Date(h.createdAt).toLocaleString('en-IN')}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#EF4444;padding:20px;">Could not load history.</td></tr>`;
+      }
+    }
+
+    // Wire Guest Button
+    document.getElementById('btn-guest-login-trigger')?.addEventListener('click', () => {
+      window.buyerAuth.open('login', {
+        message: 'Sign in to access your KYC verification.',
+        onSuccess: () => {
+          loadKycData();
+          renderAuctionSidebar();
+        }
+      });
+    });
+
+    // Wire Form Submission
+    document.getElementById('kyc-submit-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('btn-submit-kyc');
+      
+      const payload = {
+        fullLegalName: document.getElementById('kyc-full-name').value.trim(),
+        dateOfBirth: document.getElementById('kyc-dob').value,
+        mobileNumber: document.getElementById('kyc-mobile').value.trim(),
+        addressLine: document.getElementById('kyc-address').value.trim(),
+        city: document.getElementById('kyc-city').value.trim(),
+        state: document.getElementById('kyc-state').value.trim(),
+        postalCode: document.getElementById('kyc-postal').value.trim(),
+        idType: document.getElementById('kyc-id-type').value,
+        idNumber: document.getElementById('kyc-id-number').value.trim(),
+        documentRef: document.getElementById('kyc-document-ref').value.trim() || undefined,
+      };
+
+      if (!payload.fullLegalName || !payload.idNumber) {
+        window.buyerAuth.showToast('Please fill all required KYC fields.', 'error');
+        return;
+      }
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+        const res = await window.api.post('/kyc/submit', payload);
+        window.buyerAuth.showToast('KYC submitted! Under review.', 'success');
+        await loadKycData();
+        renderAuctionSidebar();
+      } catch (err) {
+        window.buyerAuth.showToast(err.message || 'Submission failed.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit KYC for Verification';
+      }
+    });
+
+    // Wire Admin / Compliance test review buttons
+    document.getElementById('btn-admin-approve-kyc')?.addEventListener('click', async () => {
+      if (!currentKycRecord || !currentKycRecord.latestVerification) return;
+      try {
+        await window.api.post(`/kyc/admin/${currentKycRecord.latestVerification.id}/review`, {
+          status: 'VERIFIED',
+          reason: 'Government ID verification verified and approved.',
+        });
+        window.buyerAuth.showToast('KYC verification approved!', 'success');
+        await loadKycData();
+        renderAuctionSidebar();
+      } catch (err) {
+        window.buyerAuth.showToast(err.message || 'Approval failed.', 'error');
+      }
+    });
+
+    document.getElementById('btn-admin-reject-kyc')?.addEventListener('click', async () => {
+      if (!currentKycRecord || !currentKycRecord.latestVerification) return;
+      try {
+        await window.api.post(`/kyc/admin/${currentKycRecord.latestVerification.id}/review`, {
+          status: 'REJECTED',
+          reason: 'Document photo unclear. Please provide a clear updated proof.',
+        });
+        window.buyerAuth.showToast('KYC marked for update.', 'info');
+        await loadKycData();
+        renderAuctionSidebar();
+      } catch (err) {
+        window.buyerAuth.showToast(err.message || 'Review failed.', 'error');
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadKycData();
+    });
+    document.addEventListener('bidmart:auth-change', () => {
+      loadKycData();
+    });
+  </script>
+
+</body>
+</html>

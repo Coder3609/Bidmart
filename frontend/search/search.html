@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="container">
+    <div class="page-head">
+      <h1 id="page-title">Search</h1>
+      <span class="text-muted" id="result-count"></span>
+    </div>
+
+    <div class="search-tabs" id="search-tabs">
+      <button data-tab="products" class="active">Products</button>
+      <button data-tab="auctions">Auctions</button>
+    </div>
+
+    <div class="search-layout">
+      <aside class="card filter-panel" id="filter-panel"></aside>
+
+      <div>
+        <div class="grid-4" id="result-grid">
+          <p class="text-muted">Loading…</p>
+        </div>
+        <div style="display:flex;justify-content:center;gap:10px;margin-top:32px;" id="pagination"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/product-card.js"></script>
+  <script src="/shared/auction-card.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const state = {
+      tab: 'products',
+      q: params.get('q') || '',
+      page: 1,
+      categoryId: '',
+      // product filters
+      minPrice: '', maxPrice: '', brand: '', condition: '', availability: '',
+      // auction filters
+      minBid: '', maxBid: '', endingSoon: false,
+      sort: '',
+    };
+
+    let categories = [];
+
+    function categoryOptions() {
+      return `<option value="">All categories</option>` +
+        categories.filter((c) => c.parent_id === null)
+          .map((c) => `<option value="${c.id}" ${String(c.id) === state.categoryId ? 'selected' : ''}>${c.name}</option>`)
+          .join('');
+    }
+
+    function renderFilterPanel() {
+      const panel = document.getElementById('filter-panel');
+      if (state.tab === 'products') {
+        panel.innerHTML = `
+          <h4>Filters</h4>
+          <div class="form-group"><label>Category</label>
+            <select id="f-category">${categoryOptions()}</select>
+          </div>
+          <div class="form-group"><label>Min Price (₹)</label><input type="number" id="f-minPrice" value="${state.minPrice}" min="0" /></div>
+          <div class="form-group"><label>Max Price (₹)</label><input type="number" id="f-maxPrice" value="${state.maxPrice}" min="0" /></div>
+          <div class="form-group"><label>Brand</label><input type="text" id="f-brand" value="${state.brand}" /></div>
+          <div class="form-group"><label>Condition</label>
+            <select id="f-condition">
+              <option value="">Any</option>
+              <option value="NEW" ${state.condition === 'NEW' ? 'selected' : ''}>New</option>
+              <option value="LIKE_NEW" ${state.condition === 'LIKE_NEW' ? 'selected' : ''}>Like New</option>
+              <option value="USED" ${state.condition === 'USED' ? 'selected' : ''}>Used</option>
+              <option value="REFURBISHED" ${state.condition === 'REFURBISHED' ? 'selected' : ''}>Refurbished</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Availability</label>
+            <select id="f-availability">
+              <option value="">Any</option>
+              <option value="IN_STOCK" ${state.availability === 'IN_STOCK' ? 'selected' : ''}>In stock</option>
+              <option value="OUT_OF_STOCK" ${state.availability === 'OUT_OF_STOCK' ? 'selected' : ''}>Out of stock</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Sort</label>
+            <select id="f-sort">
+              <option value="">${state.q ? 'Relevance' : 'Newest'}</option>
+              <option value="price_asc" ${state.sort === 'price_asc' ? 'selected' : ''}>Price: Low to High</option>
+              <option value="price_desc" ${state.sort === 'price_desc' ? 'selected' : ''}>Price: High to Low</option>
+              <option value="newest" ${state.sort === 'newest' ? 'selected' : ''}>Newest</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="apply-filters" style="width:100%;">Apply Filters</button>
+        `;
+      } else {
+        panel.innerHTML = `
+          <h4>Filters</h4>
+          <div class="form-group"><label>Category</label>
+            <select id="f-category">${categoryOptions()}</select>
+          </div>
+          <div class="form-group"><label>Min Bid (₹)</label><input type="number" id="f-minBid" value="${state.minBid}" min="0" /></div>
+          <div class="form-group"><label>Max Bid (₹)</label><input type="number" id="f-maxBid" value="${state.maxBid}" min="0" /></div>
+          <div class="form-group"><label>Condition</label>
+            <select id="f-condition">
+              <option value="">Any</option>
+              <option value="NEW" ${state.condition === 'NEW' ? 'selected' : ''}>New</option>
+              <option value="LIKE_NEW" ${state.condition === 'LIKE_NEW' ? 'selected' : ''}>Like New</option>
+              <option value="USED" ${state.condition === 'USED' ? 'selected' : ''}>Used</option>
+              <option value="REFURBISHED" ${state.condition === 'REFURBISHED' ? 'selected' : ''}>Refurbished</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="filter-option" style="padding:0;">
+              <input type="checkbox" id="f-endingSoon" ${state.endingSoon ? 'checked' : ''} /> Ending within 24 hours
+            </label>
+          </div>
+          <div class="form-group"><label>Sort</label>
+            <select id="f-sort">
+              <option value="">Ending Soonest</option>
+              <option value="bid_asc" ${state.sort === 'bid_asc' ? 'selected' : ''}>Bid: Low to High</option>
+              <option value="bid_desc" ${state.sort === 'bid_desc' ? 'selected' : ''}>Bid: High to Low</option>
+              <option value="newest" ${state.sort === 'newest' ? 'selected' : ''}>Newest</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="apply-filters" style="width:100%;">Apply Filters</button>
+        `;
+      }
+
+      document.getElementById('apply-filters').addEventListener('click', () => {
+        if (state.tab === 'products') {
+          state.categoryId = document.getElementById('f-category').value;
+          state.minPrice = document.getElementById('f-minPrice').value;
+          state.maxPrice = document.getElementById('f-maxPrice').value;
+          state.brand = document.getElementById('f-brand').value.trim();
+          state.condition = document.getElementById('f-condition').value;
+          state.availability = document.getElementById('f-availability').value;
+          state.sort = document.getElementById('f-sort').value;
+        } else {
+          state.categoryId = document.getElementById('f-category').value;
+          state.minBid = document.getElementById('f-minBid').value;
+          state.maxBid = document.getElementById('f-maxBid').value;
+          state.condition = document.getElementById('f-condition').value;
+          state.endingSoon = document.getElementById('f-endingSoon').checked;
+          state.sort = document.getElementById('f-sort').value;
+        }
+        state.page = 1;
+        loadResults();
+      });
+    }
+
+    async function loadResults() {
+      document.getElementById('page-title').textContent = state.q ? `Search results for "${state.q}"` : (state.tab === 'products' ? 'All Products' : 'All Auctions');
+      const grid = document.getElementById('result-grid');
+      grid.innerHTML = '<p class="text-muted">Loading…</p>';
+
+      try {
+        const p = new URLSearchParams();
+        if (state.q) p.set('q', state.q);
+        if (state.categoryId) p.set('categoryId', state.categoryId);
+        if (state.sort) p.set('sort', state.sort);
+        p.set('page', state.page);
+        p.set('limit', 12);
+
+        let items, pagination, renderer;
+        if (state.tab === 'products') {
+          if (state.minPrice) p.set('minPrice', state.minPrice);
+          if (state.maxPrice) p.set('maxPrice', state.maxPrice);
+          if (state.brand) p.set('brand', state.brand);
+          if (state.condition) p.set('condition', state.condition);
+          if (state.availability) p.set('availability', state.availability);
+          ({ items, pagination } = await window.api.get(`/search/products?${p.toString()}`));
+          renderer = window.shopHelpers.renderProductCard;
+        } else {
+          if (state.minBid) p.set('minBid', state.minBid);
+          if (state.maxBid) p.set('maxBid', state.maxBid);
+          if (state.condition) p.set('condition', state.condition);
+          if (state.endingSoon) p.set('endingSoon', 'true');
+          ({ items, pagination } = await window.api.get(`/search/auctions?${p.toString()}`));
+          renderer = (a) => window.auctionHelpers.renderAuctionCard({ ...a, current_price: a.current_price });
+        }
+
+        document.getElementById('result-count').textContent = `${pagination.total} result(s)`;
+        grid.innerHTML = items.length
+          ? items.map(renderer).join('')
+          : '<div class="empty-state">No results match your search and filters.</div>';
+
+        renderPagination(pagination);
+      } catch (err) {
+        grid.innerHTML = `<p class="text-muted">Could not load results: ${err.message}</p>`;
+      }
+    }
+
+    function renderPagination(pagination) {
+      const container = document.getElementById('pagination');
+      if (pagination.totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+      let buttons = '';
+      for (let i = 1; i <= pagination.totalPages; i++) {
+        buttons += `<button class="btn ${i === pagination.page ? 'btn-primary' : 'btn-ghost'} btn-sm" data-page="${i}">${i}</button>`;
+      }
+      container.innerHTML = buttons;
+      container.querySelectorAll('[data-page]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.page = Number(btn.dataset.page);
+          loadResults();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    document.getElementById('search-tabs').addEventListener('click', (event) => {
+      const btn = event.target.closest('button[data-tab]');
+      if (!btn) return;
+      document.querySelectorAll('#search-tabs button').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.tab = btn.dataset.tab;
+      state.page = 1;
+      state.sort = '';
+      renderFilterPanel();
+      loadResults();
+    });
+
+    (async () => {
+      try {
+        categories = await window.api.get('/categories');
+      } catch { categories = []; }
+      renderFilterPanel();
+      await loadResults();
+    })();
+  </script>
+
+</body>
+</html>

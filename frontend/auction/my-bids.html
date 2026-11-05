@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Bids & Auction Cart — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/auth-modal.css" />
+</head>
+<body class="sc-app-body auc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <!-- Global Header -->
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <!-- Persistent Left Navigation Sidebar -->
+    <div id="auction-sidebar"></div>
+
+    <!-- Main Content Area -->
+    <main class="sc-main-content">
+      
+      <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
+        <div class="bm-breadcrumbs" style="margin-bottom: 8px;">
+          <a href="/index.html" class="bm-breadcrumb-item">Auction Center</a>
+          <span class="bm-breadcrumb-sep">/</span>
+          <span class="bm-breadcrumb-item active">My Bids</span>
+        </div>
+        <div>
+          <a href="/auction/auctions.html" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/auction/auctions.html'); return false;" aria-label="Go back to live auctions">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span>Back to Auctions</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Top Page Header -->
+      <div class="sc-page-header">
+        <div>
+          <h1 class="sc-title">My Bids & Auction Cart</h1>
+          <p class="sc-subtitle">Track your active bids in real-time, counter outbids instantly, and claim your won auctions.</p>
+        </div>
+        <div class="sc-header-actions">
+          <a href="/auction/auctions.html" class="sc-btn-primary" style="text-decoration:none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 16l4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <span>Explore Live Auctions</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 Real Database KPI Summary Cards -->
+      <section class="sc-kpi-grid" style="margin-bottom:24px;">
+        <div class="sc-kpi-card">
+          <div class="sc-kpi-icon" style="background:#EFF6FF;color:#2563EB;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <span class="sc-kpi-label">Total Bids Placed</span>
+          <div class="sc-kpi-value" id="kpi-total-bids">0</div>
+          <div class="sc-kpi-change neutral"><span>Across all auctions</span></div>
+        </div>
+
+        <div class="sc-kpi-card">
+          <div class="sc-kpi-icon" style="background:#ECFDF5;color:#059669;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Currently Winning</span>
+          <div class="sc-kpi-value" id="kpi-winning-bids">0</div>
+          <div class="sc-kpi-change positive"><span>Highest bidder</span></div>
+        </div>
+
+        <div class="sc-kpi-card">
+          <div class="sc-kpi-icon" style="background:#FEF2F2;color:#DC2626;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Outbid (Needs Action)</span>
+          <div class="sc-kpi-value" id="kpi-outbid-bids" style="color:#DC2626;">0</div>
+          <div class="sc-kpi-change" style="color:#DC2626;"><span>Re-bid to reclaim lead</span></div>
+        </div>
+
+        <div class="sc-kpi-card">
+          <div class="sc-kpi-icon" style="background:#FFFBEB;color:#D97706;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <span class="sc-kpi-label">Auctions Won</span>
+          <div class="sc-kpi-value" id="kpi-won-bids" style="color:#D97706;">0</div>
+          <div class="sc-kpi-change positive"><span>Ready for checkout</span></div>
+        </div>
+      </section>
+
+      <!-- Status Tabs & Filter -->
+      <div class="auc-tabs-container">
+        <div class="auc-tabs-list" id="bids-tabs">
+          <button type="button" class="auc-tab-btn active" data-tab="ALL">
+            <span>All Bids</span>
+            <span class="auc-tab-count" id="tab-count-all">0</span>
+          </button>
+          <button type="button" class="auc-tab-btn" data-tab="WINNING">
+            <span>✓ Winning</span>
+            <span class="auc-tab-count" id="tab-count-winning">0</span>
+          </button>
+          <button type="button" class="auc-tab-btn" data-tab="OUTBID">
+            <span>⚠️ Outbid</span>
+            <span class="auc-tab-count" id="tab-count-outbid">0</span>
+          </button>
+          <button type="button" class="auc-tab-btn" data-tab="WON">
+            <span>🏆 Won / Checkout</span>
+            <span class="auc-tab-count" id="tab-count-won">0</span>
+          </button>
+          <button type="button" class="auc-tab-btn" data-tab="LOST">
+            <span>Closed / Lost</span>
+            <span class="auc-tab-count" id="tab-count-lost">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bids Table / Card List -->
+      <div class="sc-card" style="padding:0;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table class="sc-table" id="bids-table">
+            <thead>
+              <tr>
+                <th style="padding-left:24px;">Item Details</th>
+                <th>Your Bid</th>
+                <th>Current Leading Price</th>
+                <th>Bidding Status</th>
+                <th>Time Remaining</th>
+                <th style="text-align:right;padding-right:24px;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="bids-tbody">
+              <tr><td colspan="6" class="text-muted" style="text-align:center;padding:40px;">Loading your bids…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Complete Order / Claim Modal -->
+  <div class="bm-modal-overlay" id="checkout-modal">
+    <div class="bm-modal">
+      <div class="bm-modal-header">
+        <h3 class="bm-modal-title">Complete Your Auction Win</h3>
+        <button type="button" class="bm-modal-close" id="checkout-modal-close">&times;</button>
+      </div>
+      <div class="bm-modal-body">
+        <p class="text-muted" style="font-size:0.85rem;margin-top:0;margin-bottom:16px;" id="checkout-product-title"></p>
+
+        <form id="checkout-form">
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="checkout-address" style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;">Delivery Address</label>
+            <select id="checkout-address" class="auc-filter-select" style="width:100%;" required>
+              <option value="">Loading addresses…</option>
+            </select>
+          </div>
+
+          <details style="margin-bottom:16px;">
+            <summary style="cursor:pointer;font-weight:700;font-size:0.82rem;color:var(--auc-primary);">+ Add New Address</summary>
+            <div id="new-address-form" style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+              <input type="text" id="na-fullName" placeholder="Full Name *" class="auc-quickbid-input" style="height:36px;" />
+              <input type="tel" id="na-phone" placeholder="Phone Number *" class="auc-quickbid-input" style="height:36px;" />
+              <input type="text" id="na-line1" placeholder="Address Line 1 *" class="auc-quickbid-input" style="height:36px;" />
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <input type="text" id="na-city" placeholder="City *" class="auc-quickbid-input" style="height:36px;" />
+                <input type="text" id="na-state" placeholder="State *" class="auc-quickbid-input" style="height:36px;" />
+              </div>
+              <input type="text" id="na-postalCode" placeholder="Postal Code *" class="auc-quickbid-input" style="height:36px;" />
+              <button type="button" class="sc-btn-primary" id="btn-save-new-address" style="height:34px;font-size:0.8rem;justify-content:center;">Save Address</button>
+            </div>
+          </details>
+
+          <div class="form-group" style="margin-bottom:20px;">
+            <label for="checkout-payment-method" style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;">Payment Method</label>
+            <select id="checkout-payment-method" class="auc-filter-select" style="width:100%;">
+              <option value="WALLET">BidMart Escrow Wallet (Direct Release)</option>
+              <option value="COD">Cash on Delivery</option>
+              <option value="CARD">Credit / Debit Card</option>
+              <option value="UPI">UPI Payment</option>
+            </select>
+          </div>
+
+          <button type="submit" class="sc-btn-mint" id="btn-submit-checkout" style="width:100%;height:44px;font-size:0.95rem;justify-content:center;">
+            Confirm Order & Claim Item
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Re-bid Modal -->
+  <div class="bm-modal-overlay" id="rebid-modal">
+    <div class="bm-modal">
+      <div class="bm-modal-header">
+        <h3 class="bm-modal-title">Re-bid to Reclaim Lead</h3>
+        <button type="button" class="bm-modal-close" id="rebid-modal-close">&times;</button>
+      </div>
+      <div class="bm-modal-body">
+        <p class="text-muted" style="font-size:0.85rem;margin-top:0;margin-bottom:14px;" id="rebid-product-title"></p>
+
+        <form id="rebid-form">
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px;">
+              <span class="text-muted">Current Leading Price:</span>
+              <strong id="rebid-current-price">₹0</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;">
+              <span class="text-muted">Minimum Required Bid:</span>
+              <strong style="color:var(--auc-primary);" id="rebid-min-next">₹0</strong>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:20px;">
+            <label for="rebid-amount" style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;">Your New Bid (₹)</label>
+            <input type="number" id="rebid-amount" required class="auc-quickbid-input" style="height:44px;font-size:1.1rem;padding-left:14px;" />
+          </div>
+
+          <button type="submit" class="sc-btn-primary" id="btn-submit-rebid" style="width:100%;height:44px;font-size:0.95rem;justify-content:center;">
+            Submit Higher Bid
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="bm-toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/auth-modal.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/auction-sidebar.js"></script>
+
+  <script>
+    let allBids = [];
+    let currentTab = 'ALL';
+    let activeCheckoutAuctionId = null;
+    let activeRebidAuction = null;
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `bm-toast ${type}`;
+      toast.innerHTML = `
+        <span>${type === 'success' ? '✓' : (type === 'error' ? '✘' : 'ℹ')}</span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Modal Helpers
+    const checkoutModal = document.getElementById('checkout-modal');
+    const rebidModal = document.getElementById('rebid-modal');
+
+    function openCheckoutModal(item) {
+      activeCheckoutAuctionId = item.auction_id;
+      document.getElementById('checkout-product-title').textContent = `Claiming: ${item.title} (Winning Bid: ₹${Number(item.amount).toLocaleString('en-IN')})`;
+      loadAddresses();
+      checkoutModal.classList.add('open');
+    }
+    function closeCheckoutModal() { checkoutModal.classList.remove('open'); }
+    document.getElementById('checkout-modal-close')?.addEventListener('click', closeCheckoutModal);
+
+    function openRebidModal(item) {
+      activeRebidAuction = item;
+      const currentPrice = Number(item.current_price);
+      const minNext = currentPrice + 100;
+      document.getElementById('rebid-product-title').textContent = item.title;
+      document.getElementById('rebid-current-price').textContent = `₹${currentPrice.toLocaleString('en-IN')}`;
+      document.getElementById('rebid-min-next').textContent = `₹${minNext.toLocaleString('en-IN')}`;
+      const input = document.getElementById('rebid-amount');
+      input.value = minNext;
+      input.min = minNext;
+      rebidModal.classList.add('open');
+      input.focus();
+    }
+    function closeRebidModal() { rebidModal.classList.remove('open'); }
+    document.getElementById('rebid-modal-close')?.addEventListener('click', closeRebidModal);
+
+    // Save Address inline
+    document.getElementById('btn-save-new-address')?.addEventListener('click', async () => {
+      const payload = {
+        fullName: document.getElementById('na-fullName').value.trim(),
+        phone: document.getElementById('na-phone').value.trim(),
+        addressLine1: document.getElementById('na-line1').value.trim(),
+        city: document.getElementById('na-city').value.trim(),
+        state: document.getElementById('na-state').value.trim(),
+        postalCode: document.getElementById('na-postalCode').value.trim(),
+        isDefault: true,
+      };
+
+      if (!payload.fullName || !payload.phone || !payload.addressLine1 || !payload.city || !payload.postalCode) {
+        showToast('Please fill all required address fields.', 'error');
+        return;
+      }
+
+      try {
+        const address = await window.api.post('/addresses', payload);
+        showToast('Address saved successfully!', 'success');
+        await loadAddresses(address.id);
+      } catch (err) {
+        showToast(err.message || 'Could not save address.', 'error');
+      }
+    });
+
+    async function loadAddresses(selectId = null) {
+      const sel = document.getElementById('checkout-address');
+      try {
+        const { items } = await window.api.get('/addresses');
+        if (!items || items.length === 0) {
+          sel.innerHTML = '<option value="">No addresses found — add one below</option>';
+          return;
+        }
+        sel.innerHTML = items.map(a => `
+          <option value="${a.id}" ${selectId === a.id || a.is_default ? 'selected' : ''}>
+            ${a.full_name}, ${a.address_line_1}, ${a.city} (${a.postal_code}) - ${a.phone}
+          </option>
+        `).join('');
+      } catch (err) {
+        sel.innerHTML = '<option value="">Failed to load addresses</option>';
+      }
+    }
+
+    // Handle Checkout Submit
+    document.getElementById('checkout-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const addressId = Number(document.getElementById('checkout-address').value);
+      const paymentMethod = document.getElementById('checkout-payment-method').value;
+      const submitBtn = document.getElementById('btn-submit-checkout');
+
+      if (!addressId) {
+        showToast('Please select or add a delivery address.', 'error');
+        return;
+      }
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Completing Order…';
+        await window.api.post(`/auctions/${activeCheckoutAuctionId}/complete-order`, {
+          addressId,
+          paymentMethod,
+        });
+        showToast('Order confirmed! Your won auction is being processed.', 'success');
+        closeCheckoutModal();
+        await loadMyBids();
+      } catch (err) {
+        showToast(err.message || 'Could not complete order.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm Order & Claim Item';
+      }
+    });
+
+    // Handle Re-bid Submit
+    document.getElementById('rebid-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!activeRebidAuction) return;
+      const amount = Number(document.getElementById('rebid-amount').value);
+      const submitBtn = document.getElementById('btn-submit-rebid');
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Placing Bid…';
+        await window.api.post(`/auctions/${activeRebidAuction.auction_id}/bids`, { amount });
+        showToast(`Bid placed successfully for ₹${amount.toLocaleString('en-IN')}!`, 'success');
+        closeRebidModal();
+        await loadMyBids();
+      } catch (err) {
+        showToast(err.message || 'Bid failed.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Higher Bid';
+      }
+    });
+
+    // Load Buyer's Bids
+    async function loadMyBids() {
+      const tbody = document.getElementById('bids-tbody');
+      const user = window.auth ? window.auth.getUser() : null;
+
+      if (!user) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center;padding:50px 20px;">
+              <div style="font-size:2.2rem;margin-bottom:10px;">🔒</div>
+              <h3 style="margin:0 0 6px;color:#0F172A;font-weight:700;">Bidder Authentication Required</h3>
+              <p class="text-muted" style="font-size:0.85rem;max-width:400px;margin:0 auto 18px;">
+                Sign in to view your live bids, counter outbids, and claim won auctions.
+              </p>
+              <button type="button" class="sc-btn-primary" id="btn-my-bids-login" style="margin:0 auto;">
+                <span>👤 Bidder Login / Sign Up</span>
+              </button>
+            </td>
+          </tr>
+        `;
+        document.getElementById('btn-my-bids-login')?.addEventListener('click', () => {
+          window.buyerAuth?.open('login', {
+            message: 'Sign in to access your active bids and won auctions.',
+            onSuccess: () => {
+              loadMyBids();
+              renderAuctionSidebar();
+            }
+          });
+        });
+        return;
+      }
+
+      tbody.innerHTML = '<tr><td colspan="6" class="text-muted" style="text-align:center;padding:40px;">Refreshing your bids…</td></tr>';
+
+      try {
+        const { items } = await window.api.get('/auctions/my-bids');
+        allBids = items || [];
+
+        // Calculate KPI Counts
+        let winningCount = 0;
+        let outbidCount = 0;
+        let wonCount = 0;
+        let lostCount = 0;
+
+        allBids.forEach(b => {
+          if (b.bid_status === 'WINNING') winningCount++;
+          else if (b.bid_status === 'OUTBID') outbidCount++;
+          else if (b.bid_status === 'WON') wonCount++;
+          else if (b.bid_status === 'LOST') lostCount++;
+        });
+
+        document.getElementById('kpi-total-bids').textContent = allBids.length;
+        document.getElementById('kpi-winning-bids').textContent = winningCount;
+        document.getElementById('kpi-outbid-bids').textContent = outbidCount;
+        document.getElementById('kpi-won-bids').textContent = wonCount;
+
+        document.getElementById('tab-count-all').textContent = allBids.length;
+        document.getElementById('tab-count-winning').textContent = winningCount;
+        document.getElementById('tab-count-outbid').textContent = outbidCount;
+        document.getElementById('tab-count-won').textContent = wonCount;
+        document.getElementById('tab-count-lost').textContent = lostCount;
+
+        renderFilteredBids();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-muted" style="text-align:center;padding:40px;">Could not load bids: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderFilteredBids() {
+      const tbody = document.getElementById('bids-tbody');
+      let filtered = allBids;
+      if (currentTab !== 'ALL') {
+        filtered = allBids.filter(b => b.bid_status === currentTab);
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center;padding:50px 20px;">
+              <div style="font-size:2rem;margin-bottom:8px;">🎯</div>
+              <strong style="display:block;font-size:1rem;color:#0F172A;margin-bottom:4px;">No Bids Found</strong>
+              <span class="text-muted" style="font-size:0.85rem;">You have no bids in this category.</span>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const image = Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : null;
+        let statusBadge = '';
+        let actionMarkup = '';
+
+        if (item.bid_status === 'WON') {
+          statusBadge = '<span class="status-pill status-active_shop" style="background:#ECFDF5;color:#059669;border:1px solid #A7F3D0;">🎉 Won Auction</span>';
+          actionMarkup = item.product_status === 'AUCTION_WON'
+            ? `<button type="button" class="sc-btn-mint" data-action="claim" data-id="${item.auction_id}" style="padding:6px 14px;font-size:0.8rem;border-radius:6px;cursor:pointer;">Complete Checkout</button>`
+            : `<span class="text-muted" style="font-size:0.8rem;font-weight:600;">Order Placed ✓</span>`;
+        } else if (item.bid_status === 'WINNING') {
+          statusBadge = '<span class="status-pill status-active_shop" style="background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;">✓ Highest Bidder</span>';
+          actionMarkup = `<a href="/auction/auction-detail.html?id=${item.auction_id}" class="sc-btn-outline" style="padding:6px 12px;font-size:0.8rem;border-radius:6px;text-decoration:none;">View Room</a>`;
+        } else if (item.bid_status === 'OUTBID') {
+          statusBadge = '<span class="status-pill status-out_of_stock" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;">⚠️ Outbid</span>';
+          actionMarkup = `<button type="button" class="sc-btn-primary" data-action="rebid" data-id="${item.auction_id}" style="padding:6px 14px;font-size:0.8rem;border-radius:6px;cursor:pointer;">Re-bid Now</button>`;
+        } else {
+          statusBadge = '<span class="status-pill" style="background:#F1F5F9;color:#64748B;">Closed / Lost</span>';
+          actionMarkup = `<a href="/auction/auction-detail.html?id=${item.auction_id}" class="sc-btn-outline" style="padding:6px 12px;font-size:0.8rem;border-radius:6px;text-decoration:none;">View Result</a>`;
+        }
+
+        const ends = new Date(item.ends_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+
+        return `
+          <tr>
+            <td style="padding-left:24px;">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:48px;height:48px;border-radius:8px;background:#F1F5F9;overflow:hidden;flex-shrink:0;">
+                  ${image ? `<img src="${image}" style="width:100%;height:100%;object-fit:cover;" />` : ''}
+                </div>
+                <div>
+                  <a href="/auction/auction-detail.html?id=${item.auction_id}" style="font-weight:700;color:#0F172A;text-decoration:none;font-size:0.9rem;">
+                    ${item.title}
+                  </a>
+                  <div style="font-size:0.75rem;color:#94A3B8;margin-top:2px;">#AUC-${item.auction_id}</div>
+                </div>
+              </div>
+            </td>
+            <td><strong style="font-size:0.95rem;color:#0F172A;">₹${Number(item.amount).toLocaleString('en-IN')}</strong></td>
+            <td><span style="font-size:0.95rem;font-weight:600;color:var(--auc-primary);">₹${Number(item.current_price).toLocaleString('en-IN')}</span></td>
+            <td>${statusBadge}</td>
+            <td style="font-size:0.82rem;color:#64748B;">${ends}</td>
+            <td style="text-align:right;padding-right:24px;">${actionMarkup}</td>
+          </tr>
+        `;
+      }).join('');
+
+      wireTableButtons();
+    }
+
+    function wireTableButtons() {
+      document.querySelectorAll('[data-action="claim"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const aucId = Number(btn.dataset.id);
+          const item = allBids.find(b => b.auction_id === aucId);
+          if (item) openCheckoutModal(item);
+        });
+      });
+
+      document.querySelectorAll('[data-action="rebid"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const aucId = Number(btn.dataset.id);
+          const item = allBids.find(b => b.auction_id === aucId);
+          if (item) openRebidModal(item);
+        });
+      });
+    }
+
+    // Tab Navigation
+    document.getElementById('bids-tabs')?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.auc-tab-btn');
+      if (!btn) return;
+      document.querySelectorAll('#bids-tabs .auc-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      renderFilteredBids();
+    });
+
+    // Initial Bootstrap
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tab') === 'won') {
+      currentTab = 'WON';
+      document.querySelectorAll('#bids-tabs .auc-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('#bids-tabs [data-tab="WON"]')?.classList.add('active');
+    }
+    renderSellerHeader();
+    renderAuctionSidebar();
+    loadMyBids();
+  </script>
+
+</body>
+</html>

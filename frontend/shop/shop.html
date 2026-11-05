@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="container" style="padding-top:20px;padding-bottom:40px;">
+    <!-- Page Header with Back Button & Breadcrumbs -->
+    <div class="bm-page-header-top" style="margin-bottom:18px;">
+      <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/index.html')" aria-label="Go back to Home">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Back to Home</span>
+      </button>
+      <nav class="bm-breadcrumbs" aria-label="Breadcrumb">
+        <a href="/index.html" class="bm-breadcrumb-item">Home</a>
+        <span class="bm-breadcrumb-sep">/</span>
+        <span class="bm-breadcrumb-item active" aria-current="page">Shop Catalog</span>
+      </nav>
+    </div>
+
+    <div class="page-head">
+      <h1>Shop</h1>
+      <span class="text-muted" id="result-count"></span>
+    </div>
+
+    <div class="shop-layout">
+      <aside class="card filter-panel">
+        <h4>Categories</h4>
+        <div id="category-filters">
+          <label class="filter-option active" data-value="">
+            <input type="radio" name="category" value="" checked /> All categories
+          </label>
+        </div>
+      </aside>
+
+      <div>
+        <div class="shop-toolbar">
+          <form id="search-form" class="site-search" style="max-width:340px;">
+            <input type="search" id="search-input" placeholder="Search this catalog..." />
+            <button type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </form>
+        </div>
+
+        <div class="grid-4" id="product-grid">
+          <p class="text-muted">Loading products…</p>
+        </div>
+
+        <div style="display:flex;justify-content:center;gap:10px;margin-top:32px;" id="pagination"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/product-card.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+
+  <script>
+    const state = { categoryId: '', search: '', page: 1 };
+
+    async function loadCategories() {
+      const categories = await window.api.get('/categories');
+      const container = document.getElementById('category-filters');
+
+      categories.filter((c) => c.parent_id === null).forEach((c) => {
+        const label = document.createElement('label');
+        label.className = 'filter-option';
+        label.dataset.value = c.id;
+        label.innerHTML = `<input type="radio" name="category" value="${c.id}" /> ${c.name}`;
+        container.appendChild(label);
+      });
+
+      container.addEventListener('change', (event) => {
+        if (event.target.name !== 'category') return;
+        state.categoryId = event.target.value;
+        state.page = 1;
+        container.querySelectorAll('.filter-option').forEach((el) => {
+          el.classList.toggle('active', el.dataset.value === event.target.value);
+        });
+        loadProducts();
+      });
+    }
+
+    async function loadProducts() {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = '<p class="text-muted">Loading products…</p>';
+
+      try {
+        const params = new URLSearchParams();
+        if (state.categoryId) params.set('categoryId', state.categoryId);
+        if (state.search) params.set('search', state.search);
+        params.set('page', state.page);
+        params.set('limit', 12);
+
+        const { items, pagination } = await window.api.get(`/products?${params.toString()}`);
+
+        document.getElementById('result-count').textContent = `${pagination.total} product(s)`;
+        grid.innerHTML = items.length
+          ? items.map(window.shopHelpers.renderProductCard).join('')
+          : '<div class="empty-state">No products match your filters.</div>';
+
+        renderPagination(pagination);
+      } catch (err) {
+        grid.innerHTML = `<p class="text-muted">Could not load products: ${err.message}</p>`;
+      }
+    }
+
+    function renderPagination(pagination) {
+      const container = document.getElementById('pagination');
+      if (pagination.totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+      let buttons = '';
+      for (let i = 1; i <= pagination.totalPages; i++) {
+        buttons += `<button class="btn ${i === pagination.page ? 'btn-primary' : 'btn-ghost'} btn-sm" data-page="${i}">${i}</button>`;
+      }
+      container.innerHTML = buttons;
+      container.querySelectorAll('[data-page]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.page = Number(btn.dataset.page);
+          loadProducts();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    document.getElementById('search-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      state.search = document.getElementById('search-input').value.trim();
+      state.page = 1;
+      loadProducts();
+    });
+
+    // Support /shop.html?search=xyz deep links (e.g. from the header search bar)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('q')) {
+      state.search = params.get('q');
+      document.getElementById('search-input').value = state.search;
+    }
+
+    (async () => {
+      await loadCategories();
+      await loadProducts();
+    })();
+  </script>
+
+</body>
+</html>

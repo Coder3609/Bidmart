@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <style>
+    .product-gallery-thumbs {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .product-gallery-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      background: #F1F5F9;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .product-gallery-thumb:hover {
+      border-color: #CBD5E1;
+    }
+    .product-gallery-thumb.active {
+      border-color: #106EBE;
+      box-shadow: 0 0 0 2px rgba(16, 110, 190, 0.2);
+    }
+    .product-gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="container" style="padding-top:20px;padding-bottom:40px;">
+    
+    <!-- Top Back Button and Breadcrumbs -->
+    <div class="bm-page-header-top" style="margin-bottom:20px;">
+      <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/shop/shop.html')" aria-label="Go back to Shop">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Back to Shop</span>
+      </button>
+      <nav class="bm-breadcrumbs" aria-label="Breadcrumb" id="product-breadcrumbs">
+        <a href="/index.html" class="bm-breadcrumb-item">Home</a>
+        <span class="bm-breadcrumb-sep">/</span>
+        <a href="/shop/shop.html" class="bm-breadcrumb-item">Shop</a>
+        <span class="bm-breadcrumb-sep">/</span>
+        <span class="bm-breadcrumb-item active" id="bc-product-title">Product Details</span>
+      </nav>
+    </div>
+
+    <div class="form-error" id="form-error" role="alert" style="margin-top:10px;"></div>
+    <div id="product-root">
+      <p class="text-muted" style="margin-top:40px;text-align:center;">Loading product…</p>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/product-card.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+
+  <script>
+    const errorBox = document.getElementById('form-error');
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    const productId = new URLSearchParams(window.location.search).get('id');
+    const root = document.getElementById('product-root');
+
+    function stockInfo(qty) {
+      if (qty <= 0) return { text: 'Out of stock', cls: 'out-of-stock' };
+      if (qty <= 5) return { text: `Only ${qty} left in stock`, cls: 'low-stock' };
+      return { text: 'In stock', cls: 'in-stock' };
+    }
+
+    async function loadProduct() {
+      if (!productId) {
+        root.innerHTML = '<p class="text-muted" style="margin-top:40px;text-align:center;">No product specified.</p>';
+        return;
+      }
+
+      let product;
+      try {
+        product = await window.api.get(`/products/${productId}`);
+      } catch (err) {
+        root.innerHTML = `<p class="text-muted" style="margin-top:40px;text-align:center;">${err.message}</p>`;
+        return;
+      }
+
+      // Auction items live on the dedicated bidding page, not here.
+      if (product.status === 'ACTIVE_AUCTION') {
+        window.location.replace(`/auction/auction-detail.html?productId=${product.id}`);
+        return;
+      }
+
+      document.title = `${product.title} — BidMart`;
+      const bcEl = document.getElementById('bc-product-title');
+      if (bcEl) bcEl.textContent = product.title;
+
+      let images = [];
+      if (product.image_records && product.image_records.length > 0) {
+        images = product.image_records.map(r => r.image_url);
+      } else if (Array.isArray(product.images)) {
+        images = product.images;
+      }
+
+      const fallbackImg = '/assets/products/placeholder.svg';
+      const mainImage = images.length > 0 ? images[0] : fallbackImg;
+      const isShopBuyable = product.status === 'ACTIVE_SHOP';
+      const isAuction = product.status === 'ACTIVE_AUCTION';
+      const qty = product.available_qty || 0;
+      const stock = stockInfo(qty);
+
+      root.innerHTML = `
+        <div class="product-detail">
+          <div>
+            <div class="product-detail__image" style="width:100%;border-radius:16px;background:#F8FAFC;border:1px solid #E2E8F0;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;">
+              <img src="${mainImage}" alt="${product.title}" id="main-product-display" onerror="this.onerror=null;this.src='${fallbackImg}';" style="width:100%;height:100%;object-fit:cover;" />
+            </div>
+            ${images.length > 1 ? `
+              <div class="product-gallery-thumbs" id="gallery-thumbs">
+                ${images.map((img, idx) => `
+                  <div class="product-gallery-thumb ${idx === 0 ? 'active' : ''}" data-src="${img}" onclick="selectGalleryImage('${img}', this)">
+                    <img src="${img}" alt="Thumbnail ${idx + 1}" onerror="this.src='${fallbackImg}'" />
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+
+          <div>
+            ${isAuction ? '<span class="badge badge-live" style="margin-bottom:10px;">LIVE AUCTION</span>' : ''}
+            <h1 style="margin:0 0 6px;font-size:1.6rem;font-weight:800;color:#172033;">${product.title}</h1>
+            <p class="text-muted" style="margin:0 0 10px;">${product.brand || ''} ${product.brand ? '·' : ''} ${product.category_name} · ${(product.condition || '').replaceAll('_',' ')}</p>
+            <p class="text-muted" id="rating-summary" style="margin:0 0 14px;"></p>
+            <p class="product-detail__price" style="font-size:1.8rem;font-weight:800;color:#106EBE;margin:0 0 14px;">${window.shopHelpers.formatINR(product.price)}</p>
+
+            ${isShopBuyable ? `<p class="stock-note ${stock.cls}">${stock.text}</p>` : ''}
+            ${isAuction ? '<p class="stock-note" style="color:var(--color-primary)">This item is being sold via live auction.</p>' : ''}
+            ${!isShopBuyable && !isAuction ? `<p class="stock-note out-of-stock">Not currently available for purchase.</p>` : ''}
+
+            ${isShopBuyable ? `
+              <div class="qty-stepper" style="margin-bottom:16px;">
+                <button type="button" id="qty-minus">−</button>
+                <input type="number" id="qty-input" value="1" min="1" max="${qty}" />
+                <button type="button" id="qty-plus">+</button>
+              </div>
+              <div class="detail-actions" style="display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="btn btn-ghost" id="wishlist-btn">♡ Wishlist</button>
+                <button class="btn btn-outline" style="color:var(--color-primary);border-color:var(--color-primary);" id="add-cart-btn" ${qty === 0 ? 'disabled' : ''}>Add to Cart</button>
+                <button class="btn btn-mint" id="buy-now-btn" ${qty === 0 ? 'disabled' : ''}>Buy Now</button>
+              </div>
+            ` : `
+              <div class="detail-actions">
+                <button class="btn btn-ghost" id="wishlist-btn">♡ Wishlist</button>
+              </div>
+            `}
+
+            <div class="card" style="padding:18px;margin-top:20px;">
+              <h4 style="margin-bottom:8px;font-size:1rem;font-weight:700;">Description</h4>
+              <p class="text-muted" style="margin:0;line-height:1.5;">${product.description || 'No description provided.'}</p>
+            </div>
+
+            <div class="card" style="padding:18px;margin-top:16px;">
+              <h4 style="margin-bottom:10px;font-size:1rem;font-weight:700;">Reviews</h4>
+              <div id="reviews-list"><p class="text-muted">Loading reviews…</p></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      wireActions(product, qty);
+      loadReviews(product.id);
+    }
+
+    function selectGalleryImage(src, thumbEl) {
+      document.getElementById('main-product-display').src = src;
+      document.querySelectorAll('.product-gallery-thumb').forEach(t => t.classList.remove('active'));
+      if (thumbEl) thumbEl.classList.add('active');
+    }
+    window.selectGalleryImage = selectGalleryImage;
+
+    async function loadReviews(productId) {
+      try {
+        const { summary, items } = await window.api.get(`/reviews/product/${productId}`);
+        const summaryEl = document.getElementById('rating-summary');
+        if (summaryEl) {
+          summaryEl.textContent = summary.totalReviews > 0
+            ? `★ ${summary.averageRating} (${summary.totalReviews} review${summary.totalReviews === 1 ? '' : 's'})`
+            : 'No reviews yet';
+        }
+        const list = document.getElementById('reviews-list');
+        list.innerHTML = items.length
+          ? items.map((r) => `
+              <div style="padding:12px 0;border-bottom:1px solid var(--color-border);">
+                <strong style="font-size:var(--font-size-sm);">${r.buyer_name}</strong>
+                <span style="color:var(--color-warning);margin-left:6px;">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+                ${r.comment ? `<p class="text-muted" style="margin:6px 0 0;font-size:var(--font-size-sm);">${r.comment}</p>` : ''}
+              </div>
+            `).join('')
+          : '<p class="text-muted">No reviews yet — be the first to buy and review this product.</p>';
+      } catch (err) {
+        document.getElementById('reviews-list').innerHTML = `<p class="text-muted">Could not load reviews.</p>`;
+      }
+    }
+
+    function wireActions(product, maxQty) {
+      const qtyInput = document.getElementById('qty-input');
+      document.getElementById('qty-minus')?.addEventListener('click', () => {
+        qtyInput.value = Math.max(1, Number(qtyInput.value) - 1);
+      });
+      document.getElementById('qty-plus')?.addEventListener('click', () => {
+        qtyInput.value = Math.min(maxQty, Number(qtyInput.value) + 1);
+      });
+
+      document.getElementById('wishlist-btn')?.addEventListener('click', async () => {
+        if (!window.auth.isLoggedIn()) {
+          if (window.buyerAuth) {
+            window.buyerAuth.requireBuyerAuth(async () => {
+              await window.api.post('/wishlist', { productId: product.id });
+              document.getElementById('wishlist-btn').textContent = '♥ Added to Wishlist';
+              window.buyerAuth.showToast('Item saved to your wishlist!', 'success');
+            }, 'Sign in to save this product to your wishlist.');
+          } else {
+            window.location.href = '/auth/login.html';
+          }
+          return;
+        }
+        try {
+          await window.api.post('/wishlist', { productId: product.id });
+          document.getElementById('wishlist-btn').textContent = '♥ Added to Wishlist';
+          if (window.buyerAuth) window.buyerAuth.showToast('Item saved to your wishlist!', 'success');
+        } catch (err) {
+          showError(err.message);
+        }
+      });
+
+      document.getElementById('add-cart-btn')?.addEventListener('click', async () => {
+        if (!window.auth.isLoggedIn()) {
+          if (window.buyerAuth) {
+            window.buyerAuth.requireBuyerAuth(async () => {
+              await window.api.post('/cart', { productId: product.id, quantity: Number(qtyInput.value) });
+              window.location.href = '/shop/cart.html';
+            }, 'Sign in to add this item to your cart.');
+          } else {
+            window.location.href = '/auth/login.html';
+          }
+          return;
+        }
+        hideError();
+        try {
+          await window.api.post('/cart', { productId: product.id, quantity: Number(qtyInput.value) });
+          window.location.href = '/shop/cart.html';
+        } catch (err) {
+          showError(err.message);
+        }
+      });
+
+      document.getElementById('buy-now-btn')?.addEventListener('click', async () => {
+        if (!window.auth.isLoggedIn()) {
+          if (window.buyerAuth) {
+            window.buyerAuth.requireBuyerAuth(async () => {
+              await window.api.post('/cart', { productId: product.id, quantity: Number(qtyInput.value) });
+              window.location.href = '/shop/checkout.html';
+            }, 'Sign in to proceed to checkout.');
+          } else {
+            window.location.href = '/auth/login.html';
+          }
+          return;
+        }
+        hideError();
+        try {
+          await window.api.post('/cart', { productId: product.id, quantity: Number(qtyInput.value) });
+          window.location.href = '/shop/checkout.html';
+        } catch (err) {
+          showError(err.message);
+        }
+      });
+    }
+
+    loadProduct();
+  </script>
+
+</body>
+</html>

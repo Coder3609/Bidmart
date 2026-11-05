@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Center / Notifications — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body class="sc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <div id="seller-sidebar"></div>
+
+    <main class="sc-main-content">
+      <div class="bm-page-header-wrap">
+        <div class="bm-page-header-top">
+          <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/dashboards/seller/dashboard.html')" aria-label="Go back to Seller Dashboard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Back to Seller Dashboard</span>
+          </button>
+          <nav class="bm-breadcrumbs" aria-label="Breadcrumb">
+            <a href="/dashboards/seller/dashboard.html" class="bm-breadcrumb-item">Seller Center</a>
+            <span class="bm-breadcrumb-sep">/</span>
+            <span class="bm-breadcrumb-item active" aria-current="page">Notifications</span>
+          </nav>
+        </div>
+        <div class="bm-page-header-main">
+          <div class="bm-page-header-titles">
+            <h1 class="bm-page-title">Store Activity & Notifications</h1>
+            <p class="bm-page-subtitle">Live alerts for new customer orders, auction bids, returns, and inventory status.</p>
+          </div>
+          <div class="bm-page-header-actions">
+            <button type="button" class="sc-btn-sm" id="mark-all-read-btn" style="padding:10px 16px;">Mark all as read</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications List Card -->
+      <div class="sc-card" style="padding:0;overflow:hidden;">
+        <div id="seller-notif-full-list">
+          <p class="text-muted" style="text-align:center;padding:32px;">Loading notifications…</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/seller-sidebar.js"></script>
+
+  <script>
+    window.auth.requireRole('SELLER');
+
+    async function loadNotifications() {
+      const container = document.getElementById('seller-notif-full-list');
+      try {
+        const { items } = await window.api.get('/notifications?limit=30');
+
+        if (!items || items.length === 0) {
+          container.innerHTML = '<div class="text-muted" style="text-align:center;padding:48px 20px;">No notifications yet. Alerts will appear here as activity occurs on your store.</div>';
+          return;
+        }
+
+        container.innerHTML = items.map(n => {
+          const dateStr = new Date(n.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+          const unreadBg = !n.is_read ? 'background:#F0F7FF;' : '';
+
+          return `
+            <div style="padding:18px 24px;border-bottom:1px solid #F1F5F9;display:flex;align-items:start;justify-content:space-between;gap:16px;${unreadBg}">
+              <div style="display:flex;gap:14px;align-items:start;">
+                <div style="width:36px;height:36px;border-radius:10px;background:${!n.is_read ? '#DBEAFE' : '#F1F5F9'};color:${!n.is_read ? '#1D4ED8' : '#64748B'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <div style="font-weight:700;color:#172033;margin-bottom:2px;">${n.title}</div>
+                  <p style="margin:0 0 6px 0;font-size:0.85rem;color:#475569;">${n.message}</p>
+                  <span class="text-muted" style="font-size:0.75rem;">${dateStr}</span>
+                </div>
+              </div>
+              ${!n.is_read ? `<span class="sc-status-pill pending">Unread</span>` : ''}
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        container.innerHTML = `<p style="color:#EF4444;text-align:center;padding:24px;">Could not load notifications: ${err.message}</p>`;
+      }
+    }
+
+    document.getElementById('mark-all-read-btn').addEventListener('click', async () => {
+      try {
+        await window.api.patch('/notifications/read-all', {});
+        await loadNotifications();
+      } catch (err) {
+        alert('Failed to mark read: ' + err.message);
+      }
+    });
+
+    loadNotifications();
+  </script>
+</body>
+</html>

@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Center / Products & Inventory — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <style>
+    .product-modal-scroll {
+      max-height: calc(88vh - 80px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .product-modal-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .product-modal-scroll::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="sc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <div id="seller-sidebar"></div>
+
+    <main class="sc-main-content">
+      <!-- Standardized Page Header with Back Button & Breadcrumbs -->
+      <div class="bm-page-header-wrap">
+        <div class="bm-page-header-top">
+          <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/dashboards/seller/dashboard.html')" aria-label="Go back to Seller Dashboard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Back to Seller Dashboard</span>
+          </button>
+          <nav class="bm-breadcrumbs" aria-label="Breadcrumb">
+            <a href="/dashboards/seller/dashboard.html" class="bm-breadcrumb-item">Seller Center</a>
+            <span class="bm-breadcrumb-sep">/</span>
+            <span class="bm-breadcrumb-item active" aria-current="page">Products & Inventory</span>
+          </nav>
+        </div>
+
+        <div class="bm-page-header-main">
+          <div class="bm-page-header-titles">
+            <h1 class="bm-page-title">Products Management</h1>
+            <p class="bm-page-subtitle">Manage catalog, upload product galleries, update pricing & stock levels, or launch live auctions.</p>
+          </div>
+          <div class="bm-page-header-actions">
+            <button type="button" class="sc-btn-primary" id="open-create-modal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              <span>+ Add New Product</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-error" id="form-error" role="alert" style="margin-bottom:16px;"></div>
+
+      <!-- Filter / Search Toolbar -->
+      <div class="sc-card" style="padding:16px 20px;margin-bottom:20px;">
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
+          <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:280px;">
+            <div class="sc-search-bar" style="max-width:340px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="sc-search-icon"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="search" id="product-search-input" placeholder="Search by title, brand, SKU..." />
+            </div>
+            <select class="sc-period-select" id="status-filter">
+              <option value="">All Statuses</option>
+              <option value="ACTIVE_SHOP">Active in Shop</option>
+              <option value="DRAFT">Drafts</option>
+              <option value="OUT_OF_STOCK">Out of Stock</option>
+              <option value="ACTIVE_AUCTION">Active Auction</option>
+              <option value="AUCTION_UNSOLD">Unsold Auction</option>
+            </select>
+            <select class="sc-period-select" id="category-filter">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size:0.82rem;font-weight:600;" id="product-count-label">Loading products…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Table Card -->
+      <div class="sc-card" style="padding:0;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table class="sc-table">
+            <thead>
+              <tr>
+                <th style="padding-left:20px;">Product & Gallery</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody">
+              <tr><td colspan="6" class="text-muted" style="text-align:center;padding:32px;">Loading products…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Modal: Add New Product -->
+  <div class="modal-overlay" id="create-modal" hidden>
+    <div class="modal" style="max-width:680px;">
+      <button class="modal-close" id="create-modal-close" aria-label="Close modal">&times;</button>
+      <h3 style="margin-top:0;font-size:1.3rem;font-weight:800;color:#172033;">Add New Product</h3>
+      <p class="text-muted" style="font-size:0.85rem;margin-bottom:18px;">Upload product photos and enter catalog specifications. Listings start in <strong>Draft</strong> mode.</p>
+
+      <form id="create-product-form" class="product-modal-scroll">
+        
+        <!-- PRODUCT IMAGES SECTION -->
+        <div class="bm-image-upload-section">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+            <label style="font-weight:700;font-size:0.88rem;color:#172033;">Product Images *</label>
+            <span style="font-size:0.75rem;color:#64748B;" id="create-image-counter">0 / 8 images</span>
+          </div>
+          <p class="text-muted" style="font-size:0.78rem;margin:0 0 10px;">Upload clear images of your product. The first image will be used as the primary product image.</p>
+          
+          <div class="bm-upload-dropzone" id="create-dropzone" tabindex="0" role="button" aria-label="Upload Product Images. Drag and drop images here or browse files.">
+            <input type="file" id="create-file-input" multiple accept="image/jpeg,image/png,image/webp" style="display:none;" />
+            <div class="bm-upload-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <div class="bm-upload-title">Upload Product Images</div>
+            <div class="bm-upload-subtitle">Drag & drop images here or <span style="color:#106EBE;font-weight:700;text-decoration:underline;">Browse Files</span></div>
+            <div class="bm-upload-btn-fake">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <span>Browse Files</span>
+            </div>
+            <div class="bm-upload-meta">JPG, JPEG, PNG, WEBP • Max 10 MB each • Up to 8 images</div>
+          </div>
+
+          <div id="create-image-error" style="color:#DC2626;font-size:0.78rem;font-weight:600;margin-top:6px;display:none;"></div>
+
+          <!-- Thumbnails Preview Grid -->
+          <div class="bm-thumbs-grid" id="create-thumbs-grid"></div>
+        </div>
+
+        <!-- PRODUCT DETAILS -->
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="p-title" style="font-weight:700;font-size:0.85rem;">Product Title *</label>
+          <input type="text" id="p-title" required minlength="3" maxlength="190" placeholder="e.g. Sony WH-1000XM5 Wireless Noise-Cancelling Headphones" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div class="form-group">
+            <label for="p-category" style="font-weight:700;font-size:0.85rem;">Category *</label>
+            <select id="p-category" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;"></select>
+          </div>
+          <div class="form-group">
+            <label for="p-condition" style="font-weight:700;font-size:0.85rem;">Condition *</label>
+            <select id="p-condition" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;">
+              <option value="NEW">New (Unopened)</option>
+              <option value="LIKE_NEW">Like New (Mint)</option>
+              <option value="USED">Used (Good)</option>
+              <option value="REFURBISHED">Refurbished</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div class="form-group">
+            <label for="p-price" style="font-weight:700;font-size:0.85rem;">Price (₹) *</label>
+            <input type="number" id="p-price" min="1" step="0.01" required placeholder="4999" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+          </div>
+          <div class="form-group">
+            <label for="p-qty" style="font-weight:700;font-size:0.85rem;">Initial Stock *</label>
+            <input type="number" id="p-qty" min="0" step="1" value="10" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+          </div>
+          <div class="form-group">
+            <label for="p-brand" style="font-weight:700;font-size:0.85rem;">Brand</label>
+            <input type="text" id="p-brand" placeholder="e.g. Sony" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="p-sku" style="font-weight:700;font-size:0.85rem;">SKU Code (Optional)</label>
+          <input type="text" id="p-sku" placeholder="e.g. SNY-WH1000-BLK" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+        </div>
+
+        <div class="form-group" style="margin-bottom:18px;">
+          <label for="p-desc" style="font-weight:700;font-size:0.85rem;">Description</label>
+          <textarea id="p-desc" rows="3" placeholder="Detailed product specifications, warranty info, key features..." style="width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;font-family:inherit;"></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:20px;position:sticky;bottom:0;background:#FFFFFF;padding-top:12px;border-top:1px solid #E2E8F0;">
+          <button type="button" class="sc-btn-sm" id="cancel-create-btn" style="flex:1;padding:12px;font-size:0.9rem;">Cancel</button>
+          <button type="submit" class="sc-btn-primary" id="save-product-btn" style="flex:2;justify-content:center;padding:12px;font-size:0.95rem;">Create Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Product & Image Gallery Manager -->
+  <div class="modal-overlay" id="edit-modal" hidden>
+    <div class="modal" style="max-width:680px;">
+      <button class="modal-close" id="edit-modal-close" aria-label="Close modal">&times;</button>
+      <h3 style="margin-top:0;font-size:1.3rem;font-weight:800;color:#172033;">Edit Product</h3>
+      <p class="text-muted" style="font-size:0.85rem;margin-bottom:16px;" id="edit-modal-subtitle">Update catalog details and product photo gallery.</p>
+
+      <form id="edit-product-form" class="product-modal-scroll">
+        <input type="hidden" id="edit-product-id" />
+
+        <!-- EDIT IMAGES SECTION -->
+        <div class="bm-image-upload-section">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+            <label style="font-weight:700;font-size:0.88rem;color:#172033;">Product Images *</label>
+            <span style="font-size:0.75rem;color:#64748B;" id="edit-image-counter">0 / 8 images</span>
+          </div>
+
+          <div class="bm-upload-dropzone" id="edit-dropzone" tabindex="0" role="button" aria-label="Upload New Product Images" style="padding:16px;">
+            <input type="file" id="edit-file-input" multiple accept="image/jpeg,image/png,image/webp" style="display:none;" />
+            <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+              <span style="font-size:1.4rem;">📷</span>
+              <span style="font-size:0.85rem;font-weight:700;color:#106EBE;">+ Add More Photos (Drag & drop or Click)</span>
+            </div>
+          </div>
+
+          <div id="edit-image-error" style="color:#DC2626;font-size:0.78rem;font-weight:600;margin-top:6px;display:none;"></div>
+          <div class="bm-thumbs-grid" id="edit-thumbs-grid"></div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="edit-title" style="font-weight:700;font-size:0.85rem;">Product Title *</label>
+          <input type="text" id="edit-title" required minlength="3" maxlength="190" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div class="form-group">
+            <label for="edit-category" style="font-weight:700;font-size:0.85rem;">Category *</label>
+            <select id="edit-category" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;"></select>
+          </div>
+          <div class="form-group">
+            <label for="edit-condition" style="font-weight:700;font-size:0.85rem;">Condition *</label>
+            <select id="edit-condition" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;">
+              <option value="NEW">New (Unopened)</option>
+              <option value="LIKE_NEW">Like New (Mint)</option>
+              <option value="USED">Used (Good)</option>
+              <option value="REFURBISHED">Refurbished</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div class="form-group">
+            <label for="edit-price" style="font-weight:700;font-size:0.85rem;">Shop Price (₹) *</label>
+            <input type="number" id="edit-price" min="1" step="0.01" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+          </div>
+          <div class="form-group">
+            <label for="edit-stock" style="font-weight:700;font-size:0.85rem;">Available Stock *</label>
+            <input type="number" id="edit-stock" min="0" step="1" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+          </div>
+          <div class="form-group">
+            <label for="edit-brand" style="font-weight:700;font-size:0.85rem;">Brand</label>
+            <input type="text" id="edit-brand" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="edit-sku" style="font-weight:700;font-size:0.85rem;">SKU Code (Optional)</label>
+          <input type="text" id="edit-sku" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+        </div>
+
+        <div class="form-group" style="margin-bottom:18px;">
+          <label for="edit-desc" style="font-weight:700;font-size:0.85rem;">Description</label>
+          <textarea id="edit-desc" rows="3" style="width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;font-family:inherit;"></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:20px;position:sticky;bottom:0;background:#FFFFFF;padding-top:12px;border-top:1px solid #E2E8F0;">
+          <button type="button" class="sc-btn-sm" id="cancel-edit-btn" style="flex:1;padding:12px;font-size:0.9rem;">Cancel</button>
+          <button type="submit" class="sc-btn-primary" id="save-edit-btn" style="flex:2;justify-content:center;padding:12px;font-size:0.95rem;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Shared Scripts -->
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/seller-sidebar.js"></script>
+
+  <script>
+    window.auth.requireRole('SELLER');
+
+    let allProducts = [];
+    let categoriesList = [];
+    const errorBox = document.getElementById('form-error');
+
+    // State for Add Product Images
+    let createImages = []; // Array of { file?: File, url: string, isPrimary: boolean }
+    // State for Edit Product Images
+    let editImages = []; // Array of { id?: number, file?: File, url: string, isPrimary: boolean }
+
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatINR(num) {
+      return '₹' + Number(num || 0).toLocaleString('en-IN');
+    }
+
+    // =========================================================================
+    // IMAGE UPLOAD & PREVIEW ENGINE
+    // =========================================================================
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+    const MAX_COUNT = 8;
+
+    function validateAndAddFiles(files, targetArray, errorEl, updateCallback) {
+      errorEl.style.display = 'none';
+      errorEl.textContent = '';
+
+      if (!files || files.length === 0) return;
+
+      if (targetArray.length + files.length > MAX_COUNT) {
+        errorEl.textContent = `You can upload a maximum of ${MAX_COUNT} images.`;
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const ext = file.name.split('.').pop().toLowerCase();
+        const validExt = ['jpg', 'jpeg', 'png', 'webp'].includes(ext);
+        const validMime = ALLOWED_TYPES.includes(file.type.toLowerCase());
+
+        if (!validExt || !validMime) {
+          errorEl.textContent = 'Only JPG, JPEG, PNG and WEBP images are allowed.';
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        if (file.size > MAX_SIZE_BYTES) {
+          errorEl.textContent = `"${file.name}" is larger than 10 MB. Image size must be 10 MB or smaller.`;
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        const previewUrl = URL.createObjectURL(file);
+        const isPrimary = targetArray.length === 0;
+
+        targetArray.push({
+          file,
+          url: previewUrl,
+          isPrimary,
+          isNew: true,
+        });
+      }
+
+      // Ensure primary exists
+      if (targetArray.length > 0 && !targetArray.some(x => x.isPrimary)) {
+        targetArray[0].isPrimary = true;
+      }
+
+      updateCallback();
+    }
+
+    function renderThumbs(targetArray, gridEl, counterEl, onRemove, onSetPrimary, onMove) {
+      counterEl.textContent = `${targetArray.length} / ${MAX_COUNT} images`;
+
+      if (targetArray.length === 0) {
+        gridEl.innerHTML = '';
+        return;
+      }
+
+      gridEl.innerHTML = targetArray.map((img, idx) => {
+        const isPrimary = Boolean(img.isPrimary);
+        return `
+          <div class="bm-thumb-card ${isPrimary ? 'is-primary' : ''}">
+            <div class="bm-thumb-preview-wrap">
+              <img src="${img.url}" alt="Product Photo ${idx + 1}" class="bm-thumb-img" />
+              <span class="bm-thumb-index-badge">#${idx + 1}</span>
+              ${isPrimary ? '<span class="bm-thumb-primary-tag">PRIMARY</span>' : ''}
+              <button type="button" class="bm-thumb-del-btn" data-idx="${idx}" title="Remove image" aria-label="Remove image">✕</button>
+            </div>
+            <div class="bm-thumb-actions">
+              ${isPrimary
+                ? '<button type="button" class="bm-thumb-action-btn primary-btn" disabled>Primary</button>'
+                : `<button type="button" class="bm-thumb-action-btn" data-set-primary="${idx}">Set Primary</button>`
+              }
+              <div class="bm-thumb-nav-row">
+                <button type="button" class="bm-thumb-move-btn" data-move-left="${idx}" ${idx === 0 ? 'disabled' : ''} title="Move Left">◀</button>
+                <button type="button" class="bm-thumb-move-btn" data-move-right="${idx}" ${idx === targetArray.length - 1 ? 'disabled' : ''} title="Move Right">▶</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Wire remove buttons
+      gridEl.querySelectorAll('.bm-thumb-del-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          onRemove(Number(btn.dataset.idx));
+        });
+      });
+
+      // Wire set primary buttons
+      gridEl.querySelectorAll('[data-set-primary]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          onSetPrimary(Number(btn.dataset.setPrimary));
+        });
+      });
+
+      // Wire move buttons
+      gridEl.querySelectorAll('[data-move-left]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          onMove(Number(btn.dataset.moveLeft), -1);
+        });
+      });
+      gridEl.querySelectorAll('[data-move-right]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          onMove(Number(btn.dataset.moveRight), 1);
+        });
+      });
+    }
+
+    // Setup Create Modal Dropzone
+    const createDropzone = document.getElementById('create-dropzone');
+    const createFileInput = document.getElementById('create-file-input');
+    const createError = document.getElementById('create-image-error');
+    const createThumbsGrid = document.getElementById('create-thumbs-grid');
+    const createCounter = document.getElementById('create-image-counter');
+
+    createDropzone.addEventListener('click', () => createFileInput.click());
+    createDropzone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        createFileInput.click();
+      }
+    });
+
+    createFileInput.addEventListener('change', () => {
+      validateAndAddFiles(createFileInput.files, createImages, createError, updateCreateThumbs);
+      createFileInput.value = '';
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      createDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        createDropzone.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      createDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        createDropzone.classList.remove('dragover');
+      });
+    });
+    createDropzone.addEventListener('drop', (e) => {
+      if (e.dataTransfer && e.dataTransfer.files) {
+        validateAndAddFiles(e.dataTransfer.files, createImages, createError, updateCreateThumbs);
+      }
+    });
+
+    function updateCreateThumbs() {
+      renderThumbs(
+        createImages,
+        createThumbsGrid,
+        createCounter,
+        (removeIdx) => {
+          createImages.splice(removeIdx, 1);
+          if (createImages.length > 0 && !createImages.some(x => x.isPrimary)) {
+            createImages[0].isPrimary = true;
+          }
+          updateCreateThumbs();
+        },
+        (primaryIdx) => {
+          createImages.forEach((img, i) => { img.isPrimary = (i === primaryIdx); });
+          updateCreateThumbs();
+        },
+        (idx, offset) => {
+          const target = idx + offset;
+          if (target >= 0 && target < createImages.length) {
+            const temp = createImages[idx];
+            createImages[idx] = createImages[target];
+            createImages[target] = temp;
+            updateCreateThumbs();
+          }
+        }
+      );
+    }
+
+    // Setup Edit Modal Dropzone
+    const editDropzone = document.getElementById('edit-dropzone');
+    const editFileInput = document.getElementById('edit-file-input');
+    const editError = document.getElementById('edit-image-error');
+    const editThumbsGrid = document.getElementById('edit-thumbs-grid');
+    const editCounter = document.getElementById('edit-image-counter');
+
+    editDropzone.addEventListener('click', () => editFileInput.click());
+    editFileInput.addEventListener('change', () => {
+      validateAndAddFiles(editFileInput.files, editImages, editError, updateEditThumbs);
+      editFileInput.value = '';
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      editDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        editDropzone.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      editDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        editDropzone.classList.remove('dragover');
+      });
+    });
+    editDropzone.addEventListener('drop', (e) => {
+      if (e.dataTransfer && e.dataTransfer.files) {
+        validateAndAddFiles(e.dataTransfer.files, editImages, editError, updateEditThumbs);
+      }
+    });
+
+    function updateEditThumbs() {
+      renderThumbs(
+        editImages,
+        editThumbsGrid,
+        editCounter,
+        (removeIdx) => {
+          if (editImages.length <= 1) {
+            editError.textContent = 'A product must have at least one image.';
+            editError.style.display = 'block';
+            return;
+          }
+          editImages.splice(removeIdx, 1);
+          if (editImages.length > 0 && !editImages.some(x => x.isPrimary)) {
+            editImages[0].isPrimary = true;
+          }
+          updateEditThumbs();
+        },
+        (primaryIdx) => {
+          editImages.forEach((img, i) => { img.isPrimary = (i === primaryIdx); });
+          updateEditThumbs();
+        },
+        (idx, offset) => {
+          const target = idx + offset;
+          if (target >= 0 && target < editImages.length) {
+            const temp = editImages[idx];
+            editImages[idx] = editImages[target];
+            editImages[target] = temp;
+            updateEditThumbs();
+          }
+        }
+      );
+    }
+
+    // =========================================================================
+    // UNSAVED CHANGES GUARD
+    // =========================================================================
+    function isCreateFormDirty() {
+      return createImages.length > 0 ||
+        Boolean(document.getElementById('p-title').value.trim()) ||
+        Boolean(document.getElementById('p-price').value.trim()) ||
+        Boolean(document.getElementById('p-brand').value.trim()) ||
+        Boolean(document.getElementById('p-desc').value.trim());
+    }
+
+    const { confirmDiscard } = window.nav.setupUnsavedChangesGuard({
+      isDirtyCheck: isCreateFormDirty,
+      onDiscard: () => {
+        createImages = [];
+        updateCreateThumbs();
+        document.getElementById('create-product-form').reset();
+      }
+    });
+
+    // =========================================================================
+    // CATEGORY & PRODUCT DATA LOADING
+    // =========================================================================
+    async function loadCategories() {
+      categoriesList = await window.api.get('/categories');
+      const select = document.getElementById('p-category');
+      const editSelect = document.getElementById('edit-category');
+      const filterSelect = document.getElementById('category-filter');
+      const options = categoriesList
+        .filter(c => c.parent_id === null)
+        .map(c => `<option value="${c.id}">${c.name}</option>`)
+        .join('');
+
+      select.innerHTML = options;
+      editSelect.innerHTML = options;
+      filterSelect.innerHTML = '<option value="">All Categories</option>' + options;
+    }
+
+    async function loadProducts() {
+      hideError();
+      try {
+        const { items } = await window.api.get('/products/my');
+        allProducts = items || [];
+        renderProductsTable();
+      } catch (err) {
+        showError('Could not load products: ' + err.message);
+      }
+    }
+
+    function renderProductsTable() {
+      const tbody = document.getElementById('products-tbody');
+      const searchQ = document.getElementById('product-search-input').value.toLowerCase().trim();
+      const statusFilter = document.getElementById('status-filter').value;
+      const categoryFilter = document.getElementById('category-filter').value;
+
+      let filtered = allProducts.filter(p => {
+        if (statusFilter && p.status !== statusFilter) return false;
+        if (categoryFilter && String(p.category_id) !== String(categoryFilter)) return false;
+        if (searchQ) {
+          const matchTitle = (p.title || '').toLowerCase().includes(searchQ);
+          const matchBrand = (p.brand || '').toLowerCase().includes(searchQ);
+          const matchSku = (p.sku || '').toLowerCase().includes(searchQ);
+          if (!matchTitle && !matchBrand && !matchSku) return false;
+        }
+        return true;
+      });
+
+      document.getElementById('product-count-label').textContent = `Showing ${filtered.length} of ${allProducts.length} products`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center;padding:48px 20px;">
+              <div style="font-size:1.1rem;font-weight:700;color:#172033;margin-bottom:6px;">No products found</div>
+              <p class="text-muted" style="margin-bottom:16px;">Click the button below to add your first product with photos to BidMart.</p>
+              <button type="button" class="sc-btn-primary" onclick="document.getElementById('open-create-modal').click()">+ Add Your First Product</button>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const fallbackImg = '/assets/placeholder-product.svg';
+        let imgUrl = fallbackImg;
+        let imgCount = 0;
+
+        if (Array.isArray(p.images) && p.images.length > 0) {
+          imgUrl = typeof p.images[0] === 'string' ? p.images[0] : (p.images[0].url || p.images[0].image_url || fallbackImg);
+          imgCount = p.images.length;
+        } else if (typeof p.images === 'string') {
+          try {
+            const arr = JSON.parse(p.images);
+            if (Array.isArray(arr) && arr.length > 0) {
+              imgUrl = typeof arr[0] === 'string' ? arr[0] : (arr[0].url || fallbackImg);
+              imgCount = arr.length;
+            }
+          } catch {}
+        }
+
+        const statusClass = (p.status || '').toLowerCase();
+        const isDraft = p.status === 'DRAFT';
+        const isShop = p.status === 'ACTIVE_SHOP';
+        const isUnsold = p.status === 'AUCTION_UNSOLD';
+
+        let actionButtons = '';
+        if (isDraft) {
+          actionButtons += `<button class="sc-btn-sm" data-action="publish" data-id="${p.id}" style="color:#059669;border-color:#059669;font-weight:700;">Publish</button> `;
+          actionButtons += `<button class="sc-btn-sm" data-action="edit" data-id="${p.id}">Edit</button> `;
+          actionButtons += `<button class="sc-btn-sm" data-action="delete" data-id="${p.id}" style="color:#DC2626;">Delete</button> `;
+        } else if (isShop) {
+          actionButtons += `<button class="sc-btn-sm" data-action="edit" data-id="${p.id}">Edit / Photos</button> `;
+          actionButtons += `<a href="/seller/auctions.html" class="sc-btn-sm" style="color:var(--sc-primary);text-decoration:none;">Move to Auction</a> `;
+        } else if (isUnsold) {
+          actionButtons += `<a href="/seller/auctions.html" class="sc-btn-sm" style="color:#059669;text-decoration:none;">Relist Auction</a> `;
+        } else {
+          actionButtons += `<button class="sc-btn-sm" data-action="edit" data-id="${p.id}">Edit</button> `;
+        }
+
+        return `
+          <tr>
+            <td style="padding-left:20px;">
+              <div class="sc-product-cell" style="display:flex;align-items:center;gap:12px;">
+                <div style="position:relative;width:52px;height:52px;border-radius:10px;background:#F1F5F9;overflow:hidden;flex-shrink:0;border:1px solid #E2E8F0;">
+                  <img src="${imgUrl}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='${fallbackImg}'" />
+                  ${imgCount > 1 ? `<span style="position:absolute;bottom:2px;right:2px;background:rgba(15,23,42,0.8);color:#fff;font-size:0.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">${imgCount}</span>` : ''}
+                </div>
+                <div>
+                  <div style="font-weight:700;color:#172033;font-size:0.92rem;">${p.title}</div>
+                  <div class="text-muted" style="font-size:0.75rem;">SKU: ${p.sku || 'N/A'} · Brand: ${p.brand || 'Generic'}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="text-muted" style="font-weight:600;font-size:0.85rem;">${p.category_name || 'General'}</span></td>
+            <td><strong style="font-size:0.95rem;">${formatINR(p.price)}</strong></td>
+            <td>
+              <span style="font-weight:700;font-size:0.88rem;${(p.available_qty ?? 0) <= 5 ? 'color:#DC2626;' : 'color:#059669;'}">
+                ${p.available_qty ?? 0} units
+              </span>
+            </td>
+            <td><span class="sc-status-pill ${statusClass}">${(p.status || '').replace('_', ' ')}</span></td>
+            <td><div style="display:flex;gap:6px;flex-wrap:wrap;">${actionButtons}</div></td>
+          </tr>
+        `;
+      }).join('');
+
+      // Wire Publish action
+      tbody.querySelectorAll('[data-action="publish"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          btn.disabled = true;
+          try {
+            await window.api.patch(`/products/${btn.dataset.id}/status`, { status: 'ACTIVE_SHOP' });
+            await loadProducts();
+          } catch (err) {
+            showError(err.message);
+            btn.disabled = false;
+          }
+        });
+      });
+
+      // Wire Delete action
+      tbody.querySelectorAll('[data-action="delete"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Are you sure you want to delete this draft product and its images?')) return;
+          try {
+            await window.api.delete(`/products/${btn.dataset.id}`);
+            await loadProducts();
+          } catch (err) {
+            showError(err.message);
+          }
+        });
+      });
+
+      // Wire Edit action
+      tbody.querySelectorAll('[data-action="edit"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const prodId = btn.dataset.id;
+          try {
+            const prod = await window.api.get(`/products/${prodId}`);
+            openEditModal(prod);
+          } catch (err) {
+            showError(err.message);
+          }
+        });
+      });
+    }
+
+    // =========================================================================
+    // MODAL HANDLERS
+    // =========================================================================
+    const createModal = document.getElementById('create-modal');
+    const editModal = document.getElementById('edit-modal');
+
+    document.getElementById('open-create-modal').addEventListener('click', () => {
+      createImages = [];
+      updateCreateThumbs();
+      document.getElementById('create-product-form').reset();
+      createError.style.display = 'none';
+      createModal.hidden = false;
+    });
+
+    document.getElementById('create-modal-close').addEventListener('click', () => {
+      confirmDiscard(() => { createModal.hidden = true; });
+    });
+    document.getElementById('cancel-create-btn').addEventListener('click', () => {
+      confirmDiscard(() => { createModal.hidden = true; });
+    });
+
+    document.getElementById('edit-modal-close').addEventListener('click', () => { editModal.hidden = true; });
+    document.getElementById('cancel-edit-btn').addEventListener('click', () => { editModal.hidden = true; });
+
+    function openEditModal(prod) {
+      document.getElementById('edit-product-id').value = prod.id;
+      document.getElementById('edit-modal-subtitle').textContent = prod.title;
+      document.getElementById('edit-title').value = prod.title;
+      document.getElementById('edit-category').value = prod.category_id;
+      document.getElementById('edit-condition').value = prod.condition || 'NEW';
+      document.getElementById('edit-price').value = prod.price;
+      document.getElementById('edit-stock').value = prod.available_qty ?? 0;
+      document.getElementById('edit-brand').value = prod.brand || '';
+      document.getElementById('edit-sku').value = prod.sku || '';
+      document.getElementById('edit-desc').value = prod.description || '';
+
+      editImages = [];
+      if (prod.image_records && prod.image_records.length > 0) {
+        editImages = prod.image_records.map(rec => ({
+          id: rec.id,
+          url: rec.image_url,
+          isPrimary: Boolean(rec.is_primary),
+          isNew: false,
+        }));
+      } else if (Array.isArray(prod.images)) {
+        editImages = prod.images.map((url, i) => ({
+          url,
+          isPrimary: i === 0,
+          isNew: false,
+        }));
+      }
+
+      updateEditThumbs();
+      editError.style.display = 'none';
+      editModal.hidden = false;
+    }
+
+    // =========================================================================
+    // SUBMIT CREATE PRODUCT (MULTIPART / IMAGES)
+    // =========================================================================
+    document.getElementById('create-product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+      createError.style.display = 'none';
+
+      if (createImages.length === 0) {
+        createError.textContent = 'Add at least one product image.';
+        createError.style.display = 'block';
+        return;
+      }
+
+      const saveBtn = document.getElementById('save-product-btn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Creating Product & Uploading Photos…';
+
+      try {
+        const formData = new FormData();
+        formData.append('title', document.getElementById('p-title').value.trim());
+        formData.append('categoryId', Number(document.getElementById('p-category').value));
+        formData.append('condition', document.getElementById('p-condition').value);
+        formData.append('price', Number(document.getElementById('p-price').value));
+        formData.append('initialQty', Number(document.getElementById('p-qty').value));
+        if (document.getElementById('p-brand').value.trim()) {
+          formData.append('brand', document.getElementById('p-brand').value.trim());
+        }
+        if (document.getElementById('p-sku').value.trim()) {
+          formData.append('sku', document.getElementById('p-sku').value.trim());
+        }
+        if (document.getElementById('p-desc').value.trim()) {
+          formData.append('description', document.getElementById('p-desc').value.trim());
+        }
+
+        // Find primary index among ordered createImages
+        let primaryIdx = createImages.findIndex(x => x.isPrimary);
+        if (primaryIdx < 0) primaryIdx = 0;
+        formData.append('primaryIndex', primaryIdx);
+
+        // Append files
+        createImages.forEach(img => {
+          if (img.file) {
+            formData.append('images', img.file);
+          }
+        });
+
+        // Send multipart request via API
+        const token = window.auth.getToken();
+        const res = await fetch('/api/products', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'Failed to create product.');
+        }
+
+        createModal.hidden = true;
+        createImages = [];
+        document.getElementById('create-product-form').reset();
+        await loadProducts();
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Create Product';
+      }
+    });
+
+    // =========================================================================
+    // SUBMIT EDIT PRODUCT (UPDATES DETAILS & IMAGES)
+    // =========================================================================
+    document.getElementById('edit-product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+      editError.style.display = 'none';
+
+      if (editImages.length === 0) {
+        editError.textContent = 'Add at least one product image.';
+        editError.style.display = 'block';
+        return;
+      }
+
+      const saveBtn = document.getElementById('save-edit-btn');
+      const prodId = document.getElementById('edit-product-id').value;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving Changes…';
+
+      try {
+        const formData = new FormData();
+        formData.append('title', document.getElementById('edit-title').value.trim());
+        formData.append('category_id', Number(document.getElementById('edit-category').value));
+        formData.append('condition', document.getElementById('edit-condition').value);
+        formData.append('price', Number(document.getElementById('edit-price').value));
+        formData.append('available_qty', Number(document.getElementById('edit-stock').value));
+        formData.append('brand', document.getElementById('edit-brand').value.trim());
+        formData.append('sku', document.getElementById('edit-sku').value.trim());
+        formData.append('description', document.getElementById('edit-desc').value.trim());
+
+        // Separate existing image records vs new files
+        const existingUrls = [];
+        let newFileCount = 0;
+
+        editImages.forEach((img, idx) => {
+          if (img.file) {
+            formData.append('images', img.file);
+            newFileCount++;
+          } else {
+            existingUrls.push({
+              url: img.url,
+              imageUrl: img.url,
+              isPrimary: Boolean(img.isPrimary),
+              sortOrder: idx,
+            });
+          }
+        });
+
+        formData.append('existingImages', JSON.stringify(existingUrls));
+
+        const token = window.auth.getToken();
+        const res = await fetch(`/api/products/${prodId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'Failed to update product.');
+        }
+
+        editModal.hidden = true;
+        await loadProducts();
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Changes';
+      }
+    });
+
+    // Filter listeners
+    document.getElementById('product-search-input').addEventListener('input', renderProductsTable);
+    document.getElementById('status-filter').addEventListener('change', renderProductsTable);
+    document.getElementById('category-filter').addEventListener('change', renderProductsTable);
+
+    // Initial load
+    (async () => {
+      await loadCategories();
+      await loadProducts();
+      if (window.location.hash === '#add') {
+        document.getElementById('open-create-modal').click();
+      }
+    })();
+  </script>
+</body>
+</html>

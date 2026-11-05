@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wishlist — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="container">
+    <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
+      <a href="/shop/shop.html" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/shop/shop.html'); return false;" aria-label="Go back to shop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Back to Shop</span>
+      </a>
+      <div class="bm-breadcrumbs">
+        <a href="/">Home</a>
+        <span class="bm-breadcrumbs-separator">/</span>
+        <a href="/shop/shop.html">Shop</a>
+        <span class="bm-breadcrumbs-separator">/</span>
+        <span class="bm-breadcrumb-current">Wishlist</span>
+      </div>
+    </div>
+    <div class="page-head"><h1>Your Wishlist</h1></div>
+    <div class="grid-4" id="wishlist-grid">
+      <p class="text-muted">Loading…</p>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/product-card.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+
+  <script>
+    if (!window.auth.isLoggedIn()) {
+      window.location.href = '/auth/login.html';
+    }
+
+    async function load() {
+      const grid = document.getElementById('wishlist-grid');
+      try {
+        const items = await window.api.get('/wishlist');
+        grid.innerHTML = items.length
+          ? items.map((item) => `
+              <div style="position:relative;">
+                ${window.shopHelpers.renderProductCard({ ...item, id: item.product_id, category_name: '', status: item.product_status })}
+                <button class="btn btn-ghost btn-sm" data-remove="${item.product_id}" style="position:absolute;top:24px;right:24px;background:white;">Remove</button>
+              </div>
+            `).join('')
+          : '<div class="empty-state" style="grid-column:1/-1;">Your wishlist is empty. <a href="/shop/shop.html" style="color:var(--color-primary);font-weight:600;">Browse products</a></div>';
+
+        grid.querySelectorAll('[data-remove]').forEach((btn) => {
+          btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            await window.api.delete(`/wishlist/${btn.dataset.remove}`);
+            load();
+          });
+        });
+      } catch (err) {
+        grid.innerHTML = `<p class="text-muted">Could not load your wishlist: ${err.message}</p>`;
+      }
+    }
+
+    load();
+  </script>
+
+</body>
+</html>

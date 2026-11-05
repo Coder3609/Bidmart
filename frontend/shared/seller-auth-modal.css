@@ -1,0 +1,604 @@
+/**
+ * BidMart Premium Seller Authentication Modal Styles
+ * Unified visual language with Buyer Auth:
+ * Dark navy (#061B33, #030F1E, #092648), Blue #106EBE, Mint #0FFCBE,
+ * Glassmorphism, diagonal glowing divider, and floating 3D seller objects.
+ */
+
+:root {
+  --seller-navy-deep: #030F1E;
+  --seller-navy-panel: #061B33;
+  --seller-navy-light: #092648;
+  --seller-blue-brand: #106EBE;
+  --seller-blue-hover: #005A9E;
+  --seller-mint-accent: #0FFCBE;
+  --seller-mint-glow: rgba(15, 252, 190, 0.35);
+  --seller-cyan-glow: rgba(6, 182, 212, 0.25);
+  --seller-text-main: #FFFFFF;
+  --seller-text-muted: #94A3B8;
+  --seller-border-subtle: rgba(255, 255, 255, 0.12);
+  --seller-border-mint: rgba(15, 252, 190, 0.3);
+  --seller-radius-lg: 24px;
+  --seller-radius-md: 14px;
+}
+
+/* Modal Overlay & Backdrop */
+.seller-auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(3, 15, 30, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+}
+
+.seller-auth-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Floating 3D Selling Objects Layer */
+.seller-floating-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.seller-float-item {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.45));
+  will-change: transform;
+}
+
+/* 1. 3D Shopping Delivery Package */
+.seller-obj-package {
+  top: 14%;
+  left: 8%;
+  animation: sellerFloatBox 6s ease-in-out infinite alternate;
+}
+
+/* 2. Storefront Icon */
+.seller-obj-store {
+  bottom: 15%;
+  left: 10%;
+  animation: sellerFloatStore 7s ease-in-out infinite alternate;
+}
+
+/* 3. Sales Growth Chart Card */
+.seller-obj-chart {
+  top: 16%;
+  right: 9%;
+  animation: sellerFloatChart 8s ease-in-out infinite alternate;
+}
+
+/* 4. Payout / Escrow Card */
+.seller-obj-payout {
+  bottom: 18%;
+  right: 11%;
+  animation: sellerFloatPayout 6.5s ease-in-out infinite alternate;
+}
+
+/* 5. Floating Coins */
+.seller-obj-coin {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FCD34D 0%, #D97706 100%);
+  color: #030F1E;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border: 2px solid #FEF08A;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.45);
+}
+.seller-coin-1 {
+  top: 48%;
+  left: 4%;
+  animation: sellerFloatCoin 5s ease-in-out infinite alternate;
+}
+.seller-coin-2 {
+  top: 40%;
+  right: 5%;
+  animation: sellerFloatCoin 6.5s ease-in-out infinite alternate-reverse;
+}
+
+/* Floating Animations */
+@keyframes sellerFloatBox {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  100% { transform: translateY(-22px) rotate(8deg) scale(1.05); }
+}
+@keyframes sellerFloatStore {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(18px) rotate(-6deg); }
+}
+@keyframes sellerFloatChart {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-18px) rotate(-5deg); }
+}
+@keyframes sellerFloatPayout {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(20px) rotate(6deg); }
+}
+@keyframes sellerFloatCoin {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  100% { transform: translateY(-26px) rotate(180deg) scale(1.1); }
+}
+
+/* Main Modal Card */
+.seller-auth-modal {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 980px;
+  min-height: 580px;
+  background: var(--seller-navy-panel);
+  border: 1px solid var(--seller-border-mint);
+  border-radius: var(--seller-radius-lg);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(15, 252, 190, 0.15);
+  overflow: hidden;
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+}
+
+.seller-auth-overlay.is-active .seller-auth-modal {
+  transform: scale(1) translateY(0);
+}
+
+/* Close Button */
+.seller-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.seller-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  border-color: var(--seller-mint-accent);
+  transform: rotate(90deg);
+}
+
+/* Split Panel Layout */
+.seller-auth-panels {
+  display: flex;
+  width: 100%;
+  min-height: 580px;
+}
+
+/* Form Area (Left) */
+.seller-form-side {
+  flex: 1.15;
+  padding: 44px 48px;
+  background: var(--seller-navy-panel);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 3;
+}
+
+/* Showcase Hero Side (Right) */
+.seller-hero-side {
+  flex: 0.85;
+  background: linear-gradient(135deg, #092648 0%, #030F1E 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 44px;
+  overflow: hidden;
+  border-left: 1px solid rgba(15, 252, 190, 0.2);
+}
+
+/* Glowing Diagonal Divider */
+.seller-hero-side::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -2px;
+  bottom: -20%;
+  width: 3px;
+  background: linear-gradient(180deg, transparent 0%, #106EBE 30%, #0FFCBE 70%, transparent 100%);
+  box-shadow: 0 0 16px var(--seller-mint-accent), 0 0 30px var(--seller-blue-brand);
+}
+
+/* Hero Content */
+.seller-hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  color: #FFFFFF;
+}
+
+.seller-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(15, 252, 190, 0.12);
+  border: 1px solid rgba(15, 252, 190, 0.35);
+  border-radius: 999px;
+  color: var(--seller-mint-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.seller-hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 14px 0;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #FFFFFF 40%, #0FFCBE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seller-hero-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #94A3B8;
+  margin: 0 0 28px 0;
+}
+
+.seller-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.seller-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.86rem;
+  color: #E2E8F0;
+}
+
+.seller-feature-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(15, 252, 190, 0.15);
+  color: var(--seller-mint-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Brand Badge */
+.seller-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.seller-brand-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.3px;
+}
+.seller-brand-mint {
+  color: var(--seller-mint-accent);
+}
+.seller-portal-tag {
+  font-size: 0.72rem;
+  background: rgba(16, 110, 190, 0.3);
+  border: 1px solid rgba(16, 110, 190, 0.6);
+  color: #60A5FA;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+/* Headings */
+.seller-auth-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.4px;
+}
+
+.seller-auth-subtitle {
+  font-size: 0.88rem;
+  color: #94A3B8;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+/* Forms View Switcher */
+.seller-view-pane {
+  display: none;
+  animation: sellerFadeSlide 0.3s ease forwards;
+}
+.seller-view-pane.active {
+  display: block;
+}
+
+@keyframes sellerFadeSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Groups & Fields */
+.seller-field-group {
+  margin-bottom: 16px;
+}
+
+.seller-field-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #CBD5E1;
+  margin-bottom: 6px;
+}
+
+.seller-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.seller-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.seller-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--seller-radius-md);
+  padding: 12px 14px 12px 42px;
+  font-size: 0.92rem;
+  color: #FFFFFF;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.seller-input.has-toggle {
+  padding-right: 42px;
+}
+
+.seller-input:focus {
+  border-color: var(--seller-mint-accent);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(15, 252, 190, 0.18);
+}
+
+.seller-input:focus ~ .seller-input-icon {
+  color: var(--seller-mint-accent);
+}
+
+.seller-input::placeholder {
+  color: #64748B;
+}
+
+.seller-pwd-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+.seller-pwd-toggle:hover {
+  color: #FFFFFF;
+}
+
+/* Field Error Message */
+.seller-field-error {
+  font-size: 0.76rem;
+  color: #F87171;
+  margin-top: 4px;
+  display: none;
+}
+.seller-field-group.has-error .seller-input {
+  border-color: #EF4444;
+}
+.seller-field-group.has-error .seller-field-error {
+  display: block;
+}
+
+/* Alert Banner */
+.seller-alert-banner {
+  display: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.seller-alert-banner.error {
+  display: block;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #FCA5A5;
+}
+.seller-alert-banner.success {
+  display: block;
+  background: rgba(15, 252, 190, 0.15);
+  border: 1px solid rgba(15, 252, 190, 0.4);
+  color: var(--seller-mint-accent);
+}
+
+/* Extra row: Remember me & Forgot Password */
+.seller-extra-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 0.82rem;
+  color: #94A3B8;
+}
+
+.seller-remember-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.seller-remember-label input[type="checkbox"] {
+  accent-color: var(--seller-mint-accent);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.seller-forgot-link {
+  color: #60A5FA;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.seller-forgot-link:hover {
+  color: var(--seller-mint-accent);
+  text-decoration: underline;
+}
+
+/* Primary Submit Button */
+.seller-submit-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: var(--seller-radius-md);
+  border: none;
+  background: linear-gradient(135deg, #106EBE 0%, #0BC99A 100%);
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 6px 20px rgba(15, 252, 190, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.seller-submit-btn:hover {
+  background: linear-gradient(135deg, #005A9E 0%, #0FFCBE 100%);
+  box-shadow: 0 8px 25px rgba(15, 252, 190, 0.4);
+  transform: translateY(-1px);
+}
+
+.seller-submit-btn:active {
+  transform: translateY(0);
+}
+
+.seller-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Switch Views Footer */
+.seller-switch-text {
+  text-align: center;
+  font-size: 0.84rem;
+  color: #94A3B8;
+  margin-top: 20px;
+}
+
+.seller-switch-btn {
+  background: none;
+  border: none;
+  color: var(--seller-mint-accent);
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+  padding: 0 4px;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.seller-switch-btn:hover {
+  color: #FFFFFF;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 860px) {
+  .seller-auth-panels {
+    flex-direction: column;
+  }
+  .seller-hero-side {
+    display: none;
+  }
+  .seller-form-side {
+    padding: 36px 28px;
+  }
+  .seller-auth-modal {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 480px) {
+  .seller-auth-overlay {
+    padding: 12px;
+  }
+  .seller-form-side {
+    padding: 30px 18px;
+  }
+  .seller-auth-title {
+    font-size: 1.4rem;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .seller-float-item {
+    animation: none !important;
+  }
+  .seller-auth-modal {
+    transition: none !important;
+  }
+}

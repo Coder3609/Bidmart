@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Center / Auctions — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body class="sc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <div id="seller-sidebar"></div>
+
+    <main class="sc-main-content">
+      <div class="bm-page-header-wrap">
+        <div class="bm-page-header-top">
+          <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/dashboards/seller/dashboard.html')" aria-label="Go back to Seller Dashboard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Back to Seller Dashboard</span>
+          </button>
+          <nav class="bm-breadcrumbs" aria-label="Breadcrumb">
+            <a href="/dashboards/seller/dashboard.html" class="bm-breadcrumb-item">Seller Center</a>
+            <span class="bm-breadcrumb-sep">/</span>
+            <span class="bm-breadcrumb-item active" aria-current="page">Auctions Management</span>
+          </nav>
+        </div>
+        <div class="bm-page-header-main">
+          <div class="bm-page-header-titles">
+            <h1 class="bm-page-title">Auctions Management</h1>
+            <p class="bm-page-subtitle">Shift existing Shop products into live auctions, track live bidding, and manage unsold items.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-error" id="form-error" role="alert" style="margin-bottom:16px;"></div>
+
+      <div class="two-col" style="display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:start;">
+        
+        <!-- Left: My Auctions List -->
+        <div class="sc-card" style="padding:0;overflow:hidden;">
+          <div class="sc-card-head" style="padding:18px 20px;border-bottom:1px solid #E2E8F0;margin-bottom:0;">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:var(--sc-primary);"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Your Auction Listings</span>
+            </h3>
+            <span class="text-muted" style="font-size:0.8rem;font-weight:600;" id="auctions-count">0 auctions</span>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="sc-table">
+              <thead>
+                <tr>
+                  <th style="padding-left:20px;">Auction Product</th>
+                  <th>Current Price</th>
+                  <th>Status</th>
+                  <th>Time Remaining</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="auctions-tbody">
+                <tr><td colspan="5" class="text-muted" style="text-align:center;padding:32px;">Loading auctions…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Eligible Products to Move to Auction -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#059669;"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Eligible Products</span>
+            </h3>
+          </div>
+          <p class="text-muted" style="font-size:0.85rem;margin-bottom:16px;">
+            Convert any active Shop product or unsold item into a live auction round.
+          </p>
+
+          <div id="eligible-products-list">
+            <p class="text-muted" style="text-align:center;padding:16px;">Loading eligible products…</p>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Modal: Move to Auction / Relist -->
+  <div class="modal-overlay" id="auction-modal" hidden>
+    <div class="modal" style="max-width:480px;">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <h3 id="modal-title" style="margin-top:0;font-size:1.25rem;">Move to Auction</h3>
+      <p class="text-muted" style="font-size:0.85rem;margin-bottom:18px;" id="modal-product-name"></p>
+
+      <form id="auction-form">
+        <div class="form-group">
+          <label for="startingPrice">Starting Price (₹) *</label>
+          <input type="number" id="startingPrice" min="1" step="0.01" required placeholder="e.g. 1000" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group">
+            <label for="bidIncrement">Bid Increment (₹) *</label>
+            <input type="number" id="bidIncrement" min="1" step="0.01" value="100" required />
+          </div>
+          <div class="form-group">
+            <label for="reservePrice">Reserve Price (₹, optional)</label>
+            <input type="number" id="reservePrice" min="1" step="0.01" placeholder="Optional minimum" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="startsAt">Auction Starts At *</label>
+          <input type="datetime-local" id="startsAt" required />
+        </div>
+        <div class="form-group">
+          <label for="endsAt">Auction Ends At *</label>
+          <input type="datetime-local" id="endsAt" required />
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button type="button" class="sc-btn-sm" id="cancel-auction-btn" style="flex:1;padding:10px;">Cancel</button>
+          <button type="submit" class="sc-btn-primary" id="modal-submit" style="flex:2;justify-content:center;">Start Auction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/auction-card.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/seller-sidebar.js"></script>
+
+  <script>
+    window.auth.requireRole('SELLER');
+
+    const errorBox = document.getElementById('form-error');
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.classList.add('visible');
+    }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    function formatINR(num) {
+      return '₹' + Number(num || 0).toLocaleString('en-IN');
+    }
+
+    function toLocalInputValue(date) {
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function formatTimeRemaining(endsAtStr) {
+      const diffMs = new Date(endsAtStr).getTime() - Date.now();
+      if (diffMs <= 0) return '<span style="color:#64748B;">Ended</span>';
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      if (hours >= 24) {
+        const days = Math.floor(hours / 24);
+        return `<span style="color:#EF4444;font-weight:700;">${days}d ${hours % 24}h remaining</span>`;
+      }
+      return `<span style="color:#EF4444;font-weight:700;">${hours}h ${mins}m remaining</span>`;
+    }
+
+    let modalMode = 'shift';
+    let modalProductId = null;
+    const modal = document.getElementById('auction-modal');
+
+    document.getElementById('modal-close').addEventListener('click', () => { modal.hidden = true; });
+    document.getElementById('cancel-auction-btn').addEventListener('click', () => { modal.hidden = true; });
+
+    function openAuctionModal(mode, prod) {
+      modalMode = mode;
+      modalProductId = prod.id;
+      document.getElementById('modal-title').textContent = mode === 'shift' ? 'Move Product to Auction' : 'Relist Auction';
+      document.getElementById('modal-product-name').textContent = prod.title;
+      document.getElementById('startingPrice').value = Number(prod.price) || '';
+      document.getElementById('reservePrice').value = '';
+      document.getElementById('bidIncrement').value = 100;
+
+      const now = new Date(Date.now() + 2 * 60 * 1000); // 2 mins from now
+      const ends = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days default
+      document.getElementById('startsAt').value = toLocalInputValue(now);
+      document.getElementById('endsAt').value = toLocalInputValue(ends);
+
+      modal.hidden = false;
+    }
+
+    document.getElementById('auction-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+      const btn = document.getElementById('modal-submit');
+      btn.disabled = true;
+      btn.textContent = 'Submitting…';
+
+      const payload = {
+        productId: modalProductId,
+        startingPrice: Number(document.getElementById('startingPrice').value),
+        bidIncrement: Number(document.getElementById('bidIncrement').value),
+        reservePrice: document.getElementById('reservePrice').value ? Number(document.getElementById('reservePrice').value) : undefined,
+        startsAt: new Date(document.getElementById('startsAt').value).toISOString(),
+        endsAt: new Date(document.getElementById('endsAt').value).toISOString(),
+      };
+
+      try {
+        if (modalMode === 'shift') {
+          await window.api.post('/auctions', payload);
+        } else {
+          await window.api.post('/auctions/relist', payload);
+        }
+        modal.hidden = true;
+        await refreshAll();
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Start Auction';
+      }
+    });
+
+    async function loadMyAuctions() {
+      const tbody = document.getElementById('auctions-tbody');
+      try {
+        const { items } = await window.api.get('/auctions/my');
+        const countLabel = document.getElementById('auctions-count');
+        countLabel.textContent = `${(items || []).length} auctions`;
+
+        if (!items || items.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;" class="text-muted">No auctions created yet. Select a product on the right to start an auction.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = items.map(a => {
+          const fallbackImg = '/assets/placeholder-product.svg';
+          let imgUrl = fallbackImg;
+          if (Array.isArray(a.images) && a.images.length) imgUrl = a.images[0];
+          else if (typeof a.images === 'string') {
+            try { const arr = JSON.parse(a.images); imgUrl = arr[0] || fallbackImg; } catch {}
+          }
+
+          const statusClass = (a.product_status || a.status || '').toLowerCase();
+
+          return `
+            <tr>
+              <td style="padding-left:20px;">
+                <div class="sc-product-cell">
+                  <img src="${imgUrl}" alt="${a.title}" class="sc-thumb-sm" onerror="this.src='${fallbackImg}'" />
+                  <a href="/auction/auction-detail.html?id=${a.id}" style="font-weight:700;color:#172033;text-decoration:none;">${a.title}</a>
+                </div>
+              </td>
+              <td><strong>${formatINR(a.current_price)}</strong></td>
+              <td><span class="sc-status-pill ${statusClass}">${(a.status || '').replace('_', ' ')}</span></td>
+              <td>${formatTimeRemaining(a.ends_at)}</td>
+              <td>
+                <a href="/auction/auction-detail.html?id=${a.id}" class="sc-btn-sm" style="color:var(--sc-primary);">View Bids</a>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" style="color:#EF4444;text-align:center;padding:24px;">Could not load auctions: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function loadEligibleProducts() {
+      const container = document.getElementById('eligible-products-list');
+      try {
+        const { items } = await window.api.get('/products/my');
+        const eligible = (items || []).filter(p => p.status === 'ACTIVE_SHOP' || p.status === 'AUCTION_UNSOLD');
+
+        if (eligible.length === 0) {
+          container.innerHTML = '<div class="text-muted" style="text-align:center;padding:24px;">No Shop or unsold products available right now.</div>';
+          return;
+        }
+
+        container.innerHTML = eligible.map(p => {
+          const fallbackImg = '/assets/placeholder-product.svg';
+          let imgUrl = fallbackImg;
+          if (Array.isArray(p.images) && p.images.length) imgUrl = p.images[0];
+          else if (typeof p.images === 'string') {
+            try { const arr = JSON.parse(p.images); imgUrl = arr[0] || fallbackImg; } catch {}
+          }
+
+          const isShop = p.status === 'ACTIVE_SHOP';
+
+          return `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #F1F5F9;gap:12px;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <img src="${imgUrl}" alt="${p.title}" class="sc-thumb-sm" onerror="this.src='${fallbackImg}'" />
+                <div>
+                  <div style="font-weight:700;font-size:0.85rem;">${p.title}</div>
+                  <div class="text-muted" style="font-size:0.75rem;">Price: ${formatINR(p.price)} · ${p.status.replace('_', ' ')}</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px;">
+                ${isShop
+                  ? `<button type="button" class="sc-btn-sm" style="color:var(--sc-primary);border-color:var(--sc-primary);" data-action="shift" data-id="${p.id}" data-title="${p.title}" data-price="${p.price}">Move to Auction</button>`
+                  : `<button type="button" class="sc-btn-sm" style="color:#059669;border-color:#059669;" data-action="relist" data-id="${p.id}" data-title="${p.title}" data-price="${p.price}">Relist</button>
+                     <button type="button" class="sc-btn-sm" data-action="return-shop" data-id="${p.id}">Return to Shop</button>`
+                }
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        container.querySelectorAll('[data-action="shift"], [data-action="relist"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            openAuctionModal(btn.dataset.action === 'shift' ? 'shift' : 'relist', {
+              id: Number(btn.dataset.id),
+              title: btn.dataset.title,
+              price: btn.dataset.price,
+            });
+          });
+        });
+
+        container.querySelectorAll('[data-action="return-shop"]').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            if (!confirm('Return this unsold auction item back to the fixed-price Shop?')) return;
+            try {
+              await window.api.post('/auctions/return-to-shop', { productId: Number(btn.dataset.id) });
+              await refreshAll();
+            } catch (err) {
+              showError(err.message);
+            }
+          });
+        });
+
+      } catch (err) {
+        container.innerHTML = `<p style="color:#EF4444;">${err.message}</p>`;
+      }
+    }
+
+    async function refreshAll() {
+      await Promise.all([loadMyAuctions(), loadEligibleProducts()]);
+    }
+
+    refreshAll();
+  </script>
+</body>
+</html>

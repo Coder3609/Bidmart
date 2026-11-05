@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escrow Wallet Dashboard — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body class="sc-app-body auc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <!-- Global Header -->
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <!-- Persistent Left Navigation Sidebar -->
+    <div id="auction-sidebar"></div>
+
+    <!-- Main Content Area -->
+    <main class="sc-main-content">
+      
+      <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
+        <div class="bm-breadcrumbs" style="margin-bottom: 8px;">
+          <a href="/index.html" class="bm-breadcrumb-item">Auction Center</a>
+          <span class="bm-breadcrumb-sep">/</span>
+          <span class="bm-breadcrumb-item active">Escrow Wallet</span>
+        </div>
+        <div>
+          <a href="/auction/auctions.html" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/auction/auctions.html'); return false;" aria-label="Go back to live auctions">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span>Back to Auctions</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Top Page Header -->
+      <div class="sc-page-header">
+        <div>
+          <h1 class="sc-title">Escrow Wallet Dashboard</h1>
+          <p class="sc-subtitle">Manage your deposits, view reserved auction escrow funds, and track real-time transaction ledger.</p>
+        </div>
+        <div class="sc-header-actions">
+          <button type="button" class="sc-btn-mint" id="btn-open-deposit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <span>+ Deposit Funds</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 Real Database Balance Cards -->
+      <section class="sc-kpi-grid" style="margin-bottom:24px;grid-template-columns:repeat(3, 1fr);">
+        <!-- 1. Total Balance -->
+        <div class="sc-kpi-card" style="border-top:4px solid #2563EB;">
+          <div class="sc-kpi-icon" style="background:#EFF6FF;color:#2563EB;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M2 10h20M16 14h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Total Balance</span>
+          <div class="sc-kpi-value" id="kpi-total-balance">₹0.00</div>
+          <div class="sc-kpi-change neutral"><span>All credited funds</span></div>
+        </div>
+
+        <!-- 2. Available Balance -->
+        <div class="sc-kpi-card" style="border-top:4px solid #059669;">
+          <div class="sc-kpi-icon" style="background:#ECFDF5;color:#059669;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Available to Bid / Shop</span>
+          <div class="sc-kpi-value" style="color:#059669;" id="kpi-avail-balance">₹0.00</div>
+          <div class="sc-kpi-change positive"><span>Ready for immediate use</span></div>
+        </div>
+
+        <!-- 3. Reserved Escrow Balance -->
+        <div class="sc-kpi-card" style="border-top:4px solid #D97706;">
+          <div class="sc-kpi-icon" style="background:#FFFBEB;color:#D97706;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Reserved in Active Bids</span>
+          <div class="sc-kpi-value" style="color:#D97706;" id="kpi-reserved-balance">₹0.00</div>
+          <div class="sc-kpi-change" style="color:#D97706;"><span>Held in escrow holds</span></div>
+        </div>
+      </section>
+
+      <!-- Two Column Layout: Active Holds & Deposit Form -->
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:24px;margin-bottom:28px;align-items:start;">
+        
+        <!-- Left: Active Escrow Holds Table -->
+        <div class="sc-card" style="padding:0;overflow:hidden;">
+          <div class="sc-card-head" style="padding:18px 20px;border-bottom:1px solid #E2E8F0;margin-bottom:0;">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#D97706;"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Active Auction Holds (Escrow)</span>
+            </h3>
+            <span class="text-muted" style="font-size:0.8rem;font-weight:600;" id="holds-count">0 active holds</span>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="sc-table">
+              <thead>
+                <tr>
+                  <th style="padding-left:20px;">Auction Item</th>
+                  <th>Held Amount</th>
+                  <th>Status</th>
+                  <th>Placed At</th>
+                  <th style="padding-right:20px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="holds-tbody">
+                <tr><td colspan="5" class="text-muted" style="text-align:center;padding:32px;">Loading active holds…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Instant Deposit Box -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#059669;"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2"/></svg>
+              <span>Quick Deposit Funds</span>
+            </h3>
+          </div>
+          <p class="text-muted" style="font-size:0.85rem;margin-bottom:16px;">
+            Instantly add funds to your wallet balance for placing bids and purchasing products.
+          </p>
+
+          <form id="wallet-deposit-form">
+            <div class="form-group" style="margin-bottom:12px;">
+              <label for="w-deposit-amount" style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;">Amount (₹)</label>
+              <input type="number" id="w-deposit-amount" min="10" max="1000000" step="10" required placeholder="e.g. 5000" class="auc-quickbid-input" style="height:42px;font-size:1.1rem;padding-left:14px;" />
+            </div>
+
+            <!-- Chips -->
+            <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+              <button type="button" class="sc-chip-btn" data-preset="1000" style="padding:5px 10px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.75rem;font-weight:700;cursor:pointer;">+₹1k</button>
+              <button type="button" class="sc-chip-btn" data-preset="5000" style="padding:5px 10px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.75rem;font-weight:700;cursor:pointer;">+₹5k</button>
+              <button type="button" class="sc-chip-btn" data-preset="10000" style="padding:5px 10px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.75rem;font-weight:700;cursor:pointer;">+₹10k</button>
+              <button type="button" class="sc-chip-btn" data-preset="25000" style="padding:5px 10px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.75rem;font-weight:700;cursor:pointer;">+₹25k</button>
+            </div>
+
+            <div class="form-group" style="margin-bottom:18px;">
+              <label for="w-deposit-method" style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;">Payment Method</label>
+              <select id="w-deposit-method" class="auc-filter-select" style="width:100%;">
+                <option value="UPI">Instant UPI (Simulated Instant Credit)</option>
+                <option value="CARD">Credit / Debit Card</option>
+                <option value="NET_BANKING">Net Banking</option>
+              </select>
+            </div>
+
+            <button type="submit" class="sc-btn-mint" id="btn-w-submit" style="width:100%;height:42px;justify-content:center;font-size:0.95rem;">
+              Deposit Funds Now
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Full Transaction Ledger Table -->
+      <div class="sc-card" style="padding:0;overflow:hidden;">
+        <div class="sc-card-head" style="padding:18px 20px;border-bottom:1px solid #E2E8F0;margin-bottom:0;">
+          <h3 class="sc-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:var(--auc-primary);"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2"/></svg>
+            <span>Wallet Transaction History</span>
+          </h3>
+          <span class="text-muted" style="font-size:0.8rem;font-weight:600;" id="tx-total-count">0 transactions</span>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="sc-table">
+            <thead>
+              <tr>
+                <th style="padding-left:24px;">Transaction ID / Type</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th style="padding-right:24px;text-align:right;">Date & Time</th>
+              </tr>
+            </thead>
+            <tbody id="tx-tbody">
+              <tr><td colspan="5" class="text-muted" style="text-align:center;padding:40px;">Loading transaction history…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;justify-content:center;gap:8px;padding:16px;" id="tx-pagination"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="bm-toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/auction-sidebar.js"></script>
+
+  <script>
+    window.auth.requireAuth();
+
+    let txPage = 1;
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `bm-toast ${type}`;
+      toast.innerHTML = `
+        <span>${type === 'success' ? '✓' : (type === 'error' ? '✘' : 'ℹ')}</span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Load Wallet Balances & Holds
+    async function loadWalletData() {
+      try {
+        const wallet = await window.api.get('/wallet');
+        document.getElementById('kpi-total-balance').textContent = `₹${Number(wallet.total_balance || 0).toLocaleString('en-IN')}`;
+        document.getElementById('kpi-avail-balance').textContent = `₹${Number(wallet.available_balance || 0).toLocaleString('en-IN')}`;
+        document.getElementById('kpi-reserved-balance').textContent = `₹${Number(wallet.reserved_balance || 0).toLocaleString('en-IN')}`;
+
+        const holds = wallet.active_holds || [];
+        document.getElementById('holds-count').textContent = `${holds.length} active hold${holds.length === 1 ? '' : 's'}`;
+
+        const tbody = document.getElementById('holds-tbody');
+        if (holds.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="text-muted" style="text-align:center;padding:32px;">
+                No active escrow holds. When you place a bid on a live auction, funds are reserved here safely.
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = holds.map(h => `
+            <tr>
+              <td style="padding-left:20px;">
+                <a href="/auction/auction-detail.html?id=${h.auction_id}" style="font-weight:700;color:#0F172A;text-decoration:none;">
+                  ${h.product_title || `Auction #${h.auction_id}`}
+                </a>
+              </td>
+              <td><strong style="color:#D97706;">₹${Number(h.amount).toLocaleString('en-IN')}</strong></td>
+              <td><span class="status-pill status-out_of_stock" style="background:#FFFBEB;color:#D97706;border:1px solid #FDE68A;">ACTIVE ESCROW</span></td>
+              <td style="font-size:0.8rem;color:#64748B;">${new Date(h.created_at).toLocaleString('en-IN', { dateStyle:'short', timeStyle:'short' })}</td>
+              <td style="padding-right:20px;">
+                <a href="/auction/auction-detail.html?id=${h.auction_id}" class="sc-btn-outline" style="padding:4px 10px;font-size:0.75rem;text-decoration:none;">View Auction</a>
+              </td>
+            </tr>
+          `).join('');
+        }
+      } catch (err) {
+        showToast(err.message || 'Could not load wallet.', 'error');
+      }
+    }
+
+    // Load Transactions
+    async function loadTransactions() {
+      const tbody = document.getElementById('tx-tbody');
+      try {
+        const { items, pagination } = await window.api.get(`/wallet/transactions?page=${txPage}&limit=15`);
+        document.getElementById('tx-total-count').textContent = `${pagination.total} transactions`;
+
+        if (!items || items.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="text-muted" style="text-align:center;padding:32px;">
+                No wallet transactions recorded yet.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = items.map(tx => {
+          let badge = '';
+          let amountColor = '#0F172A';
+          let sign = '';
+
+          if (tx.type === 'DEPOSIT') {
+            badge = '<span class="status-pill status-active_shop" style="background:#ECFDF5;color:#059669;">DEPOSIT</span>';
+            amountColor = '#059669';
+            sign = '+';
+          } else if (tx.type === 'AUCTION_HOLD') {
+            badge = '<span class="status-pill" style="background:#FFFBEB;color:#D97706;">BID HOLD</span>';
+            amountColor = '#D97706';
+            sign = '🔒';
+          } else if (tx.type === 'AUCTION_HOLD_RELEASE') {
+            badge = '<span class="status-pill" style="background:#EFF6FF;color:#2563EB;">HOLD RELEASE</span>';
+            amountColor = '#2563EB';
+            sign = '🔓';
+          } else if (tx.type === 'ORDER_PAYMENT') {
+            badge = '<span class="status-pill" style="background:#FEF2F2;color:#DC2626;">ORDER PAYMENT</span>';
+            amountColor = '#DC2626';
+            sign = '-';
+          } else {
+            badge = `<span class="status-pill">${tx.type}</span>`;
+          }
+
+          return `
+            <tr>
+              <td style="padding-left:24px;">
+                <div style="font-weight:700;font-size:0.85rem;color:#0F172A;">#TX-${tx.id}</div>
+                <div style="margin-top:2px;">${badge}</div>
+              </td>
+              <td style="font-size:0.85rem;color:#475569;">${tx.description || '—'}</td>
+              <td><strong style="color:${amountColor};font-size:0.95rem;">${sign} ₹${Number(tx.amount).toLocaleString('en-IN')}</strong></td>
+              <td><span style="font-size:0.8rem;color:#059669;font-weight:700;">✓ COMPLETED</span></td>
+              <td style="text-align:right;padding-right:24px;font-size:0.82rem;color:#64748B;">
+                ${new Date(tx.created_at).toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' })}
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        renderTxPagination(pagination);
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-muted" style="text-align:center;padding:32px;">Could not load transactions: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderTxPagination(pagination) {
+      const container = document.getElementById('tx-pagination');
+      if (!pagination || pagination.totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+      let html = '';
+      for (let i = 1; i <= pagination.totalPages; i++) {
+        html += `
+          <button class="sc-btn-primary ${i === pagination.page ? '' : 'sc-btn-outline'}" 
+                  style="min-width:32px;height:32px;padding:0 10px;font-size:0.8rem;${i === pagination.page ? '' : 'background:#FFF;color:#0F172A;border:1px solid #CBD5E1;'}" 
+                  data-page="${i}">${i}</button>
+        `;
+      }
+      container.innerHTML = html;
+      container.querySelectorAll('[data-page]').forEach(b => {
+        b.addEventListener('click', () => {
+          txPage = Number(b.dataset.page);
+          loadTransactions();
+        });
+      });
+    }
+
+    // Handle Deposit Form Submit
+    document.getElementById('wallet-deposit-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const amount = Number(document.getElementById('w-deposit-amount').value);
+      const submitBtn = document.getElementById('btn-w-submit');
+
+      if (!amount || amount <= 0) return;
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Depositing Funds…';
+        await window.api.post('/wallet/deposit', { amount });
+        showToast(`Successfully deposited ₹${amount.toLocaleString('en-IN')}!`, 'success');
+        document.getElementById('w-deposit-amount').value = '';
+        await loadWalletData();
+        await loadTransactions();
+        renderAuctionSidebar();
+      } catch (err) {
+        showToast(err.message || 'Deposit failed.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Deposit Funds Now';
+      }
+    });
+
+    // Preset Chips
+    document.querySelectorAll('.sc-chip-btn[data-preset]').forEach(b => {
+      b.addEventListener('click', () => {
+        document.getElementById('w-deposit-amount').value = b.dataset.preset;
+      });
+    });
+
+    document.getElementById('btn-open-deposit')?.addEventListener('click', () => {
+      document.getElementById('w-deposit-amount').focus();
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+    });
+
+    // Initial Bootstrap
+    renderSellerHeader();
+    renderAuctionSidebar();
+    loadWalletData();
+    loadTransactions();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+This folder is intentionally created empty in Phase 1 (Foundation).
+It will be populated in later phases:
+
+controllers/    -> Phase 2+ (auth, products, auctions, orders...)
+models/         -> Phase 2+ (data access layer per table)
+services/       -> Phase 2+ (business logic: bidding, auction closing, checkout)
+state-machine/  -> Phase 3 (product state machine transitions)
+tests/          -> Phase 2+ (backend tests per section 37 of the spec)

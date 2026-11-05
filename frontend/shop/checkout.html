@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="container">
+    <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
+      <a href="/shop/cart.html" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/shop/cart.html'); return false;" aria-label="Go back to cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Back to Cart</span>
+      </a>
+      <div class="bm-breadcrumbs">
+        <a href="/">Home</a>
+        <span class="bm-breadcrumbs-separator">/</span>
+        <a href="/shop/shop.html">Shop</a>
+        <span class="bm-breadcrumbs-separator">/</span>
+        <a href="/shop/cart.html">Cart</a>
+        <span class="bm-breadcrumbs-separator">/</span>
+        <span class="bm-breadcrumb-current">Checkout</span>
+      </div>
+    </div>
+    <div class="page-head"><h1>Checkout</h1></div>
+
+    <div class="form-error" id="form-error" role="alert"></div>
+
+    <div class="cart-layout">
+      <div>
+        <div class="card" style="padding:24px;margin-bottom:20px;">
+          <h3 style="margin-bottom:14px;">Shipping Address</h3>
+          <div id="address-list"><p class="text-muted">Loading addresses…</p></div>
+
+          <details style="margin-top:14px;">
+            <summary style="cursor:pointer;font-weight:600;font-size:var(--font-size-sm);color:var(--color-primary);">+ Add a new address</summary>
+            <form id="address-form" style="margin-top:16px;">
+              <div class="form-group"><label for="fullName">Full name</label><input id="fullName" required /></div>
+              <div class="form-group"><label for="phone">Phone</label><input id="phone" required /></div>
+              <div class="form-group"><label for="line1">Address line</label><input id="line1" required /></div>
+              <div class="form-group"><label for="city">City</label><input id="city" required /></div>
+              <div class="form-group"><label for="state">State</label><input id="state" required /></div>
+              <div class="form-group"><label for="postalCode">Postal code</label><input id="postalCode" required /></div>
+              <button type="submit" class="btn btn-ghost" style="width:100%;">Save Address</button>
+            </form>
+          </details>
+        </div>
+
+        <div class="card" style="padding:24px;">
+          <h3 style="margin-bottom:14px;">Payment Method</h3>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="COD" checked /> Cash on Delivery — pay when you receive your order
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="CARD" /> Online Payment (Development Mode — simulated success)
+          </label>
+        </div>
+      </div>
+
+      <div class="card" style="padding:24px;height:fit-content;">
+        <h3 style="margin-bottom:16px;">Order Summary</h3>
+        <div id="summary-lines"><p class="text-muted">Loading…</p></div>
+        <button class="btn btn-primary" id="place-order-btn" style="width:100%;margin-top:16px;" disabled>Place Order</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/product-card.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+
+  <script>
+    if (!window.auth.isLoggedIn()) {
+      window.location.href = '/auth/login.html';
+    }
+
+    const errorBox = document.getElementById('form-error');
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function hideError() { errorBox.classList.remove('visible'); }
+
+    let selectedAddressId = null;
+    let cartSubtotal = 0;
+
+    function renderAddresses(addresses) {
+      const container = document.getElementById('address-list');
+      if (addresses.length === 0) {
+        container.innerHTML = '<p class="text-muted">No saved addresses yet — add one below.</p>';
+        return;
+      }
+      container.innerHTML = addresses.map((a) => `
+        <label class="address-option ${a.is_default ? 'selected' : ''}" data-id="${a.id}">
+          <input type="radio" name="address" value="${a.id}" ${a.is_default ? 'checked' : ''} />
+          <strong>${a.full_name}</strong> — ${a.phone}<br/>
+          <span class="text-muted">${a.line1}${a.line2 ? ', ' + a.line2 : ''}, ${a.city}, ${a.state} ${a.postal_code}</span>
+        </label>
+      `).join('');
+
+      selectedAddressId = (addresses.find((a) => a.is_default) || addresses[0]).id;
+
+      container.querySelectorAll('.address-option').forEach((el) => {
+        el.addEventListener('click', () => {
+          selectedAddressId = Number(el.dataset.id);
+          container.querySelectorAll('.address-option').forEach((o) => o.classList.remove('selected'));
+          el.classList.add('selected');
+        });
+      });
+
+      updatePlaceOrderState();
+    }
+
+    function renderSummary(cart) {
+      cartSubtotal = cart.subtotal;
+      const container = document.getElementById('summary-lines');
+
+      if (cart.items.length === 0) {
+        container.innerHTML = '<p class="text-muted">Your cart is empty.</p>';
+        document.getElementById('place-order-btn').disabled = true;
+        return;
+      }
+
+      container.innerHTML = `
+        ${cart.items.map((i) => `<div class="summary-row"><span>${i.title} × ${i.quantity}</span><span>${window.shopHelpers.formatINR(i.price * i.quantity)}</span></div>`).join('')}
+        <div class="summary-row"><span>Delivery</span><span>Free</span></div>
+        <div class="summary-row total"><span>Total</span><span>${window.shopHelpers.formatINR(cart.subtotal)}</span></div>
+      `;
+    }
+
+    function updatePlaceOrderState() {
+      document.getElementById('place-order-btn').disabled = !selectedAddressId || cartSubtotal <= 0;
+    }
+
+    document.getElementById('address-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      hideError();
+      try {
+        await window.api.post('/addresses', {
+          fullName: document.getElementById('fullName').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          line1: document.getElementById('line1').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          state: document.getElementById('state').value.trim(),
+          postalCode: document.getElementById('postalCode').value.trim(),
+        });
+        const addresses = await window.api.get('/addresses');
+        renderAddresses(addresses);
+        document.getElementById('address-form').reset();
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    document.getElementById('place-order-btn').addEventListener('click', async () => {
+      hideError();
+      const btn = document.getElementById('place-order-btn');
+      btn.disabled = true;
+      btn.textContent = 'Placing order…';
+
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+      try {
+        const order = await window.api.post('/orders', { addressId: selectedAddressId, paymentMethod });
+        window.location.href = `/shop/order-detail.html?id=${order.id}`;
+      } catch (err) {
+        showError(err.message);
+        btn.disabled = false;
+        btn.textContent = 'Place Order';
+      }
+    });
+
+    (async () => {
+      try {
+        const [addresses, cart] = await Promise.all([
+          window.api.get('/addresses'),
+          window.api.get('/cart'),
+        ]);
+        renderAddresses(addresses);
+        renderSummary(cart);
+        updatePlaceOrderState();
+      } catch (err) {
+        showError(err.message);
+      }
+    })();
+  </script>
+
+</body>
+</html>

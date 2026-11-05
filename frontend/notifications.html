@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="container">
+    <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
+      <a href="/" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/'); return false;" aria-label="Go back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Back to Home</span>
+      </a>
+      <div class="bm-breadcrumbs">
+        <a href="/">Home</a>
+        <span class="bm-breadcrumbs-separator">/</span>
+        <span class="bm-breadcrumb-current">Notifications</span>
+      </div>
+    </div>
+
+    <div class="page-head">
+      <h1>Notifications</h1>
+      <button class="btn btn-ghost btn-sm" id="mark-all-btn">Mark all as read</button>
+    </div>
+
+    <div class="card" style="padding:10px 20px;max-width:640px;">
+      <div id="notif-list"><p class="text-muted" style="padding:16px 0;">Loading…</p></div>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:10px;margin-top:24px;" id="pagination"></div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+
+  <script>
+    window.auth.requireAuth();
+
+    function timeAgo(iso) {
+      const diffMs = Date.now() - new Date(iso).getTime();
+      const mins = Math.floor(diffMs / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return `${mins}m ago`;
+      const hours = Math.floor(mins / 60);
+      if (hours < 24) return `${hours}h ago`;
+      return `${Math.floor(hours / 24)}d ago`;
+    }
+
+    let currentPage = 1;
+
+    async function loadNotifications(page = 1) {
+      currentPage = page;
+      const list = document.getElementById('notif-list');
+      list.innerHTML = '<p class="text-muted" style="padding:16px 0;">Loading…</p>';
+      try {
+        const { items, pagination } = await window.api.get(`/notifications?page=${page}&limit=15`);
+        list.innerHTML = items.length
+          ? items.map((n) => `
+              <div class="notif-list-item ${n.is_read ? '' : 'unread'}">
+                <div>
+                  <strong>${n.title}</strong>
+                  <div class="text-muted" style="font-size:var(--font-size-sm);">${n.message}</div>
+                </div>
+                <span class="text-muted" style="font-size:var(--font-size-xs);white-space:nowrap;">${timeAgo(n.created_at)}</span>
+              </div>
+            `).join('')
+          : '<div class="empty-state">No notifications yet.</div>';
+        renderPagination(pagination);
+      } catch (err) {
+        list.innerHTML = `<p class="text-muted">Could not load notifications: ${err.message}</p>`;
+      }
+    }
+
+    function renderPagination(pagination) {
+      const container = document.getElementById('pagination');
+      if (pagination.totalPages <= 1) { container.innerHTML = ''; return; }
+      let buttons = '';
+      for (let i = 1; i <= pagination.totalPages; i++) {
+        buttons += `<button class="btn ${i === pagination.page ? 'btn-primary' : 'btn-ghost'} btn-sm" data-page="${i}">${i}</button>`;
+      }
+      container.innerHTML = buttons;
+      container.querySelectorAll('[data-page]').forEach((btn) => {
+        btn.addEventListener('click', () => loadNotifications(Number(btn.dataset.page)));
+      });
+    }
+
+    document.getElementById('mark-all-btn').addEventListener('click', async () => {
+      await window.api.patch('/notifications/read-all', {});
+      loadNotifications(currentPage);
+    });
+
+    loadNotifications();
+  </script>
+
+</body>
+</html>

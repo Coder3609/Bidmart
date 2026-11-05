@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scan — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="container">
+    <div class="page-head">
+      <h1>Scan</h1>
+      <span class="text-muted">Find a product instantly with a barcode, QR code, or photo.</span>
+    </div>
+
+    <div class="search-tabs" id="scan-tabs">
+      <button data-tab="barcode" class="active">Barcode / QR</button>
+      <button data-tab="image">Image Search</button>
+      <button data-tab="manual">Enter Code</button>
+    </div>
+
+    <div class="card" style="padding:24px;max-width:640px;margin:20px auto;">
+
+      <!-- ============ BARCODE / QR (camera) ============ -->
+      <div id="panel-barcode">
+        <p class="text-muted" style="font-size:var(--font-size-sm);margin-bottom:14px;">
+          Point your camera at a product's barcode or QR code. This uses your
+          browser's built-in barcode reader — nothing is uploaded anywhere.
+        </p>
+        <div id="barcode-unsupported" class="auction-alert info" hidden>
+          Your browser doesn't support live barcode scanning (the Barcode Detection API isn't
+          available here — it currently works in Chrome/Edge on desktop and Android).
+          Use <strong>Enter Code</strong> or <strong>Image Search</strong> instead.
+        </div>
+        <div id="barcode-camera-wrap" style="position:relative;background:#000;border-radius:var(--radius-md);overflow:hidden;">
+          <video id="barcode-video" style="width:100%;display:block;" muted playsinline></video>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;">
+          <button class="btn btn-primary" id="start-camera-btn" style="flex:1;">Start Camera</button>
+          <button class="btn btn-ghost" id="stop-camera-btn" style="flex:1;" hidden>Stop Camera</button>
+        </div>
+        <div style="margin-top:14px;">
+          <label class="btn btn-ghost" style="width:100%;text-align:center;display:block;cursor:pointer;">
+            Upload a photo of a barcode/QR code instead
+            <input type="file" id="barcode-file-input" accept="image/*" hidden />
+          </label>
+        </div>
+      </div>
+
+      <!-- ============ IMAGE SEARCH ============ -->
+      <div id="panel-image" hidden>
+        <p class="text-muted" style="font-size:var(--font-size-sm);margin-bottom:14px;">
+          Upload a photo and we'll try to match it to a product using visual search.
+        </p>
+        <input type="file" id="image-search-input" accept="image/*" />
+        <button class="btn btn-primary" id="image-search-btn" style="width:100%;margin-top:14px;" disabled>Search by Image</button>
+      </div>
+
+      <!-- ============ MANUAL CODE ENTRY ============ -->
+      <div id="panel-manual" hidden>
+        <p class="text-muted" style="font-size:var(--font-size-sm);margin-bottom:14px;">
+          Type a product's SKU or ID directly.
+        </p>
+        <form id="manual-form" style="display:flex;gap:10px;">
+          <input type="text" id="manual-code" placeholder="e.g. SKU-12345 or 42" style="flex:1;padding:12px 14px;border-radius:var(--radius-sm);border:1px solid var(--color-border);font-family:inherit;" />
+          <button type="submit" class="btn btn-primary">Look Up</button>
+        </form>
+      </div>
+
+      <div id="scan-result" style="margin-top:20px;"></div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+
+  <script>
+    const resultBox = document.getElementById('scan-result');
+
+    function renderResult(html) { resultBox.innerHTML = html; }
+    function renderLoading(text) { renderResult(`<p class="text-muted">${text}</p>`); }
+    function renderNotConfigured(message) {
+      renderResult(`<div class="auction-alert info">${message}</div>`);
+    }
+    function renderNotFound(code) {
+      renderResult(`<div class="auction-alert ended">No product matches code "${code}".</div>`);
+    }
+
+    async function handleFoundProduct(product) {
+      const href = product.status === 'ACTIVE_AUCTION'
+        ? `/auction/auction-detail.html?productId=${product.id}`
+        : `/shop/product.html?id=${product.id}`;
+      const image = Array.isArray(product.images) && product.images[0] ? product.images[0] : null;
+      renderResult(`
+        <a href="${href}" class="card product-card" style="max-width:280px;">
+          <div class="product-card__image">
+            ${image ? `<img src="${image}" style="width:100%;height:100%;object-fit:cover;" alt="${product.title}" />` : ''}
+          </div>
+          <p class="product-card__title">${product.title}</p>
+          <p class="product-card__brand">${product.brand || product.category_name || ''}</p>
+          <span class="btn btn-primary btn-sm" style="width:100%;">View Product</span>
+        </a>
+      `);
+    }
+
+    async function lookupCode(code) {
+      renderLoading(`Looking up "${code}"…`);
+      try {
+        const result = await window.api.post('/scan/lookup', { code });
+        if (result.found) {
+          await handleFoundProduct(result.product);
+        } else {
+          renderNotFound(code);
+        }
+      } catch (err) {
+        renderResult(`<p class="text-muted">Lookup failed: ${err.message}</p>`);
+      }
+    }
+
+    // ---------- Tabs ----------
+    document.getElementById('scan-tabs').addEventListener('click', (event) => {
+      const btn = event.target.closest('button[data-tab]');
+      if (!btn) return;
+      document.querySelectorAll('#scan-tabs button').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      ['barcode', 'image', 'manual'].forEach((tab) => {
+        document.getElementById(`panel-${tab}`).hidden = tab !== btn.dataset.tab;
+      });
+      renderResult('');
+      if (btn.dataset.tab !== 'barcode') stopCamera();
+    });
+
+    // ---------- Manual entry ----------
+    document.getElementById('manual-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const code = document.getElementById('manual-code').value.trim();
+      if (code) lookupCode(code);
+    });
+
+    // ---------- Barcode / QR: real browser BarcodeDetector, no faking ----------
+    let stream = null;
+    let detectLoopId = null;
+    const video = document.getElementById('barcode-video');
+    const isBarcodeApiSupported = 'BarcodeDetector' in window;
+
+    if (!isBarcodeApiSupported) {
+      document.getElementById('barcode-unsupported').hidden = false;
+      document.getElementById('start-camera-btn').disabled = true;
+    }
+
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = stream;
+        await video.play();
+        document.getElementById('start-camera-btn').hidden = true;
+        document.getElementById('stop-camera-btn').hidden = false;
+        runDetectionLoop();
+      } catch (err) {
+        renderResult(`<p class="text-muted">Could not access the camera: ${err.message}</p>`);
+      }
+    }
+
+    function stopCamera() {
+      if (detectLoopId) cancelAnimationFrame(detectLoopId);
+      detectLoopId = null;
+      if (stream) {
+        stream.getTracks().forEach((t) => t.stop());
+        stream = null;
+      }
+      document.getElementById('start-camera-btn').hidden = false;
+      document.getElementById('stop-camera-btn').hidden = true;
+    }
+
+    function runDetectionLoop() {
+      const detector = new window.BarcodeDetector({ formats: ['qr_code', 'ean_13', 'ean_8', 'code_128', 'upc_a', 'upc_e'] });
+      let busy = false;
+
+      async function tick() {
+        if (!stream) return;
+        if (!busy) {
+          busy = true;
+          try {
+            const codes = await detector.detect(video);
+            if (codes.length > 0) {
+              stopCamera();
+              await lookupCode(codes[0].rawValue);
+              return;
+            }
+          } catch { /* transient decode error — keep trying */ }
+          busy = false;
+        }
+        detectLoopId = requestAnimationFrame(tick);
+      }
+      detectLoopId = requestAnimationFrame(tick);
+    }
+
+    document.getElementById('start-camera-btn').addEventListener('click', startCamera);
+    document.getElementById('stop-camera-btn').addEventListener('click', stopCamera);
+
+    document.getElementById('barcode-file-input').addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!isBarcodeApiSupported) {
+        renderResult('<p class="text-muted">Barcode reading from photos isn\'t supported in this browser.</p>');
+        return;
+      }
+      renderLoading('Reading barcode from photo…');
+      try {
+        const bitmap = await createImageBitmap(file);
+        const detector = new window.BarcodeDetector({ formats: ['qr_code', 'ean_13', 'ean_8', 'code_128', 'upc_a', 'upc_e'] });
+        const codes = await detector.detect(bitmap);
+        if (codes.length > 0) {
+          await lookupCode(codes[0].rawValue);
+        } else {
+          renderResult('<p class="text-muted">No barcode or QR code found in that photo.</p>');
+        }
+      } catch (err) {
+        renderResult(`<p class="text-muted">Could not read that photo: ${err.message}</p>`);
+      }
+    });
+
+    // ---------- Image search (real backend call — honestly reports not-configured) ----------
+    const imageInput = document.getElementById('image-search-input');
+    const imageSearchBtn = document.getElementById('image-search-btn');
+    imageInput.addEventListener('change', () => {
+      imageSearchBtn.disabled = !imageInput.files[0];
+    });
+
+    imageSearchBtn.addEventListener('click', async () => {
+      const file = imageInput.files[0];
+      if (!file) return;
+      renderLoading('Searching…');
+      try {
+        const imageBase64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result.split(',')[1]);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        const result = await window.api.post('/scan/image', { imageBase64 });
+        if (result.configured) {
+          // Real provider wired up — render whatever it found.
+          renderResult(`<pre style="white-space:pre-wrap;font-size:var(--font-size-sm);">${JSON.stringify(result, null, 2)}</pre>`);
+        } else {
+          renderNotConfigured(result.message);
+        }
+      } catch (err) {
+        renderResult(`<p class="text-muted">${err.message}</p>`);
+      }
+    });
+
+    window.addEventListener('beforeunload', stopCamera);
+  </script>
+
+</body>
+</html>

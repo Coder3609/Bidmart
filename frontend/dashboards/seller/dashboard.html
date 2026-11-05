@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seller Center / Overview — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <!-- Chart.js CDN for clean dynamic charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body class="sc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <!-- Global Seller Header -->
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <!-- Shared Persistent Sidebar -->
+    <div id="seller-sidebar"></div>
+
+    <!-- Main Seller Center Overview Workspace -->
+    <main class="sc-main-content">
+      
+      <!-- Top Overview Header & Greetings -->
+      <div class="bm-page-header-wrap">
+        <div class="bm-page-header-top">
+          <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/index.html')" aria-label="Go back to Marketplace Homepage">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Back to Marketplace</span>
+          </button>
+          <nav class="bm-breadcrumbs" aria-label="Breadcrumb">
+            <a href="/index.html" class="bm-breadcrumb-item">BidMart</a>
+            <span class="bm-breadcrumb-sep">/</span>
+            <span class="bm-breadcrumb-item active" aria-current="page">Seller Center</span>
+          </nav>
+        </div>
+        <div class="bm-page-header-main">
+          <div class="bm-page-header-titles">
+            <h1 class="bm-page-title" id="welcome-title">Good day, <span class="sc-skeleton" style="width:120px;height:28px;"></span> 👋</h1>
+            <p class="bm-page-subtitle">Here's what's happening with your store today.</p>
+          </div>
+          <div class="bm-page-header-actions">
+            <a href="/seller/products.html" class="sc-btn-primary" id="btn-add-product">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              <span>+ Add Product</span>
+            </a>
+            <a href="/seller/auctions.html" class="sc-btn-mint" id="btn-create-auction">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 16l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>Create Auction</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 Real Database KPI Cards -->
+      <section class="sc-kpi-grid" id="kpi-grid">
+        <!-- 1. Total Products -->
+        <div class="sc-kpi-card" id="kpi-total-products">
+          <div class="sc-kpi-icon" style="background:#EFF6FF;color:#2563EB;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Total Products</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:50px;height:24px;"></span></div>
+          <div class="sc-kpi-change neutral"><span>All inventory</span></div>
+        </div>
+
+        <!-- 2. Active Listings -->
+        <div class="sc-kpi-card" id="kpi-active-listings">
+          <div class="sc-kpi-icon" style="background:#ECFDF5;color:#059669;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 7h10M7 12h10M7 17h6M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <span class="sc-kpi-label">Active Listings</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:50px;height:24px;"></span></div>
+          <div class="sc-kpi-change positive"><span>In Shop</span></div>
+        </div>
+
+        <!-- 3. Orders -->
+        <div class="sc-kpi-card" id="kpi-orders">
+          <div class="sc-kpi-icon" style="background:#F5F3FF;color:#7C3AED;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <span class="sc-kpi-label">Orders</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:50px;height:24px;"></span></div>
+          <div class="sc-kpi-change positive" id="kpi-orders-growth"><span>Total lifetime</span></div>
+        </div>
+
+        <!-- 4. Pending Orders -->
+        <div class="sc-kpi-card" id="kpi-pending-orders">
+          <div class="sc-kpi-icon" style="background:#FFFBEB;color:#D97706;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Pending Orders</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:50px;height:24px;"></span></div>
+          <div class="sc-kpi-change neutral"><span>Needs action</span></div>
+        </div>
+
+        <!-- 5. Total Sales -->
+        <div class="sc-kpi-card" id="kpi-total-sales">
+          <div class="sc-kpi-icon" style="background:#ECFDF5;color:#059669;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Total Sales</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:70px;height:24px;"></span></div>
+          <div class="sc-kpi-change positive" id="kpi-sales-growth"><span>Shop Revenue</span></div>
+        </div>
+
+        <!-- 6. Auction Revenue -->
+        <div class="sc-kpi-card" id="kpi-auction-revenue">
+          <div class="sc-kpi-icon" style="background:#F5F3FF;color:#7C3AED;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="1.8"/><path d="M14 16l4 4" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <span class="sc-kpi-label">Auction Revenue</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:60px;height:24px;"></span></div>
+          <div class="sc-kpi-change positive"><span>Auction Wins</span></div>
+        </div>
+
+        <!-- 7. Average Rating -->
+        <div class="sc-kpi-card" id="kpi-avg-rating">
+          <div class="sc-kpi-icon" style="background:#FFFBEB;color:#F59E0B;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <span class="sc-kpi-label">Average Rating</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:50px;height:24px;"></span></div>
+          <div class="sc-kpi-change positive" id="kpi-reviews-count"><span>Customer reviews</span></div>
+        </div>
+
+        <!-- 8. Pending Returns -->
+        <div class="sc-kpi-card" id="kpi-pending-returns">
+          <div class="sc-kpi-icon" style="background:#FEF2F2;color:#DC2626;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 10h10a5 5 0 015 5v2M3 10l5-5M3 10l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sc-kpi-label">Pending Returns</span>
+          <div class="sc-kpi-value"><span class="sc-skeleton" style="width:40px;height:24px;"></span></div>
+          <div class="sc-kpi-change neutral"><span>Buyer requests</span></div>
+        </div>
+      </section>
+
+      <!-- Middle Section: Sales Overview Chart + Store Performance + Quick Actions -->
+      <section class="sc-grid-middle">
+        
+        <!-- 1. Sales Overview Chart Card -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:var(--sc-primary);"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>Sales Overview</span>
+            </h3>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <select class="sc-period-select" id="sales-period-select">
+                <option value="7d" selected>Last 7 Days</option>
+                <option value="today">Today</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="90d">Last 90 Days</option>
+                <option value="1y">This Year</option>
+                <option value="custom">Custom Range</option>
+              </select>
+              <div id="custom-range-inputs" style="display:none;align-items:center;gap:4px;">
+                <input type="date" id="chart-date-from" class="sc-period-select" style="padding:4px 8px;" />
+                <span class="text-muted" style="font-size:0.75rem;">to</span>
+                <input type="date" id="chart-date-to" class="sc-period-select" style="padding:4px 8px;" />
+                <button type="button" class="sc-btn-sm" id="chart-apply-custom-btn" style="padding:5px 10px;background:var(--sc-primary);color:#fff;border-color:var(--sc-primary);">Apply</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sc-sales-summary-row">
+            <div class="sc-sales-stat-item">
+              <span>Total Sales</span>
+              <strong id="chart-total-sales">₹0</strong>
+            </div>
+            <div class="sc-sales-stat-item">
+              <span>Total Orders</span>
+              <strong id="chart-total-orders">0</strong>
+            </div>
+          </div>
+
+          <div class="sc-chart-container">
+            <canvas id="seller-sales-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- 2. Store Performance Card -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#059669;"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>Store Performance</span>
+            </h3>
+          </div>
+
+          <div class="sc-perf-grid">
+            <div class="sc-perf-item">
+              <div class="sc-perf-icon" style="background:#ECFDF5;color:#059669;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <span class="sc-perf-label">Conversion Rate</span>
+              <div class="sc-perf-val" id="perf-conversion">—</div>
+              <span class="sc-perf-sub">Orders / Views</span>
+            </div>
+
+            <div class="sc-perf-item">
+              <div class="sc-perf-icon" style="background:#EFF6FF;color:#2563EB;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <span class="sc-perf-label">Product Views</span>
+              <div class="sc-perf-val" id="perf-views">—</div>
+              <span class="sc-perf-sub" style="color:#2563EB;">Real page views</span>
+            </div>
+
+            <div class="sc-perf-item">
+              <div class="sc-perf-icon" style="background:#FEF2F2;color:#DC2626;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.35-9.5-8.5C.7 8.9 2.6 5 6.3 5c2 0 3.4 1 5.7 3.2C14.3 6 15.7 5 17.7 5c3.7 0 5.6 3.9 3.8 7.5C19 16.65 12 21 12 21z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <span class="sc-perf-label">Wishlist Adds</span>
+              <div class="sc-perf-val" id="perf-wishlist">—</div>
+              <span class="sc-perf-sub" style="color:#DC2626;">Buyer saves</span>
+            </div>
+
+            <div class="sc-perf-item">
+              <div class="sc-perf-icon" style="background:#FFFBEB;color:#F59E0B;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <span class="sc-perf-label">Customer Rating</span>
+              <div class="sc-perf-val" id="perf-rating">—</div>
+              <span class="sc-perf-sub" style="color:#F59E0B;">Overall score</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Quick Actions Card -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#7C3AED;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>Quick Actions</span>
+            </h3>
+          </div>
+
+          <div class="sc-quick-actions-list">
+            <a href="/seller/products.html" class="sc-action-row">
+              <div class="sc-action-row__left">
+                <div class="sc-action-icon" style="background:#EFF6FF;color:#2563EB;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <div class="sc-action-info">
+                  <strong>Add New Product</strong>
+                  <span>List a product for sale</span>
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" color="#94A3B8"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </a>
+
+            <a href="/seller/auctions.html" class="sc-action-row">
+              <div class="sc-action-row__left">
+                <div class="sc-action-icon" style="background:#ECFDF5;color:#059669;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <div class="sc-action-info">
+                  <strong>Create Auction</strong>
+                  <span>Turn your product into auction</span>
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" color="#94A3B8"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </a>
+
+            <a href="/seller/products.html" class="sc-action-row">
+              <div class="sc-action-row__left">
+                <div class="sc-action-icon" style="background:#EFF6FF;color:#2563EB;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <div class="sc-action-info">
+                  <strong>Manage Inventory</strong>
+                  <span>Update stock & pricing</span>
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" color="#94A3B8"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </a>
+
+            <a href="/seller/sales.html" class="sc-action-row">
+              <div class="sc-action-row__left">
+                <div class="sc-action-icon" style="background:#ECFDF5;color:#059669;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <div class="sc-action-info">
+                  <strong>View Payouts</strong>
+                  <span>Track your earnings</span>
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" color="#94A3B8"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Bottom Section: Recent Orders + Active Auctions + Products Needing Attention -->
+      <section class="sc-grid-bottom">
+        
+        <!-- 1. Recent Orders Table -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:var(--sc-primary);"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Recent Orders</span>
+            </h3>
+            <a href="/seller/orders.html" class="sc-view-all-link">View All Orders →</a>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="sc-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Product</th>
+                  <th>Buyer</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="recent-orders-tbody">
+                <tr><td colspan="7" class="text-muted" style="text-align:center;padding:24px;">Loading orders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. Active Auctions Card -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#059669;"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Active Auctions</span>
+            </h3>
+            <a href="/seller/auctions.html" class="sc-view-all-link">View All →</a>
+          </div>
+
+          <div id="active-auctions-list">
+            <p class="text-muted" style="padding:16px 0;text-align:center;">Loading auctions…</p>
+          </div>
+
+          <a href="/seller/auctions.html" class="sc-move-auction-card">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Move Product to Auction</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2"/></svg>
+          </a>
+        </div>
+
+        <!-- 3. Products Needing Attention Card -->
+        <div class="sc-card">
+          <div class="sc-card-head">
+            <h3 class="sc-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#EF4444;"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Products needing attention</span>
+            </h3>
+            <a href="/seller/products.html" class="sc-view-all-link">View All →</a>
+          </div>
+
+          <div id="attention-products-list">
+            <p class="text-muted" style="padding:16px 0;text-align:center;">Loading…</p>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Shared Scripts -->
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/seller-sidebar.js"></script>
+
+  <!-- Main Dashboard Controller Script -->
+  <script>
+    window.auth.requireRole('SELLER');
+
+    let salesChartInstance = null;
+
+    function formatINR(num) {
+      return '₹' + Number(num || 0).toLocaleString('en-IN');
+    }
+
+    function formatTimeRemaining(endsAtStr) {
+      const diffMs = new Date(endsAtStr).getTime() - Date.now();
+      if (diffMs <= 0) return 'Ended';
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      if (hours >= 24) {
+        const days = Math.floor(hours / 24);
+        return `${days}d ${hours % 24}h Remaining`;
+      }
+      return `${hours}h ${mins}m Remaining`;
+    }
+
+    function renderKPICards(stats) {
+      // 1. Total Products
+      document.querySelector('#kpi-total-products .sc-kpi-value').textContent = stats.totalProducts;
+      // 2. Active Listings
+      document.querySelector('#kpi-active-listings .sc-kpi-value').textContent = stats.activeListings;
+      // 3. Orders
+      document.querySelector('#kpi-orders .sc-kpi-value').textContent = stats.orders;
+      if (stats.ordersGrowth !== undefined) {
+        const isPos = stats.ordersGrowth >= 0;
+        document.querySelector('#kpi-orders-growth').innerHTML = `
+          <span class="${isPos ? 'positive' : 'negative'}">${isPos ? '↑' : '↓'} ${Math.abs(stats.ordersGrowth)}%</span> vs. last 7 days
+        `;
+      }
+      // 4. Pending Orders
+      document.querySelector('#kpi-pending-orders .sc-kpi-value').textContent = stats.pendingOrders;
+      // 5. Total Sales
+      document.querySelector('#kpi-total-sales .sc-kpi-value').textContent = formatINR(stats.totalSales);
+      if (stats.salesGrowth !== undefined) {
+        const isPos = stats.salesGrowth >= 0;
+        document.querySelector('#kpi-sales-growth').innerHTML = `
+          <span class="${isPos ? 'positive' : 'negative'}">${isPos ? '↑' : '↓'} ${Math.abs(stats.salesGrowth)}%</span> vs. last 7 days
+        `;
+      }
+      // 6. Auction Revenue
+      document.querySelector('#kpi-auction-revenue .sc-kpi-value').textContent = formatINR(stats.auctionRevenue);
+      // 7. Average Rating
+      document.querySelector('#kpi-avg-rating .sc-kpi-value').textContent = stats.averageRating > 0 ? `${stats.averageRating}/5` : '—';
+      if (stats.totalReviews !== undefined) {
+        document.querySelector('#kpi-reviews-count').textContent = `${stats.totalReviews} total reviews`;
+      }
+      // 8. Pending Returns
+      document.querySelector('#kpi-pending-returns .sc-kpi-value').textContent = stats.pendingReturns;
+    }
+
+    function renderStorePerformance(perf) {
+      document.getElementById('perf-conversion').textContent = perf.conversionRate;
+      document.getElementById('perf-views').textContent = Number(perf.productViews || 0).toLocaleString();
+      document.getElementById('perf-wishlist').textContent = Number(perf.wishlistAdds || 0).toLocaleString();
+      document.getElementById('perf-rating').textContent = perf.customerRating;
+    }
+
+    function initOrUpdateChart(chartData) {
+      document.getElementById('chart-total-sales').textContent = formatINR(chartData.totalSales);
+      document.getElementById('chart-total-orders').textContent = chartData.totalOrders;
+
+      const ctx = document.getElementById('seller-sales-chart').getContext('2d');
+      const labels = chartData.points.map(p => p.label);
+      const salesValues = chartData.points.map(p => p.sales);
+      const orderValues = chartData.points.map(p => p.orders);
+
+      if (salesChartInstance) {
+        salesChartInstance.data.labels = labels;
+        salesChartInstance.data.datasets[0].data = salesValues;
+        salesChartInstance.data.datasets[1].data = orderValues;
+        salesChartInstance.update();
+        return;
+      }
+
+      salesChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Sales (₹)',
+              data: salesValues,
+              backgroundColor: '#2563EB',
+              borderRadius: 6,
+              barThickness: 20,
+              yAxisID: 'ySales',
+            },
+            {
+              type: 'line',
+              label: 'Orders',
+              data: orderValues,
+              borderColor: '#00C49F',
+              backgroundColor: '#00C49F',
+              pointRadius: 4,
+              borderWidth: 2.5,
+              tension: 0.3,
+              yAxisID: 'yOrders',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'top', align: 'end', labels: { boxWidth: 12, usePointStyle: true } },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ctx.dataset.yAxisID === 'ySales'
+                  ? `Sales: ${formatINR(ctx.raw)}`
+                  : `Orders: ${ctx.raw}`,
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            ySales: {
+              type: 'linear',
+              position: 'left',
+              beginAtZero: true,
+              ticks: { callback: (v) => '₹' + (v >= 1000 ? (v/1000) + 'k' : v) },
+              grid: { color: '#F1F5F9' },
+            },
+            yOrders: {
+              type: 'linear',
+              position: 'right',
+              beginAtZero: true,
+              grid: { display: false },
+              ticks: { precision: 0 },
+            },
+          },
+        },
+      });
+    }
+
+    function renderRecentOrders(orders) {
+      const tbody = document.getElementById('recent-orders-tbody');
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-muted" style="text-align:center;padding:24px;">No sales yet. Once buyers order your products, they will appear here.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = orders.map(o => {
+        const statusClass = (o.status || '').toLowerCase();
+        const dateStr = new Date(o.placedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const fallbackImg = '/assets/placeholder-product.svg';
+        const imgUrl = o.productImage || fallbackImg;
+
+        return `
+          <tr>
+            <td><strong>#BM${o.id}</strong></td>
+            <td>
+              <div class="sc-product-cell">
+                <img src="${imgUrl}" alt="${o.productTitle}" class="sc-thumb-sm" onerror="this.src='${fallbackImg}'" />
+                <span>${o.productTitle}</span>
+              </div>
+            </td>
+            <td>${o.buyerName || 'Buyer'}</td>
+            <td><strong>${formatINR(o.amount)}</strong></td>
+            <td><span class="sc-status-pill ${statusClass}">${o.status.replace('_', ' ')}</span></td>
+            <td><span class="text-muted" style="font-size:0.75rem;">${dateStr}</span></td>
+            <td><a href="/shop/order-detail.html?id=${o.id}" class="sc-btn-sm">View</a></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderActiveAuctions(auctions) {
+      const container = document.getElementById('active-auctions-list');
+      if (!auctions || auctions.length === 0) {
+        container.innerHTML = '<p class="text-muted" style="padding:16px 0;text-align:center;">No active auctions right now. Click below to move a product to auction.</p>';
+        return;
+      }
+
+      container.innerHTML = auctions.map(a => {
+        const fallbackImg = '/assets/placeholder-product.svg';
+        const imgUrl = a.image || fallbackImg;
+        return `
+          <div class="sc-auction-item">
+            <div class="sc-auction-left">
+              <img src="${imgUrl}" alt="${a.title}" class="sc-thumb-sm" onerror="this.src='${fallbackImg}'" />
+              <div class="sc-auction-meta">
+                <div class="sc-auction-title">${a.title}</div>
+                <div class="sc-auction-price">Current: <strong>${formatINR(a.currentPrice)}</strong> · ${a.bidCount} bids</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div class="sc-auction-time">${formatTimeRemaining(a.endsAt)}</div>
+              <a href="/seller/auctions.html" class="sc-btn-sm" style="display:inline-block;margin-top:4px;">Manage</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAttentionProducts(products) {
+      const container = document.getElementById('attention-products-list');
+      if (!products || products.length === 0) {
+        container.innerHTML = '<p class="text-muted" style="padding:16px 0;text-align:center;">All products in good standing! No issues requiring attention.</p>';
+        return;
+      }
+
+      container.innerHTML = products.map(p => {
+        const fallbackImg = '/assets/placeholder-product.svg';
+        const imgUrl = p.image || fallbackImg;
+        let badge = '';
+        let btnText = 'View';
+        let btnAction = `/seller/products.html`;
+
+        if (p.attentionType === 'LOW_STOCK') {
+          badge = `<span class="sc-attention-type low-stock">⚠️ Low Stock (${p.availableQty} left)</span>`;
+          btnText = 'Restock';
+        } else if (p.attentionType === 'OUT_OF_STOCK') {
+          badge = `<span class="sc-attention-type low-stock">❌ Out of Stock</span>`;
+          btnText = 'Restock';
+        } else if (p.attentionType === 'INACTIVE') {
+          badge = `<span class="sc-attention-type inactive">⏸️ Draft / Inactive</span>`;
+          btnText = 'Activate';
+        } else if (p.attentionType === 'AUCTION_UNSOLD') {
+          badge = `<span class="sc-attention-type inactive">🔨 Unsold Auction</span>`;
+          btnText = 'Relist';
+          btnAction = `/seller/auctions.html`;
+        }
+
+        return `
+          <div class="sc-attention-item">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="${imgUrl}" alt="${p.title}" class="sc-thumb-sm" onerror="this.src='${fallbackImg}'" />
+              <div>
+                <div style="font-size:0.84rem;font-weight:700;">${p.title}</div>
+                <div>${badge}</div>
+              </div>
+            </div>
+            <a href="${btnAction}" class="sc-btn-sm">${btnText}</a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Dynamic Date Filter Handler for Sales Overview Chart
+    const customRangeInputs = document.getElementById('custom-range-inputs');
+    const dateFromInput = document.getElementById('chart-date-from');
+    const dateToInput = document.getElementById('chart-date-to');
+
+    // Default dates for custom range (last 14 days)
+    const defTo = new Date();
+    const defFrom = new Date();
+    defFrom.setDate(defFrom.getDate() - 14);
+    dateToInput.value = defTo.toISOString().slice(0, 10);
+    dateFromInput.value = defFrom.toISOString().slice(0, 10);
+
+    document.getElementById('sales-period-select').addEventListener('change', async (e) => {
+      const period = e.target.value;
+      if (period === 'custom') {
+        customRangeInputs.style.display = 'flex';
+        return;
+      }
+      customRangeInputs.style.display = 'none';
+      try {
+        const chartData = await window.api.get(`/dashboard/seller/chart?period=${period}`);
+        initOrUpdateChart(chartData);
+      } catch (err) {
+        console.error('Failed to load chart data:', err);
+      }
+    });
+
+    document.getElementById('chart-apply-custom-btn').addEventListener('click', async () => {
+      const from = dateFromInput.value;
+      const to = dateToInput.value;
+      if (!from || !to) return;
+      try {
+        const chartData = await window.api.get(`/dashboard/seller/chart?period=custom&from=${from}&to=${to}`);
+        initOrUpdateChart(chartData);
+      } catch (err) {
+        console.error('Failed to load custom chart data:', err);
+      }
+    });
+
+
+    // Main Dashboard Initialization
+    (async () => {
+      try {
+        const data = await window.api.get('/dashboard/seller');
+        
+        // Welcome Title
+        const sellerName = data.seller.storeName || data.seller.name;
+        document.getElementById('welcome-title').innerHTML = `Good day, <span>${sellerName}</span> 👋`;
+
+        // Render sections
+        renderKPICards(data.stats);
+        renderStorePerformance(data.storePerformance);
+        initOrUpdateChart(data.salesChart);
+        renderRecentOrders(data.recentOrders);
+        renderActiveAuctions(data.activeAuctions);
+        renderAttentionProducts(data.attentionProducts);
+
+        // Update live countdown timers every 30 seconds
+        setInterval(() => {
+          if (data.activeAuctions && data.activeAuctions.length) {
+            renderActiveAuctions(data.activeAuctions);
+          }
+        }, 30000);
+
+      } catch (err) {
+        console.error('Failed to load seller dashboard:', err);
+        document.getElementById('welcome-title').innerHTML = `Seller Center / Overview`;
+        document.getElementById('recent-orders-tbody').innerHTML = `<tr><td colspan="7" style="color:#EF4444;text-align:center;padding:24px;">Unable to load seller data: ${err.message} <button onclick="location.reload()" class="sc-btn-sm" style="margin-left:8px;">Retry</button></td></tr>`;
+      }
+    })();
+  </script>
+</body>
+</html>

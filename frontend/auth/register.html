@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/auth-modal.css" />
+  <link rel="stylesheet" href="/shared/seller-auth-modal.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="auth-page">
+    <div class="card auth-card">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(16,110,190,0.1);color:#106EBE;font-weight:700;font-size:0.75rem;text-transform:uppercase;margin-bottom:12px;">
+        <span>🛍️</span> <span>Buyer &amp; Bidder Registration</span>
+      </div>
+
+      <h1>Create your account</h1>
+      <p class="subtitle text-muted">Join BidMart to shop at fixed prices or participate in verified live auctions.</p>
+
+      <div class="form-error" id="form-error" role="alert"></div>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="name">Full name *</label>
+          <input type="text" id="name" name="name" placeholder="e.g. John Doe" autocomplete="name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address *</label>
+          <input type="email" id="email" name="email" placeholder="john@example.com" autocomplete="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone number (optional)</label>
+          <input type="tel" id="phone" name="phone" placeholder="9876543210" autocomplete="tel" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input type="password" id="password" name="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn" style="width:100%;margin-top:8px;">Create Account</button>
+      </form>
+
+      <!-- Clear, distinct separation for Sellers -->
+      <div style="margin-top:20px;padding:14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;text-align:center;">
+        <span style="font-size:0.85rem;color:#475569;display:block;margin-bottom:6px;">Looking to sell products or host auctions on BidMart?</span>
+        <button type="button" id="btn-seller-auth-trigger" class="btn btn-mint btn-sm" style="font-weight:700;border:none;cursor:pointer;">
+          <span>Become a BidMart Seller →</span>
+        </button>
+      </div>
+
+      <p class="auth-switch" style="margin-top:16px;">
+        Already have an account? <a href="/auth/login.html">Log in</a>
+      </p>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/footer.js"></script>
+  <script src="/shared/auth-modal.js"></script>
+  <script src="/shared/seller-auth-modal.js"></script>
+
+  <script>
+    // If URL is explicitly for seller (?role=SELLER or ?type=seller), open seller modal
+    const urlParams = new URLSearchParams(window.location.search);
+    const roleParam = (urlParams.get('role') || urlParams.get('type') || '').toUpperCase();
+
+    if (roleParam === 'SELLER') {
+      window.addEventListener('DOMContentLoaded', () => {
+        if (window.sellerAuth) {
+          window.sellerAuth.open('signup');
+        }
+      });
+    }
+
+    // If already logged in, redirect to appropriate dashboard
+    if (window.auth.isLoggedIn()) {
+      window.auth.redirectToDashboard();
+    }
+
+    const form = document.getElementById('register-form');
+    const errorBox = document.getElementById('form-error');
+    const submitBtn = document.getElementById('submit-btn');
+    const sellerTrigger = document.getElementById('btn-seller-auth-trigger');
+
+    if (sellerTrigger) {
+      sellerTrigger.addEventListener('click', () => {
+        if (window.sellerAuth) {
+          window.sellerAuth.open('signup');
+        }
+      });
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.add('visible');
+    }
+
+    function hideError() {
+      errorBox.classList.remove('visible');
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      hideError();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!name || name.length < 2) {
+        showError('Please enter your full name (minimum 2 characters).');
+        return;
+      }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+
+      if (password.length < 8) {
+        showError('Password must be at least 8 characters long.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account...';
+
+      try {
+        // Strict role = BUYER for normal registration flow
+        await window.auth.register({ name, email, password, phone, role: 'BUYER' });
+        window.auth.redirectToDashboard();
+      } catch (err) {
+        showError(err.message || 'Something went wrong. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+  </script>
+
+</body>
+</html>

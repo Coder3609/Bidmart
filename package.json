@@ -1,0 +1,13 @@
+{
+  "name": "hybrid-marketplace-auction-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hybrid Marketplace + Online Auction System (Shop it. Bid it. Own it.)",
+  "scripts": {
+    "install:backend": "npm install --prefix backend",
+    "generate:demo": "node db/generate_seed.js",
+    "run": "node start.js",
+    "dev": "npm run dev --prefix backend",
+    "start": "npm start --prefix backend"
+  }
+}

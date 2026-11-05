@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Auctions & Bidding Marketplace — BidMart</title>
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/auth-modal.css" />
+</head>
+<body class="sc-app-body auc-app-body" style="background-color:var(--sc-bg);margin:0;">
+
+  <!-- Shared Global Seller/Buyer Compatible Header -->
+  <div id="seller-header"></div>
+
+  <div class="sc-app">
+    <!-- Persistent Left Navigation Sidebar -->
+    <div id="auction-sidebar"></div>
+
+    <!-- Main Content Area -->
+    <main class="sc-main-content">
+      
+      <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
+        <div class="bm-breadcrumbs" style="margin-bottom: 8px;">
+          <a href="/index.html" class="bm-breadcrumb-item">Auction Center</a>
+          <span class="bm-breadcrumb-sep">/</span>
+          <span class="bm-breadcrumb-item active">Live Auctions</span>
+        </div>
+        <div>
+          <a href="/index.html" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/index.html'); return false;" aria-label="Go back to marketplace home">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span>Back to Home</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Top Page Header & Quick Stats -->
+      <div class="sc-page-header">
+        <div>
+          <h1 class="sc-title">Live Auctions & Bidding</h1>
+          <p class="sc-subtitle">Bid in real time, win premium verified products, and manage your live bids with escrow protection.</p>
+        </div>
+        <div class="sc-header-actions">
+          <a href="/auction/my-bids.html" class="sc-btn-primary" id="btn-header-my-bids" style="text-decoration:none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span>My Active Bids</span>
+          </a>
+          <button type="button" class="sc-btn-mint" id="btn-quick-deposit" style="cursor:pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <span>Deposit Funds</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Layout: Auctions Grid + Right Rail -->
+      <div class="auc-layout-grid">
+        
+        <!-- Left Column: Tabs, Filters, Auction Cards Grid, Pagination -->
+        <div class="auc-main-feed">
+
+          <!-- Status Tabs -->
+          <div class="auc-tabs-container">
+            <div class="auc-tabs-list" id="auc-status-tabs">
+              <button type="button" class="auc-tab-btn active" data-status="ALL">
+                <span>All Auctions</span>
+                <span class="auc-tab-count" id="count-all">0</span>
+              </button>
+              <button type="button" class="auc-tab-btn" data-status="LIVE">
+                <span>🔥 Live Now</span>
+                <span class="auc-tab-count" id="count-live">0</span>
+              </button>
+              <button type="button" class="auc-tab-btn" data-status="ENDING_SOON">
+                <span>⏱ Ending Soon</span>
+                <span class="auc-tab-count" id="count-ending">0</span>
+              </button>
+              <button type="button" class="auc-tab-btn" data-status="SCHEDULED">
+                <span>📅 Upcoming</span>
+                <span class="auc-tab-count" id="count-upcoming">0</span>
+              </button>
+              <button type="button" class="auc-tab-btn" data-status="CLOSED">
+                <span>✓ Ended</span>
+                <span class="auc-tab-count" id="count-closed">0</span>
+              </button>
+            </div>
+
+            <div class="text-muted" style="font-size:0.85rem;font-weight:600;" id="result-summary-text">
+              Loading auctions…
+            </div>
+          </div>
+
+          <!-- Comprehensive Filter & Sorting Toolbar -->
+          <div class="auc-filter-toolbar">
+            <div class="auc-filter-row-top">
+              <!-- Search in Auctions -->
+              <div class="auc-filter-search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <input type="search" id="filter-search" placeholder="Search by title, brand, or keywords…" autocomplete="off" />
+              </div>
+
+              <!-- Category Filter -->
+              <select class="auc-filter-select" id="filter-category" aria-label="Filter by Category">
+                <option value="">All Categories</option>
+              </select>
+
+              <!-- Condition Filter -->
+              <select class="auc-filter-select" id="filter-condition" aria-label="Filter by Condition">
+                <option value="">All Conditions</option>
+                <option value="NEW">Brand New</option>
+                <option value="LIKE_NEW">Like New</option>
+                <option value="GOOD">Good</option>
+                <option value="FAIR">Fair</option>
+              </select>
+
+              <!-- Sorting Dropdown -->
+              <select class="auc-filter-select" id="filter-sort" aria-label="Sort Auctions">
+                <option value="ending_soon">Ending Soonest</option>
+                <option value="newest">Newest Listed</option>
+                <option value="bid_asc">Lowest Bid</option>
+                <option value="bid_desc">Highest Bid</option>
+                <option value="most_bids">Most Bids</option>
+              </select>
+            </div>
+
+            <!-- Secondary Filter Row: Quick Chips & Price Range -->
+            <div class="auc-filter-row-bottom">
+              <div class="auc-filter-chips">
+                <button type="button" class="auc-chip-toggle" id="chip-ending-soon">
+                  <span>⏱ Ending in 24h</span>
+                </button>
+                <button type="button" class="auc-chip-toggle" id="chip-starting-soon">
+                  <span>📅 Starts in 24h</span>
+                </button>
+                <div style="display:flex;align-items:center;gap:6px;margin-left:8px;">
+                  <span style="color:#64748B;font-weight:600;">Max Bid:</span>
+                  <input type="number" id="filter-max-price" placeholder="₹ Any" style="width:90px;height:30px;padding:0 8px;border:1px solid #CBD5E1;border-radius:6px;font-size:0.8rem;" />
+                </div>
+              </div>
+
+              <div>
+                <button type="button" class="auc-btn-clear" id="btn-reset-filters">Clear All Filters</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auctions Grid Container -->
+          <div class="auc-cards-grid" id="auction-grid">
+            <p class="text-muted" style="grid-column:1/-1;text-align:center;padding:40px;">Loading live auctions…</p>
+          </div>
+
+          <!-- Pagination -->
+          <div style="display:flex;justify-content:center;gap:8px;margin-top:36px;margin-bottom:24px;" id="pagination"></div>
+
+        </div>
+
+        <!-- Right Column: Wallet Card, Auction Cart / Activity Summary, Process Guide -->
+        <aside class="auc-rail-widgets">
+          
+          <!-- 1. Live Wallet Balance Card -->
+          <div class="auc-widget-card auc-wallet-card">
+            <div class="auc-widget-title">
+              <span style="display:flex;align-items:center;gap:8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#00E6B8" stroke-width="2"/><path d="M2 10h20M16 14h2" stroke="#00E6B8" stroke-width="2" stroke-linecap="round"/></svg>
+                <span>Wallet Balance</span>
+              </span>
+              <span style="font-size:0.75rem;padding:2px 8px;border-radius:12px;background:rgba(0,230,184,0.15);color:#00E6B8;font-weight:700;">LIVE</span>
+            </div>
+
+            <div class="auc-wallet-balance-big">
+              <div class="label">Total Balance</div>
+              <div class="amount" id="rail-total-balance">₹0.00</div>
+            </div>
+
+            <div class="auc-wallet-breakdown">
+              <div class="auc-wb-item">
+                <div class="wb-label">Available to Bid</div>
+                <div class="wb-val available" id="rail-avail-balance">₹0.00</div>
+              </div>
+              <div class="auc-wb-item">
+                <div class="wb-label">Reserved in Bids</div>
+                <div class="wb-val reserved" id="rail-reserved-balance">₹0.00</div>
+              </div>
+            </div>
+
+            <div class="auc-wallet-actions">
+              <button type="button" class="auc-btn-deposit" id="btn-rail-deposit">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span>Add Funds</span>
+              </button>
+              <a href="/wallet/index.html" class="auc-btn-wallet-view" title="View Full Wallet Transactions">
+                <span>Details →</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 2. Auction Cart / Live Activity Summary -->
+          <div class="auc-widget-card">
+            <div class="auc-widget-title">
+              <span style="display:flex;align-items:center;gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--auc-primary)" stroke-width="2"/><path d="M12 6v6l4 2" stroke="var(--auc-primary)" stroke-width="2" stroke-linecap="round"/></svg>
+                <span>Auction Cart Summary</span>
+              </span>
+              <a href="/auction/my-bids.html" style="font-size:0.78rem;color:var(--auc-primary);text-decoration:none;font-weight:700;">View All</a>
+            </div>
+
+            <div class="auc-activity-list" id="rail-activity-list">
+              <div class="auc-activity-row">
+                <div class="act-left">
+                  <span class="auc-act-badge winning">✓</span>
+                  <span>Currently Winning</span>
+                </div>
+                <span class="act-count" id="count-winning">0</span>
+              </div>
+
+              <div class="auc-activity-row">
+                <div class="act-left">
+                  <span class="auc-act-badge outbid">!</span>
+                  <span>Outbid (Need Re-bid)</span>
+                </div>
+                <span class="act-count" id="count-outbid" style="color:#DC2626;">0</span>
+              </div>
+
+              <div class="auc-activity-row">
+                <div class="act-left">
+                  <span class="auc-act-badge won">🏆</span>
+                  <span>Won (Ready for Checkout)</span>
+                </div>
+                <span class="act-count" id="count-won" style="color:#2563EB;">0</span>
+              </div>
+
+              <div class="auc-activity-row">
+                <div class="act-left">
+                  <span class="auc-act-badge total">#</span>
+                  <span>Total Active Bids</span>
+                </div>
+                <span class="act-count" id="count-total-bids">0</span>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;">
+              <a href="/auction/my-bids.html" class="btn btn-primary btn-sm" style="width:100%;text-align:center;display:block;text-decoration:none;padding:10px 0;">
+                Manage My Bids & Checkout
+              </a>
+            </div>
+          </div>
+
+          <!-- 3. How Auction Bidding Works -->
+          <div class="auc-widget-card">
+            <div class="auc-widget-title">
+              <span style="display:flex;align-items:center;gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#059669" stroke-width="2" stroke-linecap="round"/></svg>
+                <span>How Bidding Works</span>
+              </span>
+            </div>
+
+            <div class="auc-guide-step">
+              <div class="auc-guide-num">1</div>
+              <div class="auc-guide-content">
+                <strong>Place Real-time Bid</strong>
+                <p>Enter your bid at or above the minimum next bid. Available wallet balance is checked instantly.</p>
+              </div>
+            </div>
+
+            <div class="auc-guide-step">
+              <div class="auc-guide-num">2</div>
+              <div class="auc-guide-content">
+                <strong>Escrow Balance Hold</strong>
+                <p>Your bid amount is held securely. If someone outbids you, your funds are released back immediately.</p>
+              </div>
+            </div>
+
+            <div class="auc-guide-step">
+              <div class="auc-guide-num">3</div>
+              <div class="auc-guide-content">
+                <strong>Win & Order</strong>
+                <p>When the auction timer expires and reserve is met, the winner completes shipping address and receives the item!</p>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Instant Wallet Deposit Modal -->
+  <div class="bm-modal-overlay" id="deposit-modal">
+    <div class="bm-modal">
+      <div class="bm-modal-header">
+        <h3 class="bm-modal-title">Deposit Funds to Wallet</h3>
+        <button type="button" class="bm-modal-close" id="deposit-modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="bm-modal-body">
+        <p class="text-muted" style="font-size:0.85rem;margin-top:0;margin-bottom:16px;">
+          Add funds to your BidMart Escrow Wallet to place bids immediately.
+        </p>
+
+        <form id="deposit-form">
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="deposit-amount" style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;">Deposit Amount (₹)</label>
+            <input type="number" id="deposit-amount" min="10" max="1000000" step="10" required placeholder="e.g. 5000" class="auc-quickbid-input" style="height:44px;font-size:1.1rem;padding-left:14px;" />
+          </div>
+
+          <!-- Preset Amount Chips -->
+          <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+            <button type="button" class="sc-chip-btn" data-preset="1000" style="padding:6px 12px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;">+₹1,000</button>
+            <button type="button" class="sc-chip-btn" data-preset="5000" style="padding:6px 12px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;">+₹5,000</button>
+            <button type="button" class="sc-chip-btn" data-preset="10000" style="padding:6px 12px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;">+₹10,000</button>
+            <button type="button" class="sc-chip-btn" data-preset="25000" style="padding:6px 12px;border:1px solid #CBD5E1;background:#F8FAFC;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;">+₹25,000</button>
+          </div>
+
+          <div class="form-group" style="margin-bottom:20px;">
+            <label for="deposit-payment-method" style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;">Payment Method</label>
+            <select id="deposit-payment-method" class="auc-filter-select" style="width:100%;">
+              <option value="UPI">Instant UPI (Google Pay, PhonePe, Paytm)</option>
+              <option value="CARD">Credit / Debit Card</option>
+              <option value="NET_BANKING">Net Banking</option>
+            </select>
+          </div>
+
+          <button type="submit" class="sc-btn-primary" id="btn-submit-deposit" style="width:100%;height:44px;font-size:0.95rem;justify-content:center;">
+            Confirm & Deposit Funds
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="bm-toast-container" id="toast-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/navigation.js"></script>
+  <script src="/shared/auth-modal.js"></script>
+  <script src="/shared/auction-card.js"></script>
+  <script src="/shared/seller-header.js"></script>
+  <script src="/shared/auction-sidebar.js"></script>
+
+  <script>
+    // Global State for Auction Marketplace
+    const state = {
+      status: 'ALL',
+      page: 1,
+      limit: 12,
+      sort: 'ending_soon',
+      q: '',
+      categoryId: '',
+      condition: '',
+      endingSoon: false,
+      startingSoon: false,
+      maxBid: '',
+      categories: [],
+      myBids: {},
+      watchlistedIds: new Set(),
+      wallet: { total_balance: 0, available_balance: 0, reserved_balance: 0 },
+    };
+
+    // Toast Notification helper
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `bm-toast ${type}`;
+      toast.innerHTML = `
+        <span>${type === 'success' ? '✓' : (type === 'error' ? '✘' : 'ℹ')}</span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Modal Controls
+    const depositModal = document.getElementById('deposit-modal');
+    function openDepositModal() {
+      if (!window.auth.getUser()) {
+        if (window.buyerAuth) {
+          window.buyerAuth.requireBuyerAuth(() => openDepositModal(), 'Sign in to your BidMart buyer account to deposit funds.');
+        } else {
+          showToast('Please log in first to deposit funds.', 'error');
+          setTimeout(() => window.location.href = '/auth/login.html?redirect=/auction/auctions.html', 1000);
+        }
+        return;
+      }
+      depositModal.classList.add('open');
+      document.getElementById('deposit-amount').focus();
+    }
+    function closeDepositModal() {
+      depositModal.classList.remove('open');
+    }
+    document.getElementById('btn-quick-deposit')?.addEventListener('click', openDepositModal);
+    document.getElementById('btn-rail-deposit')?.addEventListener('click', openDepositModal);
+    document.getElementById('deposit-modal-close')?.addEventListener('click', closeDepositModal);
+    depositModal?.addEventListener('click', (e) => {
+      if (e.target === depositModal) closeDepositModal();
+    });
+
+    // Preset Amount Chips
+    document.querySelectorAll('.sc-chip-btn[data-preset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('deposit-amount').value = btn.dataset.preset;
+      });
+    });
+
+    // Handle Deposit Submit
+    document.getElementById('deposit-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const amount = Number(document.getElementById('deposit-amount').value);
+      const submitBtn = document.getElementById('btn-submit-deposit');
+      if (!amount || amount <= 0) return;
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processing Deposit…';
+        await window.api.post('/wallet/deposit', { amount });
+        showToast(`Successfully deposited ₹${amount.toLocaleString('en-IN')}!`, 'success');
+        closeDepositModal();
+        document.getElementById('deposit-amount').value = '';
+        await loadWalletAndSummary();
+        renderAuctionSidebar();
+      } catch (err) {
+        showToast(err.message || 'Deposit failed.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm & Deposit Funds';
+      }
+    });
+
+    // Load Categories for dropdown
+    async function loadCategories() {
+      try {
+        const { items } = await window.api.get('/categories');
+        state.categories = items || [];
+        const select = document.getElementById('filter-category');
+        select.innerHTML = '<option value="">All Categories</option>' +
+          state.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('Could not load categories:', err.message);
+      }
+    }
+
+    // Load Wallet Balance & Activity Counts for Right Rail
+    async function loadWalletAndSummary() {
+      const user = window.auth.getUser();
+      if (!user) {
+        document.getElementById('rail-total-balance').textContent = '₹0.00';
+        document.getElementById('rail-avail-balance').textContent = '₹0.00';
+        document.getElementById('rail-reserved-balance').textContent = '₹0.00';
+        return;
+      }
+
+      try {
+        const wallet = await window.api.get('/wallet');
+        state.wallet = wallet;
+        document.getElementById('rail-total-balance').textContent = `₹${Number(wallet.total_balance || 0).toLocaleString('en-IN')}`;
+        document.getElementById('rail-avail-balance').textContent = `₹${Number(wallet.available_balance || 0).toLocaleString('en-IN')}`;
+        document.getElementById('rail-reserved-balance').textContent = `₹${Number(wallet.reserved_balance || 0).toLocaleString('en-IN')}`;
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('Wallet load error:', err.message);
+      }
+
+      // Load My Bids for activity summary and user status on cards
+      try {
+        const { items } = await window.api.get('/auctions/my-bids');
+        let winningCount = 0;
+        let outbidCount = 0;
+        let wonCount = 0;
+
+        state.myBids = {};
+        (items || []).forEach(b => {
+          state.myBids[b.auction_id] = b;
+          if (b.bid_status === 'WINNING') winningCount++;
+          else if (b.bid_status === 'OUTBID') outbidCount++;
+          else if (b.bid_status === 'WON') wonCount++;
+        });
+
+        document.getElementById('count-winning').textContent = winningCount;
+        document.getElementById('count-outbid').textContent = outbidCount;
+        document.getElementById('count-won').textContent = wonCount;
+        document.getElementById('count-total-bids').textContent = (items || []).length;
+      } catch (err) {
+        // Guest or seller without buyer bids
+      }
+    }
+
+    // Load Auctions List from Database
+    async function loadAuctions() {
+      const grid = document.getElementById('auction-grid');
+      grid.innerHTML = '<p class="text-muted" style="grid-column:1/-1;text-align:center;padding:40px;">Fetching live auctions from marketplace…</p>';
+
+      try {
+        const params = new URLSearchParams();
+        
+        if (state.status === 'ENDING_SOON') {
+          params.set('status', 'LIVE');
+          params.set('endingSoon', 'true');
+        } else if (state.status !== 'ALL') {
+          params.set('status', state.status);
+        }
+
+        params.set('page', state.page);
+        params.set('limit', state.limit);
+        params.set('sort', state.sort);
+
+        if (state.q) params.set('q', state.q);
+        if (state.categoryId) params.set('categoryId', state.categoryId);
+        if (state.condition) params.set('condition', state.condition);
+        if (state.endingSoon) params.set('endingSoon', 'true');
+        if (state.startingSoon) params.set('startingSoon', 'true');
+        if (state.maxBid) params.set('maxBid', state.maxBid);
+
+        const { items, pagination } = await window.api.get(`/auctions?${params.toString()}`);
+
+        document.getElementById('result-summary-text').textContent = `Showing ${items.length} of ${pagination.total} auctions`;
+        document.getElementById('count-all').textContent = pagination.total || items.length;
+
+        if (!items || items.length === 0) {
+          grid.innerHTML = `
+            <div style="grid-column:1/-1;text-align:center;padding:60px 20px;background:#FFFFFF;border-radius:14px;border:1px solid #E2E8F0;">
+              <div style="font-size:2.5rem;margin-bottom:12px;">🏷️</div>
+              <h3 style="margin:0 0 8px;font-size:1.15rem;color:#0F172A;">No Auctions Match Your Filters</h3>
+              <p class="text-muted" style="font-size:0.88rem;max-width:400px;margin:0 auto 18px;">
+                Try changing your search terms, selecting "All Auctions", or resetting filters to view all live items.
+              </p>
+              <button type="button" class="sc-btn-primary" id="empty-reset-btn" style="margin:0 auto;">Reset All Filters</button>
+            </div>
+          `;
+          document.getElementById('empty-reset-btn')?.addEventListener('click', resetFilters);
+          renderPagination({ totalPages: 0, page: 1 });
+          return;
+        }
+
+        grid.innerHTML = items.map(auc => {
+          const userBid = state.myBids[auc.id] || null;
+          const isWatch = state.watchlistedIds.has(String(auc.product_id));
+          return window.auctionHelpers.renderModernAuctionCard(auc, { isWatchlisted: isWatch, myBid: userBid });
+        }).join('');
+
+        wireCardInteractions();
+        renderPagination(pagination);
+      } catch (err) {
+        grid.innerHTML = `<p class="text-muted" style="grid-column:1/-1;text-align:center;padding:40px;">Could not load auctions: ${err.message}</p>`;
+      }
+    }
+
+    // Wire Card Quick Bids and Watchlist Toggles
+    function wireCardInteractions() {
+      // Quick Bid Buttons
+      document.querySelectorAll('[data-action="quick-bid"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const user = window.auth.getUser();
+          if (!user) {
+            if (window.buyerAuth) {
+              window.buyerAuth.requireBuyerAuth(async () => {
+                await loadWalletAndSummary();
+                await loadAuctions();
+              }, 'Sign in to your BidMart buyer account to place bids.');
+            } else {
+              showToast('Please log in with a buyer account to place bids.', 'error');
+              setTimeout(() => window.location.href = '/auth/login.html?redirect=/auction/auctions.html', 1200);
+            }
+            return;
+          }
+
+          const auctionId = btn.dataset.auctionId;
+          const input = document.getElementById(`bid-input-${auctionId}`);
+          if (!input) return;
+
+          const amount = Number(input.value);
+          const minVal = Number(input.dataset.min);
+
+          if (amount < minVal) {
+            showToast(`Bid must be at least ₹${minVal.toLocaleString('en-IN')}.`, 'error');
+            return;
+          }
+
+          if (state.wallet.available_balance < amount) {
+            showToast(`Insufficient available balance (₹${state.wallet.available_balance.toLocaleString('en-IN')}). Please add funds first.`, 'error');
+            openDepositModal();
+            return;
+          }
+
+          try {
+            btn.disabled = true;
+            btn.textContent = '…';
+            await window.api.post(`/auctions/${auctionId}/bids`, { amount });
+            showToast(`Bid placed successfully for ₹${amount.toLocaleString('en-IN')}!`, 'success');
+            await loadWalletAndSummary();
+            await loadAuctions();
+            renderAuctionSidebar();
+          } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 4l6 6M4 14l6 6M2 22l6-6M9 9l6 6" stroke="currentColor" stroke-width="2.2"/></svg> <span>Bid</span>`;
+            if (err.code === 'KYC_REQUIRED' || err.code === 'KYC_PENDING' || err.code === 'KYC_REJECTED') {
+              showToast(`${err.message} Opening KYC verification…`, 'error');
+              setTimeout(() => {
+                window.location.href = '/auction/kyc.html';
+              }, 1400);
+            } else {
+              showToast(err.message || 'Could not place bid.', 'error');
+            }
+          }
+        });
+      });
+
+      // Header My Active Bids button guard
+      document.getElementById('btn-header-my-bids')?.addEventListener('click', (e) => {
+        const user = window.auth ? window.auth.getUser() : null;
+        if (!user) {
+          e.preventDefault();
+          window.buyerAuth?.open('login', {
+            message: 'Sign in to view your active bids & auction history.',
+            onSuccess: () => {
+              window.location.href = '/auction/my-bids.html';
+            }
+          });
+        }
+      });
+
+      // Watchlist toggle buttons
+      document.querySelectorAll('[data-action="toggle-watchlist"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const user = window.auth.getUser();
+          if (!user) {
+            if (window.buyerAuth) {
+              window.buyerAuth.requireBuyerAuth(async () => {
+                await loadAuctions();
+              }, 'Sign in to save items to your watchlist.');
+            } else {
+              showToast('Please log in to save items to your watchlist.', 'error');
+            }
+            return;
+          }
+
+          const productId = btn.dataset.productId;
+          const isCurrentlyActive = btn.classList.contains('active');
+
+          try {
+            if (isCurrentlyActive) {
+              await window.api.del(`/wishlist/${productId}`);
+              btn.classList.remove('active');
+              state.watchlistedIds.delete(productId);
+              showToast('Removed from Watchlist.', 'info');
+            } else {
+              await window.api.post('/wishlist', { productId });
+              btn.classList.add('active');
+              state.watchlistedIds.add(productId);
+              showToast('Added to your Watchlist!', 'success');
+            }
+          } catch (err) {
+            showToast(err.message || 'Could not update watchlist.', 'error');
+          }
+        });
+      });
+    }
+
+    // Render Pagination Controls
+    function renderPagination(pagination) {
+      const container = document.getElementById('pagination');
+      if (!pagination || pagination.totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+      let buttons = '';
+      for (let i = 1; i <= pagination.totalPages; i++) {
+        buttons += `
+          <button class="sc-btn-primary ${i === pagination.page ? '' : 'sc-btn-outline'}" 
+                  style="min-width:36px;height:36px;padding:0 12px;font-size:0.85rem;${i === pagination.page ? '' : 'background:#FFFFFF;color:#0F172A;border:1px solid #CBD5E1;'}" 
+                  data-page="${i}">${i}</button>
+        `;
+      }
+      container.innerHTML = buttons;
+      container.querySelectorAll('[data-page]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.page = Number(btn.dataset.page);
+          loadAuctions();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    // Reset All Filters
+    function resetFilters() {
+      state.status = 'ALL';
+      state.page = 1;
+      state.q = '';
+      state.categoryId = '';
+      state.condition = '';
+      state.endingSoon = false;
+      state.startingSoon = false;
+      state.maxBid = '';
+      state.sort = 'ending_soon';
+
+      document.getElementById('filter-search').value = '';
+      document.getElementById('filter-category').value = '';
+      document.getElementById('filter-condition').value = '';
+      document.getElementById('filter-sort').value = 'ending_soon';
+      document.getElementById('filter-max-price').value = '';
+      document.getElementById('chip-ending-soon').classList.remove('active-red');
+      document.getElementById('chip-starting-soon').classList.remove('active');
+
+      document.querySelectorAll('#auc-status-tabs .auc-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('#auc-status-tabs [data-status="ALL"]')?.classList.add('active');
+
+      loadAuctions();
+    }
+
+    // Event Listeners for Status Tabs
+    document.getElementById('auc-status-tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.auc-tab-btn');
+      if (!btn) return;
+      document.querySelectorAll('#auc-status-tabs .auc-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.status = btn.dataset.status;
+      state.page = 1;
+      loadAuctions();
+    });
+
+    // Search filter debounce
+    let searchDebounce = null;
+    document.getElementById('filter-search').addEventListener('input', (e) => {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        state.q = e.target.value.trim();
+        state.page = 1;
+        loadAuctions();
+      }, 350);
+    });
+
+    // Dropdowns filter change
+    document.getElementById('filter-category').addEventListener('change', (e) => {
+      state.categoryId = e.target.value;
+      state.page = 1;
+      loadAuctions();
+    });
+
+    document.getElementById('filter-condition').addEventListener('change', (e) => {
+      state.condition = e.target.value;
+      state.page = 1;
+      loadAuctions();
+    });
+
+    document.getElementById('filter-sort').addEventListener('change', (e) => {
+      state.sort = e.target.value;
+      state.page = 1;
+      loadAuctions();
+    });
+
+    document.getElementById('filter-max-price').addEventListener('input', (e) => {
+      state.maxBid = e.target.value;
+      state.page = 1;
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(loadAuctions, 400);
+    });
+
+    // Chip toggles
+    document.getElementById('chip-ending-soon').addEventListener('click', function() {
+      this.classList.toggle('active-red');
+      state.endingSoon = this.classList.contains('active-red');
+      state.page = 1;
+      loadAuctions();
+    });
+
+    document.getElementById('chip-starting-soon').addEventListener('click', function() {
+      this.classList.toggle('active');
+      state.startingSoon = this.classList.contains('active');
+      state.page = 1;
+      loadAuctions();
+    });
+
+    document.getElementById('btn-reset-filters').addEventListener('click', resetFilters);
+
+    // Initial Bootstrap
+    async function init() {
+      if (typeof renderSellerHeader === 'function') renderSellerHeader();
+      if (typeof renderAuctionSidebar === 'function') renderAuctionSidebar();
+      await loadCategories();
+      await loadWalletAndSummary();
+      await loadAuctions();
+
+      // Live countdown ticker every second
+      setInterval(() => {
+        document.querySelectorAll('.auc-card-timer[data-timer-target]').forEach(timerEl => {
+          const card = timerEl.closest('.auc-card');
+          if (!card) return;
+          const status = card.dataset.status;
+          const endsAt = card.dataset.endsAt;
+          const startsAt = card.dataset.startsAt;
+          const target = status === 'SCHEDULED' ? startsAt : endsAt;
+          const info = window.auctionHelpers.getCountdownInfo({ status, starts_at: startsAt, ends_at: endsAt });
+          timerEl.querySelector('span:first-child').textContent = `⏱ ${info.text}`;
+          if (info.urgent) timerEl.classList.add('urgent');
+        });
+      }, 1000);
+    }
+
+    init();
+  </script>
+
+</body>
+</html>

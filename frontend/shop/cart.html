@@ -161,11 +161,11 @@
             <span class="bm-summary-total-val">${formatINR(subtotal)}</span>
           </div>
 
-          <!-- Direct Link to Dedicated Checkout / Payment Modal -->
-          <button type="button" class="bm-btn-checkout-now" onclick="window.bmCheckout ? window.bmCheckout.open() : (window.location.href='/shop/checkout.html')">
-            <span>Proceed to Payment</span>
+          <!-- Direct Link to Amazon-style Dedicated Checkout Page -->
+          <a href="/shop/checkout.html" class="bm-btn-checkout-now">
+            <span>Proceed to Buy</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </button>
+          </a>
 
           <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:0.75rem;color:var(--bm-cart-muted);">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>

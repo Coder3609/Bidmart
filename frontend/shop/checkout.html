@@ -3,345 +3,563 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment & Checkout — BidMart</title>
+  <title>Amazon-Style Secure Checkout — BidMart</title>
   <link rel="stylesheet" href="/shared/theme.css" />
   <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
-  <link rel="stylesheet" href="/shared/explore-dialog.css" />
-  <link rel="stylesheet" href="/shop/cart-modern.css" />
   <style>
-    /* Payment Selection Cards */
-    .bm-pay-methods-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 16px;
+    :root {
+      --amz-bg: #EAEDED;
+      --amz-white: #FFFFFF;
+      --amz-border: #D5D9D9;
+      --amz-text: #0F1111;
+      --amz-muted: #565959;
+      --amz-yellow: #FFD814;
+      --amz-yellow-hover: #F7CA00;
+      --amz-blue: #007185;
+      --amz-orange: #C45500;
+      --amz-green: #007600;
     }
 
-    .bm-pay-option-card {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 20px;
-      background: var(--bm-cart-card);
-      border: 1px solid var(--bm-cart-border);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--amz-bg);
+      color: var(--amz-text);
+      font-family: "Amazon Ember", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .bm-pay-option-card:hover {
-      border-color: rgba(216, 255, 0, 0.4);
-    }
-
-    .bm-pay-option-card.selected {
-      border-color: #D8FF00;
-      background: rgba(216, 255, 0, 0.04);
-    }
-
-    .bm-pay-radio {
-      accent-color: #D8FF00;
-      width: 18px;
-      height: 18px;
-    }
-
-    .bm-pay-text-group {
-      flex: 1;
-    }
-
-    .bm-pay-name {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--bm-cart-text);
+    /* Minimal Amazon-Style Checkout Header */
+    .amz-checkout-header {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--amz-border);
+      padding: 12px 24px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
     }
-
-    .bm-pay-sub {
-      font-size: 0.8rem;
-      color: var(--bm-cart-muted);
-      margin-top: 2px;
-    }
-
-    .bm-input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    .bm-input-group label {
-      font-size: 0.75rem;
+    .amz-logo-link {
+      font-family: 'Space Grotesk', Arial, sans-serif;
       font-weight: 800;
-      color: var(--bm-cart-muted);
-      letter-spacing: 0.05em;
+      font-size: 1.5rem;
+      color: #0F1111;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .amz-logo-link span {
+      background: #0F1111;
+      color: #FFD814;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .amz-checkout-title {
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: #0F1111;
+      margin: 0;
+    }
+    .amz-secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amz-muted);
+      font-size: 0.85rem;
     }
 
-    .bm-input-group input {
-      height: 44px;
-      background: var(--bm-cart-bg);
-      border: 1px solid var(--bm-cart-border);
+    /* Main Checkout Layout Grid */
+    .amz-checkout-container {
+      max-width: 1180px;
+      margin: 20px auto 60px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .amz-checkout-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Accordion / Step Boxes */
+    .amz-step-box {
+      background: var(--amz-white);
+      border: 1px solid var(--amz-border);
       border-radius: 8px;
-      padding: 0 14px;
-      color: var(--bm-cart-text);
-      font-size: 0.92rem;
-      font-family: inherit;
-      outline: none;
+      margin-bottom: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .amz-step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .amz-step-num {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #0F1111;
+    }
+    .amz-step-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0F1111;
+      margin: 0;
     }
 
-    .bm-input-group input:focus {
-      border-color: #D8FF00;
-    }
-
-    .bm-form-grid-2 {
+    /* Form Fields */
+    .amz-grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
+    .amz-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    .amz-input-wrap label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #0F1111;
+    }
+    .amz-input-wrap input, .amz-input-wrap select {
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      border: 1px solid #888C8C;
+      border-radius: 4px;
+      outline: none;
+      background: #FFFFFF;
+      color: #0F1111;
+      transition: all 0.15s ease;
+    }
+    .amz-input-wrap input:focus, .amz-input-wrap select:focus {
+      border-color: #007185;
+      box-shadow: 0 0 0 3px rgba(0, 113, 133, 0.2);
+    }
+
+    /* Payment Radio Cards */
+    .amz-pay-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .amz-pay-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--amz-border);
+      border-radius: 6px;
+      cursor: pointer;
+      background: #FFFFFF;
+      transition: all 0.15s ease;
+    }
+    .amz-pay-row.selected {
+      border-color: #007185;
+      background: #F0F8FF;
+    }
+    .amz-pay-row input[type="radio"] {
+      margin-top: 3px;
+      accent-color: #007185;
+      width: 18px;
+      height: 18px;
+    }
+    .amz-pay-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0F1111;
+    }
+    .amz-pay-desc {
+      font-size: 0.8rem;
+      color: var(--amz-muted);
+      margin-top: 2px;
+    }
+
+    /* Order Review Items List */
+    .amz-item-row {
+      display: flex;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--amz-border);
+    }
+    .amz-item-row:last-child {
+      border-bottom: none;
+    }
+    .amz-item-thumb {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      background: #FAFAFA;
+      border: 1px solid var(--amz-border);
+      border-radius: 4px;
+      padding: 4px;
+    }
+    .amz-item-details {
+      flex: 1;
+    }
+    .amz-item-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0F1111;
+      margin: 0 0 4px 0;
+    }
+    .amz-item-delivery {
+      color: var(--amz-green);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .amz-item-price {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #B12704;
+    }
+
+    /* Right Side Amazon Sticky Order Box */
+    .amz-order-summary-box {
+      background: var(--amz-white);
+      border: 1px solid var(--amz-border);
+      border-radius: 8px;
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .amz-btn-place-order {
+      width: 100%;
+      background: var(--amz-yellow);
+      border: 1px solid #FCD200;
+      border-radius: 20px;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0F1111;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .amz-btn-place-order:hover {
+      background: var(--amz-yellow-hover);
+    }
+    .amz-terms-fineprint {
+      font-size: 0.72rem;
+      color: var(--amz-muted);
+      line-height: 1.4;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .amz-summary-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      margin-bottom: 8px;
+      color: #0F1111;
+    }
+    .amz-divider {
+      height: 1px;
+      background: var(--amz-border);
+      margin: 12px 0;
+    }
+    .amz-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #B12704;
+      margin-top: 10px;
+    }
+
+    /* Success Order Screen */
+    .amz-success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+    }
+    .amz-success-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 36px 40px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+    .amz-success-check {
+      width: 64px;
+      height: 64px;
+      background: #E8F5E9;
+      color: #2E7D32;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
   </style>
 </head>
-<body class="bm-cart-body">
+<body>
 
-  <div id="site-header"></div>
+  <!-- Top Amazon Checkout Navbar -->
+  <header class="amz-checkout-header">
+    <a href="/market.html" class="amz-logo-link">
+      BIDMART <span>SECURE</span>
+    </a>
+    <h1 class="amz-checkout-title">Checkout</h1>
+    <div class="amz-secure-badge">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>256-Bit SSL Encrypted</span>
+    </div>
+  </header>
 
-  <main class="bm-cart-container">
-    
-    <div class="bm-cart-top-nav">
-      <a href="/shop/cart.html" class="bm-cart-back-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        <span>Back to Cart</span>
-      </a>
-      <div style="font-size:0.85rem;color:#10B981;font-weight:700;">
-        <span>🔒 100% Escrow Protected Payment</span>
+  <!-- Main Multi-Step Checkout Container -->
+  <main class="amz-checkout-container">
+
+    <!-- Left: Step 1, 2, 3 Accordions -->
+    <div>
+
+      <!-- STEP 1: Delivery Address -->
+      <section class="amz-step-box">
+        <div class="amz-step-header">
+          <span class="amz-step-num">1</span>
+          <h2 class="amz-step-title">Select delivery address</h2>
+        </div>
+        <div class="amz-grid-2">
+          <div class="amz-input-wrap">
+            <label>Full Name</label>
+            <input type="text" id="custName" value="Rahul Sharma" placeholder="e.g. Rahul Sharma" required />
+          </div>
+          <div class="amz-input-wrap">
+            <label>Mobile Number (for delivery updates)</label>
+            <input type="tel" id="custPhone" value="+91 98765 43210" placeholder="10-digit mobile number" required />
+          </div>
+        </div>
+        <div class="amz-input-wrap">
+          <label>Flat, House no., Building, Company, Apartment</label>
+          <input type="text" id="custStreet" value="Flat 402, Signature Residency, MG Road" required />
+        </div>
+        <div class="amz-grid-2">
+          <div class="amz-input-wrap">
+            <label>City / Town</label>
+            <input type="text" id="custCity" value="Bengaluru" required />
+          </div>
+          <div class="amz-input-wrap">
+            <label>PIN Code</label>
+            <input type="text" id="custPincode" value="560001" required />
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Payment Method -->
+      <section class="amz-step-box">
+        <div class="amz-step-header">
+          <span class="amz-step-num">2</span>
+          <h2 class="amz-step-title">Select a payment method</h2>
+        </div>
+        <div class="amz-pay-options">
+
+          <label class="amz-pay-row selected" onclick="pickPayment(this)">
+            <input type="radio" name="payType" value="UPI" checked />
+            <div>
+              <div class="amz-pay-label">Other UPI Apps (Google Pay, PhonePe, Paytm, BHIM)</div>
+              <div class="amz-pay-desc">Pay directly from any bank via verified UPI handle</div>
+            </div>
+          </label>
+
+          <label class="amz-pay-row" onclick="pickPayment(this)">
+            <input type="radio" name="payType" value="Card" />
+            <div>
+              <div class="amz-pay-label">Credit or debit card</div>
+              <div class="amz-pay-desc">BidMart accepts all major cards (Visa, MasterCard, RuPay, Amex)</div>
+            </div>
+          </label>
+
+          <label class="amz-pay-row" onclick="pickPayment(this)">
+            <input type="radio" name="payType" value="NetBanking" />
+            <div>
+              <div class="amz-pay-label">Net Banking</div>
+              <div class="amz-pay-desc">HDFC, ICICI, SBI, Axis, Kotak and 45+ other Indian banks</div>
+            </div>
+          </label>
+
+          <label class="amz-pay-row" onclick="pickPayment(this)">
+            <input type="radio" name="payType" value="COD" />
+            <div>
+              <div class="amz-pay-label">Cash on Delivery / Pay on Delivery</div>
+              <div class="amz-pay-desc">Cash, UPI, or Card on delivery with verified contactless OTP</div>
+            </div>
+          </label>
+
+        </div>
+      </section>
+
+      <!-- STEP 3: Items and Delivery Review -->
+      <section class="amz-step-box">
+        <div class="amz-step-header">
+          <span class="amz-step-num">3</span>
+          <h2 class="amz-step-title">Review items and delivery</h2>
+        </div>
+        <div id="amzCheckoutItemsList">
+          <p style="color:var(--amz-muted);">Loading cart items…</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right: Sticky Order Summary Box -->
+    <aside class="amz-order-summary-box">
+      <button type="button" class="amz-btn-place-order" id="btnPlaceOrder" onclick="submitAmazonOrder()">
+        Place your order and pay
+      </button>
+      <div class="amz-terms-fineprint">
+        By placing your order, you agree to BidMart's privacy notice and conditions of use.
       </div>
-    </div>
 
-    <div class="bm-cart-title-row">
-      <h1 class="bm-cart-title">Order Payment & Delivery</h1>
-    </div>
+      <div class="amz-divider"></div>
 
-    <!-- Main 2-Column Checkout -->
-    <div class="bm-cart-grid" id="bmCheckoutStage">
+      <h3 style="font-size:1.05rem;font-weight:700;margin:0 0 12px 0;">Order Summary</h3>
       
-      <!-- Left Column: Shipping + Payment Choice -->
-      <div>
-        
-        <!-- Step 1: Address Card -->
-        <div class="bm-cart-items-card" style="margin-bottom:24px;">
-          <h2 class="bm-cart-summary-title" style="margin-bottom:16px;">
-            <span style="display:inline-flex;width:24px;height:24px;background:#D8FF00;color:#080808;border-radius:50%;font-size:0.8rem;align-items:center;justify-content:center;margin-right:8px;">1</span>
-            <span>Delivery Address</span>
-          </h2>
-
-          <div class="bm-form-grid-2">
-            <div class="bm-input-group">
-              <label>FULL NAME</label>
-              <input type="text" id="shipName" value="Rahul Sharma" required />
-            </div>
-            <div class="bm-input-group">
-              <label>PHONE NUMBER</label>
-              <input type="tel" id="shipPhone" value="+91 98765 43210" required />
-            </div>
-          </div>
-
-          <div class="bm-input-group">
-            <label>STREET ADDRESS</label>
-            <input type="text" id="shipStreet" value="Flat 402, Signature Towers, MG Road" required />
-          </div>
-
-          <div class="bm-form-grid-2">
-            <div class="bm-input-group">
-              <label>CITY</label>
-              <input type="text" id="shipCity" value="Bengaluru" required />
-            </div>
-            <div class="bm-input-group">
-              <label>PINCODE</label>
-              <input type="text" id="shipPincode" value="560001" required />
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 2: Payment Choice Card -->
-        <div class="bm-cart-items-card">
-          <h2 class="bm-cart-summary-title" style="margin-bottom:16px;">
-            <span style="display:inline-flex;width:24px;height:24px;background:#D8FF00;color:#080808;border-radius:50%;font-size:0.8rem;align-items:center;justify-content:center;margin-right:8px;">2</span>
-            <span>Select Payment Method</span>
-          </h2>
-
-          <div class="bm-pay-methods-grid">
-            
-            <label class="bm-pay-option-card selected" onclick="selectMethod(this)">
-              <input type="radio" name="payMethod" value="UPI" checked class="bm-pay-radio" />
-              <div class="bm-pay-text-group">
-                <div class="bm-pay-name">UPI · Google Pay / PhonePe / Paytm</div>
-                <div class="bm-pay-sub">Instant zero-fee verification with Escrow Guarantee</div>
-              </div>
-            </label>
-
-            <label class="bm-pay-option-card" onclick="selectMethod(this)">
-              <input type="radio" name="payMethod" value="Card" class="bm-pay-radio" />
-              <div class="bm-pay-text-group">
-                <div class="bm-pay-name">Credit / Debit Card</div>
-                <div class="bm-pay-sub">Visa, Mastercard, RuPay, Amex via 256-bit bank encryption</div>
-              </div>
-            </label>
-
-            <label class="bm-pay-option-card" onclick="selectMethod(this)">
-              <input type="radio" name="payMethod" value="NetBanking" class="bm-pay-radio" />
-              <div class="bm-pay-text-group">
-                <div class="bm-pay-name">Net Banking</div>
-                <div class="bm-pay-sub">HDFC, ICICI, SBI, Axis, Kotak & 50+ major banks</div>
-              </div>
-            </label>
-
-            <label class="bm-pay-option-card" onclick="selectMethod(this)">
-              <input type="radio" name="payMethod" value="COD" class="bm-pay-radio" />
-              <div class="bm-pay-text-group">
-                <div class="bm-pay-name">Cash on Delivery (COD)</div>
-                <div class="bm-pay-sub">Pay via Cash or UPI when your verified parcel arrives</div>
-              </div>
-            </label>
-
-          </div>
-        </div>
-
+      <div class="amz-summary-line">
+        <span>Items:</span>
+        <span id="amzItemsSubtotal">₹0</span>
       </div>
 
-      <!-- Right Column: Order Summary & Complete Payment Action -->
-      <div class="bm-cart-summary-card">
-        <h2 class="bm-cart-summary-title">Summary & Payment</h2>
-
-        <div id="checkoutSummaryItems" style="margin-bottom:16px;"></div>
-
-        <div class="bm-summary-line">
-          <span>Items Total</span>
-          <span id="ckSubtotal" style="font-weight:700;color:var(--bm-cart-text);">₹0</span>
-        </div>
-
-        <div class="bm-summary-line highlight">
-          <span>Express Shipping</span>
-          <span>FREE</span>
-        </div>
-
-        <div class="bm-summary-line">
-          <span>Escrow Protection</span>
-          <span>Included</span>
-        </div>
-
-        <div class="bm-summary-divider"></div>
-
-        <div class="bm-summary-total-row">
-          <span class="bm-summary-total-label">Amount Payable</span>
-          <span class="bm-summary-total-val" id="ckTotal">₹0</span>
-        </div>
-
-        <button type="button" class="bm-btn-checkout-now" id="btnCompletePayment" onclick="processPayment()">
-          <span>Complete Order & Pay &rarr;</span>
-        </button>
-
-        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:0.75rem;color:var(--bm-cart-muted);">
-          <span>🔒 256-Bit SSL Protected · 7-Day Money Back Guarantee</span>
-        </div>
+      <div class="amz-summary-line">
+        <span>Postage &amp; Packing:</span>
+        <span style="color:var(--amz-green);font-weight:700;">FREE</span>
       </div>
 
-    </div>
+      <div class="amz-summary-line">
+        <span>Promotion Applied:</span>
+        <span style="color:var(--amz-green);font-weight:700;">-₹0</span>
+      </div>
+
+      <div class="amz-divider"></div>
+
+      <div class="amz-total-row">
+        <span>Order Total:</span>
+        <span id="amzGrandTotal">₹0</span>
+      </div>
+
+      <div style="margin-top:18px;background:#F7FAFA;border:1px solid var(--amz-border);border-radius:6px;padding:10px 12px;font-size:0.75rem;color:var(--amz-muted);display:flex;align-items:center;gap:8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#007600" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Your order qualifies for <strong>FREE Guaranteed Delivery</strong></span>
+      </div>
+    </aside>
 
   </main>
 
-  <script src="/shared/auth.js"></script>
-  <script src="/shared/api.js"></script>
-  <script src="/shared/navigation.js"></script>
-  <script src="/shared/header.js"></script>
+  <!-- Success Confirmation Modal -->
+  <div class="amz-success-overlay" id="amzSuccessModal">
+    <div class="amz-success-card">
+      <div class="amz-success-check">✓</div>
+      <h2 style="font-size:1.5rem;font-weight:800;margin:0 0 8px 0;color:#0F1111;">Order Placed, thank you!</h2>
+      <p style="font-size:0.9rem;color:var(--amz-muted);line-height:1.5;margin-bottom:20px;">
+        Confirmation will be sent to your email. Your items will arrive within <strong>2 business days</strong>.
+      </p>
+      <div style="background:#F0F8FF;border:1px solid #B0D4DE;border-radius:6px;padding:12px;margin-bottom:24px;font-size:0.85rem;color:#007185;font-weight:700;">
+        Order ID: #BM-2026-<span id="successOrderId">78921</span>
+      </div>
+      <a href="/market.html" class="amz-btn-place-order" style="text-decoration:none;">
+        Continue Shopping on BidMart
+      </a>
+    </div>
+  </div>
 
   <script>
     function formatINR(val) {
       return '₹' + Number(val || 0).toLocaleString('en-IN');
     }
 
-    function selectMethod(el) {
-      document.querySelectorAll('.bm-pay-option-card').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      const r = el.querySelector('input[type="radio"]');
-      if (r) r.checked = true;
+    function pickPayment(elem) {
+      document.querySelectorAll('.amz-pay-row').forEach(row => row.classList.remove('selected'));
+      elem.classList.add('selected');
+      const radio = elem.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
     }
 
-    function loadCheckout() {
+    function loadAmazonCheckout() {
       let cart = [];
       try {
         cart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
       } catch (_) {}
 
-      if (cart.length === 0) {
-        // Fallback default sample if user navigates directly
-        cart = [{
-          productId: 2,
-          title: 'Ultrabook X1 (14-inch, 16GB RAM)',
-          price: 59999,
-          img: '/assets/real/ultrabook.jpg',
-          quantity: 1
-        }];
+      const container = document.getElementById('amzCheckoutItemsList');
+      const subtotalEl = document.getElementById('amzItemsSubtotal');
+      const grandTotalEl = document.getElementById('amzGrandTotal');
+
+      if (!cart || cart.length === 0) {
+        container.innerHTML = `
+          <div style="padding:24px 0;text-align:center;">
+            <p style="font-size:1.1rem;color:#565959;margin-bottom:14px;">Your Cart is empty.</p>
+            <a href="/shop/shop.html" style="color:#007185;font-weight:700;text-decoration:none;">Explore today's deals &rarr;</a>
+          </div>
+        `;
+        subtotalEl.innerText = '₹0';
+        grandTotalEl.innerText = '₹0';
+        document.getElementById('btnPlaceOrder').disabled = true;
+        document.getElementById('btnPlaceOrder').style.opacity = '0.5';
+        return;
       }
 
       let subtotal = 0;
-      const itemsContainer = document.getElementById('checkoutSummaryItems');
-
-      itemsContainer.innerHTML = cart.map(item => {
+      container.innerHTML = cart.map(item => {
         const price = Number(item.price) || 0;
         const qty = Number(item.quantity) || 1;
-        subtotal += price * qty;
+        const lineTotal = price * qty;
+        subtotal += lineTotal;
+
         return `
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bm-cart-border);">
-            <img src="${item.img || item.image || '/assets/products/placeholder.svg'}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--bm-cart-bg);border:1px solid var(--bm-cart-border);" />
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:0.88rem;font-weight:700;color:var(--bm-cart-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</div>
-              <div style="font-size:0.75rem;color:var(--bm-cart-muted);">Qty: ${qty} · ${formatINR(price)}</div>
+          <div class="amz-item-row">
+            <img src="${item.img || item.image || '/assets/products/placeholder.svg'}" class="amz-item-thumb" alt="${item.title}" onerror="this.src='/assets/products/placeholder.svg';" />
+            <div class="amz-item-details">
+              <h4 class="amz-item-name">${item.title}</h4>
+              <div class="amz-item-delivery">Guaranteed Delivery: In 2 Days</div>
+              <div style="font-size:0.85rem;color:#565959;margin-top:2px;">Quantity: <strong>${qty}</strong></div>
+              <div class="amz-item-price">${formatINR(lineTotal)}</div>
             </div>
-            <div style="font-weight:800;font-size:0.92rem;color:var(--bm-cart-text);">${formatINR(price * qty)}</div>
           </div>
         `;
       }).join('');
 
-      document.getElementById('ckSubtotal').textContent = formatINR(subtotal);
-      document.getElementById('ckTotal').textContent = formatINR(subtotal);
+      subtotalEl.innerText = formatINR(subtotal);
+      grandTotalEl.innerText = formatINR(subtotal);
     }
 
-    function processPayment() {
-      const btn = document.getElementById('btnCompletePayment');
+    function submitAmazonOrder() {
+      const btn = document.getElementById('btnPlaceOrder');
+      btn.innerText = 'Processing Order...';
       btn.disabled = true;
-      btn.innerHTML = `<span>Verifying & Processing Payment...</span>`;
-
-      const selectedMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'UPI';
-      const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
 
       setTimeout(() => {
+        // Clear cart
         localStorage.removeItem('bidmart_guest_cart');
-        document.querySelectorAll('#header-cart-badge').forEach(b => b.hidden = true);
-
-        const stage = document.getElementById('bmCheckoutStage');
-        stage.innerHTML = `
-          <div class="bm-cart-empty-stage" style="grid-column:1/-1;padding:70px 24px;">
-            <div style="width:68px;height:68px;background:rgba(16,185,129,0.15);border:2px solid #10B981;color:#10B981;border-radius:50%;font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">✓</div>
-            <h2 class="bm-cart-empty-heading">Order Placed Successfully!</h2>
-            <p class="bm-cart-empty-sub">
-              Your order <strong>#${orderId}</strong> has been secured and confirmed using <strong>${selectedMethod}</strong>. Your verified package is being prepared for express delivery.
-            </p>
-            <div style="display:inline-block;background:rgba(216,255,0,0.08);border:1px dashed #D8FF00;border-radius:8px;padding:12px 24px;color:#D8FF00;font-family:'JetBrains Mono',monospace;font-size:0.85rem;margin-bottom:30px;">
-              ESTIMATED EXPRESS DELIVERY: WITHIN 48 HOURS
-            </div>
-            <div>
-              <a href="/market.html" class="bm-btn-checkout-now" style="width:fit-content;padding:12px 36px;margin:0 auto;display:inline-flex;">
-                Return to Marketplace &rarr;
-              </a>
-            </div>
-          </div>
-        `;
-      }, 1200);
+        
+        // Show success modal
+        document.getElementById('successOrderId').innerText = Math.floor(100000 + Math.random() * 900000);
+        document.getElementById('amzSuccessModal').style.display = 'flex';
+      }, 900);
     }
 
-    window.selectMethod = selectMethod;
-    window.processPayment = processPayment;
-
-    document.addEventListener('DOMContentLoaded', loadCheckout);
+    document.addEventListener('DOMContentLoaded', loadAmazonCheckout);
   </script>
 </body>
 </html>

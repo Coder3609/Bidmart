@@ -92,7 +92,7 @@ function renderHeader() {
           `}
 
           <!-- Cart Action Button -->
-          <button type="button" class="bm-btn-cart-pill" id="bmNavCartBtn" onclick="window.bmCheckout ? window.bmCheckout.open() : window.location.href='/shop/cart.html'" title="Shopping Cart">
+          <button type="button" class="bm-btn-cart-pill" id="bmNavCartBtn" onclick="window.location.href='/shop/cart.html'" title="Shopping Cart">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             <span>Cart</span>
             <span class="bm-cart-pill-count" id="header-cart-badge">0</span>

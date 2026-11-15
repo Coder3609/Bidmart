@@ -104,11 +104,6 @@
               &larr; Back to Email
             </button>
           </form>
-
-          <!-- Continue as Guest Button (Enters Directly) -->
-          <button type="button" class="bm-btn-guest-enter" id="bmGuestBtn" onclick="window.bmExploreModal.continueAsGuest()">
-            <span>Continue as Guest &rarr;</span>
-          </button>
         </div>
 
         <!-- Right: Visual Graphic Illustration -->
@@ -176,7 +171,6 @@
       if (s2) s2.style.display = 'none';
       if (soc) soc.style.display = 'grid';
       if (div) div.style.display = 'flex';
-      if (guest) guest.style.display = 'block';
       if (msg) msg.style.display = 'none';
       if (tag) tag.textContent = 'BIDMART ACCESS';
       if (title) title.textContent = 'Welcome to BidMart';
@@ -270,7 +264,6 @@
       document.getElementById('bmStep1Form').style.display = 'none';
       document.getElementById('bmSocialGrid').style.display = 'none';
       document.getElementById('bmDivider').style.display = 'none';
-      document.getElementById('bmGuestBtn').style.display = 'none';
 
       document.getElementById('bmAuthTag').textContent = 'NEW MEMBER';
       document.getElementById('bmAuthTitle').textContent = 'Tell us about yourself';

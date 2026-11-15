@@ -362,7 +362,7 @@
         : `/shop/product.html?id=${product.id}`;
 
       return `
-        <a href="${detailUrl}" class="modern-product-card" data-is-auction="${isAuction}">
+        <div class="modern-product-card" data-is-auction="${isAuction}" onclick="window.location.href='${detailUrl}'" style="cursor:pointer;">
           <div class="product-image-stage">
             <img src="${imageSrc}" alt="${product.title}" onerror="this.onerror=null;this.src='/assets/products/placeholder.svg';" loading="lazy" />
             ${isAuction ? `
@@ -392,8 +392,8 @@
 
             <div style="display:flex;align-items:center;gap:6px;">
               ${!isAuction ? `
-                <button type="button" class="btn-quick-cart" onclick="quickAddToCart(event, ${product.id}, '${product.title.replace(/'/g, "\\'")}', ${price}, '${imageSrc}')" title="Quick Add to Cart">
-                  + CART
+                <button type="button" class="btn-quick-cart" onclick="quickAddToCart(event, ${product.id}, '${product.title.replace(/'/g, "\\'")}', ${price}, '${imageSrc}')" title="Add to Cart">
+                  Add to Cart
                 </button>
               ` : `
                 <span class="btn-quick-cart" style="background:var(--accent-lime);color:#080808;font-weight:800;" title="Bid on Item">
@@ -407,7 +407,7 @@
               </div>
             </div>
           </div>
-        </a>
+        </div>
       `;
     }
 

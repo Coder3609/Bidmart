@@ -262,26 +262,35 @@ body.shop-page-body {
   cursor: pointer;
 }
 
-/* Quick Add Button on Card */
+/* Quick Add Button on Card (Amazon-style Full Add to Cart) */
 .btn-quick-cart {
-  padding: 6px 12px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
+  padding: 8px 14px;
+  background: #FFD814;
+  border: 1px solid #FCD200;
+  color: #0F1111;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.8rem;
   font-weight: 700;
-  border-radius: 6px;
+  border-radius: 20px;
   cursor: pointer;
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  position: relative;
+  z-index: 10;
 }
 .btn-quick-cart:hover {
-  background: var(--accent-lime);
-  color: #080808;
-  border-color: var(--accent-lime);
+  background: #F7CA00;
+  border-color: #F2C200;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.75);
+  transform: scale(1.02);
+}
+.btn-quick-cart:active {
+  background: #F0B800;
+  transform: scale(0.98);
 }
 
 /* Toast Message */

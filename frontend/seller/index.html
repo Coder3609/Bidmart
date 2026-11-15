@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sell on BidMart — Dual-Engine Commerce for Modern Merchants</title>
+  <meta name="description" content="Sell at fixed price or liquidate slow-moving and high-demand inventory through competitive live auctions at MRP or higher." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/global-dark.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
+  <link rel="stylesheet" href="/shared/checkout-modal.css" />
+
+  <style>
+    :root {
+      --seller-bg: #07090E;
+      --seller-surface: #0E121B;
+      --seller-card: #141923;
+      --seller-border: rgba(255, 255, 255, 0.08);
+      --seller-border-hover: rgba(16, 185, 129, 0.4);
+      --seller-mint: #10B981;
+      --seller-mint-glow: rgba(16, 185, 129, 0.25);
+      --seller-acid: #D8FF00;
+      --seller-text: #F8FAFC;
+      --seller-muted: #94A3B8;
+      --seller-accent: #38BDF8;
+    }
+
+    [data-theme="light"] {
+      --seller-bg: #F8FAFC;
+      --seller-surface: #FFFFFF;
+      --seller-card: #F1F5F9;
+      --seller-border: #E2E8F0;
+      --seller-border-hover: rgba(16, 185, 129, 0.6);
+      --seller-mint: #059669;
+      --seller-mint-glow: rgba(5, 150, 105, 0.15);
+      --seller-acid: #0F172A;
+      --seller-text: #0F172A;
+      --seller-muted: #64748B;
+      --seller-accent: #0284C7;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--seller-bg);
+      color: var(--seller-text);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .seller-hero {
+      position: relative;
+      padding: 60px 24px 80px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .seller-hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    @media (max-width: 960px) {
+      .seller-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+    }
+
+    .seller-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 999px;
+      color: var(--seller-mint);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .seller-hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin: 0 0 20px;
+    }
+
+    .seller-hero-title .gradient-text {
+      background: linear-gradient(135deg, #10B981 0%, #D8FF00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .seller-hero-sub {
+      font-size: 1.12rem;
+      line-height: 1.6;
+      color: var(--seller-muted);
+      margin: 0 0 32px;
+      max-width: 580px;
+    }
+
+    .seller-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .btn-seller-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--seller-mint);
+      color: #042416 !important;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 4px 20px var(--seller-mint-glow);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-seller-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-seller-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--seller-surface);
+      color: var(--seller-text) !important;
+      border: 1px solid var(--seller-border);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 16px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-seller-secondary:hover {
+      border-color: var(--seller-mint);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    /* Trust Stats Strip */
+    .seller-stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding-top: 24px;
+      border-top: 1px solid var(--seller-border);
+    }
+
+    @media (max-width: 600px) {
+      .seller-stats-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-item strong {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--seller-mint);
+    }
+
+    .stat-item span {
+      font-size: 0.82rem;
+      color: var(--seller-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    /* Interactive Showcase Card (Right Column) */
+    .seller-showcase-card {
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .seller-showcase-card::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .showcase-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .showcase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(216, 255, 0, 0.1);
+      border: 1px solid rgba(216, 255, 0, 0.3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #D8FF00;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] .showcase-badge {
+      color: #0F172A;
+      background: #E2E8F0;
+      border-color: #CBD5E1;
+    }
+
+    /* Inventory Comparison Box */
+    .inventory-compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .compare-box {
+      background: var(--seller-card);
+      border: 1px solid var(--seller-border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .compare-box.highlight {
+      border-color: var(--seller-mint);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .compare-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .compare-box h4 {
+      margin: 0 0 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .compare-box p {
+      margin: 0 0 14px;
+      font-size: 0.82rem;
+      color: var(--seller-muted);
+      line-height: 1.45;
+    }
+
+    .compare-metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .compare-metric.green {
+      color: #10B981;
+    }
+
+    .compare-metric.muted {
+      color: var(--seller-muted);
+    }
+
+    /* Feature Pillars */
+    .seller-features-section {
+      padding: 80px 24px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-header-centered {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 56px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      color: var(--seller-mint);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 3.2vw, 2.8rem);
+      font-weight: 800;
+      margin: 0 0 16px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--seller-muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+    }
+
+    .feature-card:hover {
+      border-color: var(--seller-border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-icon-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 0 0 10px;
+    }
+
+    .feature-card p {
+      color: var(--seller-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Onboarding / Sign Up Form Section */
+    .seller-form-section {
+      background: var(--seller-surface);
+      border-top: 1px solid var(--seller-border);
+      border-bottom: 1px solid var(--seller-border);
+      padding: 90px 24px;
+    }
+
+    .seller-form-container {
+      max-width: 620px;
+      margin: 0 auto;
+      background: var(--seller-card);
+      border: 1px solid var(--seller-border);
+      border-radius: 24px;
+      padding: 44px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 640px) {
+      .seller-form-container {
+        padding: 28px 20px;
+      }
+    }
+
+    .form-title-group {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-title-group h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0 0 8px;
+    }
+
+    .form-title-group p {
+      font-size: 0.95rem;
+      color: var(--seller-muted);
+      margin: 0;
+    }
+
+    .form-field-group {
+      margin-bottom: 20px;
+    }
+
+    .form-field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--seller-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-field-input {
+      width: 100%;
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--seller-text);
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.15s ease;
+    }
+
+    .form-field-input:focus {
+      border-color: var(--seller-mint);
+      box-shadow: 0 0 0 3px var(--seller-mint-glow);
+    }
+
+    .form-field-select {
+      width: 100%;
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--seller-text);
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .btn-seller-submit {
+      width: 100%;
+      background: var(--seller-mint);
+      color: #042416;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-seller-submit:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    .form-feedback-alert {
+      display: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* =====================================================================
+       4-STEP PLAYBOOK SECTION STYLES
+       ===================================================================== */
+    .seller-playbook-section {
+      background: #0B0E17;
+      border-top: 1px solid var(--seller-border);
+      border-bottom: 1px solid var(--seller-border);
+      padding: 70px 24px;
+    }
+
+    [data-theme="light"] .seller-playbook-section {
+      background: #F1F5F9;
+    }
+
+    .playbook-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .playbook-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .playbook-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--seller-mint);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .playbook-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+      font-weight: 800;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .playbook-subtitle {
+      color: var(--seller-muted);
+      font-size: 1rem;
+      max-width: 680px;
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    .playbook-product-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      padding: 10px 18px;
+      border-radius: 12px;
+    }
+
+    .playbook-product-badge img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    /* Financial Metrics Ribbon */
+    .financial-ribbon {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 860px) {
+      .financial-ribbon {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .fin-stat-card {
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 14px;
+      padding: 16px 20px;
+    }
+
+    .fin-stat-card.highlight-green {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .fin-stat-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--seller-muted);
+      margin-bottom: 6px;
+    }
+
+    .fin-stat-val {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .fin-stat-sub {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--seller-muted);
+    }
+
+    /* 4 Steps Grid */
+    .seller-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 990px) {
+      .seller-steps-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .seller-steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .seller-step-card {
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 14px;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .seller-step-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .seller-step-card.highlight {
+      border-color: var(--seller-mint);
+      background: rgba(16, 185, 129, 0.04);
+    }
+
+    .step-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .step-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--seller-mint);
+    }
+
+    .step-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--seller-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .step-media-box {
+      background: #000;
+      border: 1px solid var(--seller-border);
+      border-radius: 10px;
+      height: 130px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-media-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .step-media-tag {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--seller-border);
+      color: #FFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .step-center-pill {
+      position: absolute;
+      border: 1px solid;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .step-bottom-strip {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      text-align: center;
+      background: rgba(16, 185, 129, 0.9);
+      color: #042416;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .step-settle-box {
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(216, 255, 0, 0.03);
+      border-color: rgba(216, 255, 0, 0.2);
+    }
+
+    .step-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin: 0 0 6px;
+      color: var(--seller-text);
+    }
+
+    .step-card-desc {
+      font-size: 0.82rem;
+      color: var(--seller-muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .playbook-cta-banner {
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Modal Overlay */
+    .seller-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .seller-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .seller-modal-card {
+      background: var(--seller-surface);
+      border: 1px solid var(--seller-border);
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      transform: translateY(14px) scale(0.98);
+      transition: all 0.2s ease;
+    }
+
+    .seller-modal-overlay.active .seller-modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .seller-modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--seller-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .seller-modal-close {
+      background: transparent;
+      border: none;
+      color: var(--seller-muted);
+      font-size: 1.6rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .seller-modal-body {
+      padding: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Universal Header with Mode Synchronizer -->
+  <div id="site-header"></div>
+
+  <!-- 1. Master Seller Hero -->
+  <section class="seller-hero">
+    <div class="seller-hero-grid">
+      
+      <!-- Left: Cold Clarity Value Proposition -->
+      <div>
+        <div class="seller-badge-pill">
+          <span>⚡ BIDMART MERCHANT ENGINE</span>
+          <span>&bull;</span>
+          <span>FIXED STORE &bull; LIVE AUCTION</span>
+        </div>
+
+        <h1 class="seller-hero-title">
+          Sell regular inventory.<br />
+          <span class="gradient-text">Liquidate long stock at peak bids.</span>
+        </h1>
+
+        <p class="seller-hero-sub">
+          Stop taking heavy discounts on sitting items. Run fixed-price retail or flip your inventory into timed <strong>Competitive Live Drops</strong> to capture full MRP &mdash; or even higher prices based on real-time consumer demand.
+        </p>
+
+        <div class="seller-cta-row">
+          <button type="button" class="btn-seller-primary" onclick="openSellerOnboardingWizard()">
+            <span>Start Selling Today &rarr;</span>
+          </button>
+          <a href="/market.html" class="btn-seller-secondary">
+            <span>View Live Customer Market</span>
+          </a>
+        </div>
+
+        <div class="seller-stats-strip">
+          <div class="stat-item">
+            <strong>0% Hidden</strong>
+            <span>Escrow Protected Payouts</span>
+          </div>
+          <div class="stat-item">
+            <strong>+32% Avg</strong>
+            <span>Value on Auction Liquidations</span>
+          </div>
+          <div class="stat-item">
+            <strong>10,000+</strong>
+            <span>Active Competitive Bidders</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Interactive Dual Liquidation Model Showcase -->
+      <div class="seller-showcase-card">
+        <div class="showcase-header">
+          <div>
+            <h3 style="margin:0 0 4px;font-family:'Space Grotesk',sans-serif;font-size:1.35rem;">Inventory Control Hub</h3>
+            <span style="font-size:0.8rem;color:var(--seller-muted);">Dynamic Pricing vs Auction Lift</span>
+          </div>
+          <span class="showcase-badge">● LIVE SYSTEM PREVIEW</span>
+        </div>
+
+        <div class="inventory-compare-grid">
+          <!-- Standard Fixed Price -->
+          <div class="compare-box">
+            <span class="compare-tag" style="color:#60A5FA;">Engine 1: Standard Retail</span>
+            <h4>Everyday Store</h4>
+            <p>Sell high-volume goods at regular catalog prices with instant cart checkout.</p>
+            <div class="compare-metric muted">1.0x MRP</div>
+            <div style="font-size:0.75rem;color:var(--seller-muted);margin-top:4px;">Fixed Checkout</div>
+          </div>
+
+          <!-- Live Auction Liquidation -->
+          <div class="compare-box highlight">
+            <span class="compare-tag" style="color:#10B981;">Engine 2: Auction Pit</span>
+            <h4>Long-Stock Drops</h4>
+            <p>Clear older models or launch high-demand tech in time-limited auction pits.</p>
+            <div class="compare-metric green">Up to 1.4x MRP</div>
+            <div style="font-size:0.75rem;color:#10B981;font-weight:700;margin-top:4px;">Competitive Growth</div>
+          </div>
+        </div>
+
+        <!-- Live Simulation Bar -->
+        <div style="background:var(--seller-card);border:1px solid var(--seller-border);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:40px;height:40px;background:#10B981;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:800;font-size:1.1rem;">₹</div>
+            <div>
+              <div style="font-size:0.88rem;font-weight:700;">Seller Payout Guarantee</div>
+              <div style="font-size:0.75rem;color:var(--seller-muted);">All bids backed by 100% pre-locked escrow funds</div>
+            </div>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;color:#10B981;font-weight:800;font-size:0.88rem;">INSTANT SETTLE</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 2. Three Reasons Why Sellers Choose BidMart -->
+  <section class="seller-features-section">
+    <div class="section-header-centered">
+      <span class="section-tag">BUILT FOR RETAILERS &amp; DIRECT BRANDS</span>
+      <h2 class="section-title">The smartest way to move inventory in India.</h2>
+      <p class="section-desc">Traditional marketplaces force you into 40% margin discounts. BidMart lets you sell at standard retail or let buyers bid competitively for your inventory.</p>
+    </div>
+
+    <div class="features-grid">
+      
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrap">🔥</div>
+        <h3>Auction Liquidation Pit</h3>
+        <p>Have sitting stock, older generation gadgets, or luxury pieces? List them as timed drops. Bidders compete against each other, driving prices up to MRP or higher instead of you discounting.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrap">🔒</div>
+        <h3>Pre-Funded Escrow Bids</h3>
+        <p>Zero fake orders or buyer cancellations. On BidMart, a buyer cannot place a bid without having 100% of the funds pre-locked in escrow. When the hammer falls, payment is instant.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrap">📈</div>
+        <h3>Instant Dual Listing</h3>
+        <p>Toggle any item between fixed-price catalog and timed live auction with one click. Test demand in real-time and maximize gross merchandise value.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. Interactive Seller Playbook: How It Works, Margins & Liquidation (Replaces Old Form) -->
+  <section class="seller-playbook-section" id="sellerPlaybook">
+    <div class="playbook-container">
+      
+      <!-- Top Title Bar -->
+      <div class="playbook-header-row">
+        <div>
+          <div class="playbook-pill">
+            <span>⚡ MERCHANT PROFIT PLAYBOOK</span>
+            <span>//</span>
+            <span>CASE STUDY: SONY PLAYSTATION 5 PRO BUNDLE</span>
+          </div>
+          <h2 class="playbook-title">HOW SELLING WORKS ON BIDMART IN 4 STEPS</h2>
+          <p class="playbook-subtitle">
+            See exactly how merchants turn slow-moving inventory into record profits. Compare traditional retail markdown vs BidMart's competitive live auction liquidation.
+          </p>
+        </div>
+
+        <div class="playbook-product-badge">
+          <img src="/assets/real/ps5_pro_showcase.jpg" alt="PlayStation 5 Pro Showcase" />
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:0.95rem;color:#FFFFFF;">PS5 Pro Gaming Bundle</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--seller-muted);">MERCHANT COST: ₹38,000 &bull; MRP: ₹54,990</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Metrics Ribbon (Cost, Standard Margin, Auction Margin) -->
+      <div class="financial-ribbon">
+        <div class="fin-stat-card">
+          <span class="fin-stat-label">Merchant Purchase Cost</span>
+          <strong class="fin-stat-val" style="color:#94A3B8;">₹38,000</strong>
+          <span class="fin-stat-sub">Wholesale acquisition</span>
+        </div>
+        <div class="fin-stat-card">
+          <span class="fin-stat-label">Standard Retail Store (MRP)</span>
+          <strong class="fin-stat-val" style="color:#38BDF8;">₹54,990</strong>
+          <span class="fin-stat-sub">+₹16,990 profit (31% margin)</span>
+        </div>
+        <div class="fin-stat-card highlight-green">
+          <span class="fin-stat-label">🔥 Live Auction Liquidation</span>
+          <strong class="fin-stat-val" style="color:#10B981;">₹62,500</strong>
+          <span class="fin-stat-sub" style="color:#10B981;font-weight:700;">+₹24,500 profit (64% margin!)</span>
+        </div>
+        <div class="fin-stat-card">
+          <span class="fin-stat-label">Settlement Speed</span>
+          <strong class="fin-stat-val" style="color:#D8FF00;">Instant</strong>
+          <span class="fin-stat-sub">100% pre-locked escrow</span>
+        </div>
+      </div>
+
+      <!-- 4-Step Horizontal Timeline Stage -->
+      <div class="seller-steps-grid">
+        
+        <!-- Step 1 -->
+        <div class="seller-step-card">
+          <div class="step-card-header">
+            <span class="step-number">STEP 01</span>
+            <span class="step-role">INVENTORY INGESTION</span>
+          </div>
+          <div class="step-media-box">
+            <img src="/assets/real/ps5_pro_showcase.jpg" alt="Stock Ingestion" />
+            <div class="step-media-tag">STOCK INGESTED</div>
+          </div>
+          <div>
+            <h4 class="step-card-title">List Products with 1-Click</h4>
+            <p class="step-card-desc">
+              Upload your catalog. The <strong>PS5 Pro Bundle</strong> enters your inventory at Wholesale Cost of <strong>₹38,000</strong> and Standard MRP of <strong>₹54,990</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="seller-step-card">
+          <div class="step-card-header">
+            <span class="step-number" style="color:#38BDF8;">STEP 02</span>
+            <span class="step-role">STORE ENGINE</span>
+          </div>
+          <div class="step-media-box">
+            <img src="/assets/real/ps5_pro_showcase.jpg" alt="Retail Store" style="opacity:0.4;filter:grayscale(1);" />
+            <div class="step-center-pill" style="border-color:#38BDF8;color:#38BDF8;background:rgba(56,189,248,0.15);">
+              <span>🛒 Fixed Price: ₹54,990</span>
+            </div>
+          </div>
+          <div>
+            <h4 class="step-card-title" style="color:#38BDF8;">Channel A: Everyday Store</h4>
+            <p class="step-card-desc">
+              Available in the standard catalog 24/7. Buyers click <em>Buy Now</em> and checkout at MRP for guaranteed <strong>₹16,990 net profit</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="seller-step-card highlight">
+          <div class="step-card-header">
+            <span class="step-number" style="color:#10B981;">STEP 03</span>
+            <span class="step-role" style="color:#10B981;">AUCTION LIQUIDATION</span>
+          </div>
+          <div class="step-media-box">
+            <img src="/assets/real/ps5_pro_showcase.jpg" alt="Live Drop" style="filter:contrast(1.15) brightness(1.05);" />
+            <div class="step-bottom-strip">
+              BIDDING PEAKS &bull; ₹62,500 (+14% OVER MRP)
+            </div>
+          </div>
+          <div>
+            <h4 class="step-card-title" style="color:#10B981;">Channel B: Timed Drop Pit</h4>
+            <p class="step-card-desc" style="color:#A7F3D0;">
+              Have long-standing units or high-demand stock? Trigger a live 48-hour auction. When buyers compete, prices bid past MRP to <strong>₹62,500</strong>, earning you <strong>₹24,500 profit</strong>!
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="seller-step-card">
+          <div class="step-card-header">
+            <span class="step-number" style="color:#D8FF00;">STEP 04</span>
+            <span class="step-role">ESCROW SETTLE</span>
+          </div>
+          <div class="step-media-box step-settle-box">
+            <span style="font-size:2.4rem;">💰</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#D8FF00;font-weight:800;">100% PRE-FUNDED PAYOUT</span>
+          </div>
+          <div>
+            <h4 class="step-card-title" style="color:#D8FF00;">Zero Cancellations Guarantee</h4>
+            <p class="step-card-desc">
+              Unlike normal marketplaces with 25% RTO (Return to Origin), BidMart buyers lock cash in escrow <em>before</em> they can bid. The second the auction ends, your payout is guaranteed.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Interactive Action Bar -->
+      <div class="playbook-cta-banner">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="font-size:1.8rem;">🛡️</span>
+          <div>
+            <strong style="font-size:0.95rem;color:#FFFFFF;display:block;">Ready to boost your inventory gross margins?</strong>
+            <span style="font-size:0.84rem;color:var(--seller-muted);">Join 450+ verified electronics and luxury retailers selling on BidMart today.</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn-seller-primary" onclick="openSellerOnboardingWizard()">
+          <span>Create Merchant Account Now &rarr;</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive 3-Stage Seller Onboarding Wizard Dialog -->
+  <div class="seller-modal-overlay" id="sellerOnboardingModal" onclick="if(event.target===this)closeSellerOnboardingWizard()">
+    <div class="seller-modal-card" style="max-width: 680px;">
+      
+      <!-- Modal Header -->
+      <div class="seller-modal-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:rgba(16,185,129,0.15);color:#10B981;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:800;padding:3px 10px;border-radius:20px;text-transform:uppercase;">
+              Verified Merchant Setup
+            </span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.15rem;color:#FFF;">Seller Onboarding Portal</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--seller-muted);margin-top:2px;">Step-by-step verification to list catalog goods and host timed live auctions.</div>
+        </div>
+        <button type="button" class="seller-modal-close" onclick="closeSellerOnboardingWizard()">&times;</button>
+      </div>
+
+      <!-- Stepper Progress Tracker -->
+      <div style="display:grid;grid-template-columns:repeat(3, 1fr);border-bottom:1px solid var(--seller-border);background:rgba(255,255,255,0.02);">
+        <div id="stepTab1" class="wizard-step-tab active" onclick="goToStep(1)">
+          <span class="wiz-num">1</span>
+          <div>
+            <strong>Documents</strong>
+            <small>Mandatory</small>
+          </div>
+        </div>
+        <div id="stepTab2" class="wizard-step-tab" onclick="goToStep(2)">
+          <span class="wiz-num">2</span>
+          <div>
+            <strong>Store Details</strong>
+            <small>Offline Location</small>
+          </div>
+        </div>
+        <div id="stepTab3" class="wizard-step-tab" onclick="goToStep(3)">
+          <span class="wiz-num">3</span>
+          <div>
+            <strong>Verify KYC</strong>
+            <small>Instant Approval</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="seller-modal-body">
+        
+        <div class="form-feedback-alert" id="wizFeedbackAlert"></div>
+
+        <!-- ================= STAGE 1: REQUIRED DOCUMENTS ================= -->
+        <div id="wizardStage1" class="wizard-stage active">
+          
+          <div style="background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.25);border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.4rem;">📑</span>
+            <div>
+              <strong style="color:#38BDF8;font-size:0.88rem;display:block;">Regulatory &amp; Commercial Compliance:</strong>
+              <span style="font-size:0.8rem;color:var(--seller-muted);">Please confirm you have valid Indian business registration documents ready for verification.</span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+            <label class="doc-checklist-item">
+              <input type="checkbox" checked disabled />
+              <div style="flex:1;">
+                <strong>1. Goods and Services Tax (GSTIN) Certificate *</strong>
+                <p>Required for selling tech, electronics, luxury watches, and taxable commercial goods.</p>
+              </div>
+              <span class="doc-badge required">MANDATORY</span>
+            </label>
+
+            <label class="doc-checklist-item">
+              <input type="checkbox" checked disabled />
+              <div style="flex:1;">
+                <strong>2. Permanent Account Number (PAN Card) *</strong>
+                <p>Company PAN or Proprietor PAN for direct escrow disbursements &amp; TDS compliance.</p>
+              </div>
+              <span class="doc-badge required">MANDATORY</span>
+            </label>
+
+            <label class="doc-checklist-item">
+              <input type="checkbox" checked disabled />
+              <div style="flex:1;">
+                <strong>3. Bank Account Proof &amp; Cancelled Cheque *</strong>
+                <p>Account statement or cancelled cheque matching company / merchant name for payouts.</p>
+              </div>
+              <span class="doc-badge required">MANDATORY</span>
+            </label>
+
+            <label class="doc-checklist-item">
+              <input type="checkbox" checked disabled />
+              <div style="flex:1;">
+                <strong>4. Brand Authorization / Invoice / Warranty Letter</strong>
+                <p>For high-value luxury brands (Rolex, Apple, Sony) ensuring authentic escrow listing.</p>
+              </div>
+              <span class="doc-badge optional">VERIFIED PRO</span>
+            </label>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;">
+            <button type="button" class="btn-seller-submit" style="width:auto;padding:12px 28px;" onclick="goToStep(2)">
+              <span>Next: Offline Store Details &rarr;</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ================= STAGE 2: OFFLINE STORE DETAILS ================= -->
+        <div id="wizardStage2" class="wizard-stage">
+          
+          <div style="background:rgba(216,255,0,0.06);border:1px solid rgba(216,255,0,0.25);border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.4rem;">🏬</span>
+            <div>
+              <strong style="color:#D8FF00;font-size:0.88rem;display:block;">Physical Store / Warehouse Location:</strong>
+              <span style="font-size:0.8rem;color:var(--seller-muted);">Where buyers can inspect luxury drops or where BidMart courier pickups will originate.</span>
+            </div>
+          </div>
+
+          <form id="storeDetailsForm" onsubmit="event.preventDefault(); goToStep(3);">
+            <div class="form-field-group">
+              <label class="form-field-label" for="wsStoreName">Registered Store / Company Name *</label>
+              <input type="text" id="wsStoreName" class="form-field-input" placeholder="e.g. Apex Luxury Retailers India Pvt Ltd" required value="Apex Luxury Electronics" />
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-field-group">
+                <label class="form-field-label" for="wsStoreType">Store Format *</label>
+                <select id="wsStoreType" class="form-field-select" required>
+                  <option value="RETAIL_SHOWROOM">Physical Retail Showroom</option>
+                  <option value="AUTHORIZED_DISTRIBUTOR">Authorized Brand Distributor</option>
+                  <option value="CENTRAL_WAREHOUSE">Central Fulfillment Warehouse</option>
+                  <option value="FLAGSHIP_BOUTIQUE">Luxury Flagship Boutique</option>
+                </select>
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label" for="wsGstin">GSTIN Number *</label>
+                <input type="text" id="wsGstin" class="form-field-input" placeholder="29AAAAA0000A1Z5" required value="29AABCA1234F1ZP" />
+              </div>
+            </div>
+
+            <div class="form-field-group">
+              <label class="form-field-label" for="wsStreetAddress">Street Address / Landmark *</label>
+              <input type="text" id="wsStreetAddress" class="form-field-input" placeholder="Shop 14, Ground Floor, Brigade Road" required value="Plot 42, Commercial Avenue, Indiranagar" />
+            </div>
+
+            <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;">
+              <div class="form-field-group">
+                <label class="form-field-label" for="wsCity">City *</label>
+                <input type="text" id="wsCity" class="form-field-input" placeholder="Bengaluru" required value="Bengaluru" />
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label" for="wsState">State *</label>
+                <input type="text" id="wsState" class="form-field-input" placeholder="Karnataka" required value="Karnataka" />
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label" for="wsPincode">Pincode *</label>
+                <input type="text" id="wsPincode" class="form-field-input" placeholder="560001" required value="560038" />
+              </div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;">
+              <button type="button" class="btn-seller-secondary" style="padding:12px 20px;" onclick="goToStep(1)">
+                <span>&larr; Back</span>
+              </button>
+              <button type="submit" class="btn-seller-submit" style="width:auto;padding:12px 28px;">
+                <span>Next: Verify KYC &rarr;</span>
+              </button>
+            </div>
+          </form>
+
+        </div>
+
+        <!-- ================= STAGE 3: VERIFY KYC ================= -->
+        <div id="wizardStage3" class="wizard-stage">
+          
+          <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.4rem;">🛡️</span>
+            <div>
+              <strong style="color:#10B981;font-size:0.88rem;display:block;">Identity &amp; Escrow KYC Verification:</strong>
+              <span style="font-size:0.8rem;color:var(--seller-muted);">Verify your representative details to enable automatic escrow disbursement upon auction wins.</span>
+            </div>
+          </div>
+
+          <form id="sellerKycForm" onsubmit="event.preventDefault(); completeKycAndActivate();">
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-field-group">
+                <label class="form-field-label" for="kycOwnerName">Authorized Officer Name *</label>
+                <input type="text" id="kycOwnerName" class="form-field-input" placeholder="e.g. Vikram Malhotra" required value="Vikram Malhotra" />
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label" for="kycPanNumber">PAN Number *</label>
+                <input type="text" id="kycPanNumber" class="form-field-input" placeholder="ABCDE1234F" maxlength="10" required value="ABCDE1234F" style="text-transform:uppercase;" />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-field-group">
+                <label class="form-field-label" for="kycEmail">Official Contact Email *</label>
+                <input type="email" id="kycEmail" class="form-field-input" placeholder="contact@apexstore.com" required value="vikram@apexstore.com" />
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label" for="kycPhone">Registered Mobile *</label>
+                <input type="tel" id="kycPhone" class="form-field-input" placeholder="9876543210" required value="9876543210" />
+              </div>
+            </div>
+
+            <div class="form-field-group">
+              <label class="form-field-label" for="kycPassword">Account Password (Min 8 Characters) *</label>
+              <input type="password" id="kycPassword" class="form-field-input" placeholder="Enter secure password" minlength="8" required value="password123" />
+            </div>
+
+            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--seller-border);border-radius:10px;padding:12px 14px;margin-bottom:20px;font-size:0.78rem;color:var(--seller-muted);">
+              <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+                <input type="checkbox" id="kycAgreeTerms" checked required style="margin-top:2px;" />
+                <span>I confirm that all offline store and document details provided are authentic under Indian Contract Act &amp; BidMart Escrow Regulations.</span>
+              </label>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <button type="button" class="btn-seller-secondary" style="padding:12px 20px;" onclick="goToStep(2)">
+                <span>&larr; Back</span>
+              </button>
+              <button type="submit" class="btn-seller-submit" id="btnSubmitKycActivate" style="width:auto;padding:12px 32px;">
+                <span>Verify KYC &amp; Launch Store &rarr;</span>
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Wizard Steps Styling */
+    .wizard-step-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: var(--seller-muted);
+      transition: all 0.15s ease;
+    }
+
+    .wizard-step-tab.active {
+      color: #FFFFFF;
+      border-bottom-color: var(--seller-mint);
+      background: rgba(16,185,129,0.06);
+    }
+
+    .wizard-step-tab.completed .wiz-num {
+      background: var(--seller-mint);
+      color: #042416;
+      border-color: var(--seller-mint);
+    }
+
+    .wiz-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid var(--seller-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .wizard-step-tab.active .wiz-num {
+      border-color: var(--seller-mint);
+      color: var(--seller-mint);
+    }
+
+    .wizard-step-tab strong {
+      display: block;
+      font-size: 0.85rem;
+    }
+
+    .wizard-step-tab small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--seller-muted);
+      text-transform: uppercase;
+    }
+
+    .wizard-stage {
+      display: none;
+    }
+
+    .wizard-stage.active {
+      display: block;
+    }
+
+    /* Checklist Item Box */
+    .doc-checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--seller-card);
+      border: 1px solid var(--seller-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      cursor: default;
+    }
+
+    .doc-checklist-item strong {
+      display: block;
+      font-size: 0.86rem;
+      color: var(--seller-text);
+      margin-bottom: 2px;
+    }
+
+    .doc-checklist-item p {
+      margin: 0;
+      font-size: 0.76rem;
+      color: var(--seller-muted);
+    }
+
+    .doc-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .doc-badge.required {
+      background: rgba(16,185,129,0.15);
+      color: #10B981;
+      border: 1px solid rgba(16,185,129,0.3);
+    }
+
+    .doc-badge.optional {
+      background: rgba(56,189,248,0.15);
+      color: #38BDF8;
+      border: 1px solid rgba(56,189,248,0.3);
+    }
+  </style>
+
+  <!-- Interactive Footer -->
+  <footer style="padding:40px 24px;border-top:1px solid var(--seller-border);text-align:center;font-size:0.85rem;color:var(--seller-muted);">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;color:var(--seller-text);font-size:1.1rem;">
+        BIDMART MERCHANT PORTAL
+      </div>
+      <div>&copy; 2026 BidMart Technologies Inc. All escrow transactions legally verified.</div>
+      <div>
+        <a href="/market.html" style="color:inherit;text-decoration:none;margin-right:16px;">Consumer Market</a>
+        <a href="/auction/auctions.html" style="color:inherit;text-decoration:none;">Live Pit</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/checkout-modal.js"></script>
+
+  <script>
+    let currentWizStep = 1;
+
+    function openSellerOnboardingWizard() {
+      // If already logged in as a seller, enter studio directly!
+      const user = window.auth ? (window.auth.getSellerUser() || window.auth.getUser()) : null;
+      if (user && (user.role === 'SELLER' || user.role === 'seller' || user.store_name)) {
+        window.location.href = '/seller/products.html';
+        return;
+      }
+      goToStep(1);
+      const modal = document.getElementById('sellerOnboardingModal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeSellerOnboardingWizard() {
+      const modal = document.getElementById('sellerOnboardingModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function goToStep(step) {
+      currentWizStep = step;
+      
+      // Update Tab Bar
+      [1, 2, 3].forEach(s => {
+        const tab = document.getElementById(`stepTab${s}`);
+        const stage = document.getElementById(`wizardStage${s}`);
+        
+        if (s === step) {
+          tab.classList.add('active');
+          stage.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+          stage.classList.remove('active');
+        }
+
+        if (s < step) {
+          tab.classList.add('completed');
+        } else {
+          tab.classList.remove('completed');
+        }
+      });
+
+      const fb = document.getElementById('wizFeedbackAlert');
+      if (fb) fb.style.display = 'none';
+    }
+
+    async function completeKycAndActivate() {
+      const storeName = document.getElementById('wsStoreName').value.trim();
+      const ownerName = document.getElementById('kycOwnerName').value.trim();
+      const email = document.getElementById('kycEmail').value.trim();
+      const phone = document.getElementById('kycPhone').value.trim();
+      const password = document.getElementById('kycPassword').value;
+      const gstin = document.getElementById('wsGstin').value.trim();
+      const pan = document.getElementById('kycPanNumber').value.trim();
+      const address = `${document.getElementById('wsStreetAddress').value.trim()}, ${document.getElementById('wsCity').value.trim()}, ${document.getElementById('wsState').value.trim()} - ${document.getElementById('wsPincode').value.trim()}`;
+
+      const submitBtn = document.getElementById('btnSubmitKycActivate');
+      const feedback = document.getElementById('wizFeedbackAlert');
+
+      feedback.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Verifying KYC &amp; Activating…</span>';
+
+      try {
+        const payload = {
+          name: ownerName,
+          email: email,
+          phone: phone,
+          password: password,
+          role: 'SELLER',
+          store_name: storeName,
+          category: 'gaming',
+          gstin: gstin,
+          pan: pan,
+          address: address
+        };
+
+        const res = await window.api.post('/auth/register', payload);
+
+        if (res && res.token) {
+          window.auth.setSession(res.token, res.user);
+        }
+
+        feedback.style.background = 'rgba(16, 185, 129, 0.15)';
+        feedback.style.color = '#10B981';
+        feedback.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        feedback.innerHTML = `🎉 <strong>KYC Verified &amp; Store Activated!</strong> Welcome, ${storeName}. Taking you to the live marketplace…`;
+        feedback.style.display = 'block';
+
+        setTimeout(() => {
+          closeSellerOnboardingWizard();
+          window.location.href = '/seller/products.html';
+        }, 1600);
+
+      } catch (err) {
+        feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.color = '#EF4444';
+        feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        feedback.textContent = err.message || 'Verification failed. Please review your details.';
+        feedback.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Verify KYC &amp; Launch Store &rarr;</span>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHeader();
+    });
+  </script>
+</body>
+</html>
+

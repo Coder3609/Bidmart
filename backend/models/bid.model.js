@@ -1,10 +1,10 @@
 const { pool } = require('../config/db');
 
-async function create(conn, { auctionId, bidderId, amount, status = 'WINNING' }) {
+async function create(conn, { auctionId, bidderId, amount, bidderName, bidderAge, status = 'WINNING' }) {
   const runner = conn || pool;
   const [result] = await runner.query(
-    `INSERT INTO bids (auction_id, bidder_id, amount, status) VALUES (:auctionId, :bidderId, :amount, :status)`,
-    { auctionId, bidderId, amount, status }
+    `INSERT INTO bids (auction_id, bidder_id, amount, bidder_name, bidder_age, status) VALUES (:auctionId, :bidderId, :amount, :bidderName, :bidderAge, :status)`,
+    { auctionId, bidderId, amount, bidderName: bidderName || null, bidderAge: bidderAge || null, status }
   );
   return result.insertId;
 }
@@ -52,7 +52,7 @@ async function findById(id) {
 async function listByAuction(auctionId, { limit = 50 } = {}) {
   const safeLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
   const [rows] = await pool.query(
-    `SELECT b.*, u.name AS bidder_name
+    `SELECT b.*, COALESCE(b.bidder_name, u.name) AS bidder_name
      FROM bids b JOIN users u ON u.id = b.bidder_id
      WHERE b.auction_id = :auctionId
      ORDER BY b.amount DESC, b.created_at ASC

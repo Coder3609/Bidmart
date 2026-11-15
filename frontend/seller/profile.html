@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merchant Business Profile & Settings — BidMart</title>
+  <meta name="description" content="Manage your BidMart verified merchant profile, business credentials, offline store location, bank payout details, and catalog controls." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
+
+  <style>
+    :root {
+      --sp-bg: #0B0E14;
+      --sp-sidebar: #0F131C;
+      --sp-surface: #141923;
+      --sp-card: #18202D;
+      --sp-border: rgba(255, 255, 255, 0.08);
+      --sp-mint: #10B981;
+      --sp-orange: #FF7A00;
+      --sp-text: #F8FAFC;
+      --sp-muted: #94A3B8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--sp-bg);
+      color: var(--sp-text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sc-layout {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* Sidebar */
+    .sc-sidebar {
+      width: 260px;
+      background: var(--sp-sidebar);
+      border-right: 1px solid var(--sp-border);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .sc-store-header {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--sp-border);
+    }
+
+    .sc-store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--sp-mint);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 4px;
+    }
+
+    .sc-store-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--sp-text);
+      margin: 0;
+    }
+
+    .sc-nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .sc-nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--sp-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .sc-nav-item a:hover {
+      background: var(--sp-surface);
+      color: var(--sp-text);
+    }
+
+    .sc-nav-item.active a {
+      background: var(--sp-mint);
+      color: #042416;
+      font-weight: 700;
+    }
+
+    /* Main Area */
+    .sc-main {
+      flex: 1;
+      padding: 32px 36px 80px;
+      max-width: 1100px;
+      box-sizing: border-box;
+    }
+
+    .sp-header-banner {
+      background: linear-gradient(135deg, #141923 0%, #18202D 100%);
+      border: 1px solid var(--sp-border);
+      border-radius: 20px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .sp-store-badge-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--sp-mint);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .sp-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 800px) {
+      .sp-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sp-panel {
+      background: var(--sp-surface);
+      border: 1px solid var(--sp-border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .sp-panel-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sp-field-group {
+      margin-bottom: 16px;
+    }
+
+    .sp-field-label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--sp-muted);
+      margin-bottom: 6px;
+    }
+
+    .sp-field-val {
+      font-size: 0.95rem;
+      color: #FFF;
+      font-weight: 600;
+      background: var(--sp-card);
+      border: 1px solid var(--sp-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .btn-save-settings {
+      background: var(--sp-mint);
+      color: #042416;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Universal Top Header -->
+  <div id="site-header"></div>
+
+  <div class="sc-layout">
+    
+    <!-- Sidebar -->
+    <aside class="sc-sidebar">
+      <div class="sc-store-header">
+        <span class="sc-store-badge">● VERIFIED MERCHANT</span>
+        <h3 class="sc-store-name" id="sideStoreName">Apex Luxury Electronics</h3>
+      </div>
+
+      <ul class="sc-nav-list">
+        <li class="sc-nav-item">
+          <a href="/seller/products.html">
+            <span>📦</span>
+            <span>Product Catalog</span>
+          </a>
+        </li>
+        <li class="sc-nav-item">
+          <a href="/seller/auctions.html">
+            <span>⚡</span>
+            <span>Auction Arena</span>
+          </a>
+        </li>
+        <li class="sc-nav-item active">
+          <a href="/seller/profile.html">
+            <span>🏢</span>
+            <span>Store Profile &amp; KYC</span>
+          </a>
+        </li>
+        <li class="sc-nav-item">
+          <a href="/market.html" target="_blank">
+            <span>🛒</span>
+            <span>Customer Storefront</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="sc-main">
+      
+      <!-- Store Header Banner -->
+      <div class="sp-header-banner">
+        <div>
+          <span class="sp-store-badge-large">● 100% ESCROW VERIFIED MERCHANT</span>
+          <h1 style="font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;margin:0 0 6px;" id="dispStoreName">
+            Apex Luxury Electronics
+          </h1>
+          <p style="color:var(--sp-muted);margin:0;font-size:0.92rem;">
+            Authorized dealer for flagship electronics, luxury timepieces &amp; verified inventory liquidation.
+          </p>
+        </div>
+
+        <div>
+          <a href="/seller/products.html" class="btn-save-settings">
+            <span>Manage Inventory Studio &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Detail Panels -->
+      <div class="sp-grid-2">
+        
+        <!-- Panel 1: Legal Business & Identity -->
+        <div class="sp-panel">
+          <h3 class="sp-panel-title">
+            <span>🏢</span>
+            <span>Business Credentials &amp; KYC</span>
+          </h3>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Official Registered Store</span>
+            <div class="sp-field-val" id="dispStoreVal">Apex Luxury Electronics</div>
+          </div>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Authorized Signatory / Representative</span>
+            <div class="sp-field-val" id="dispRepName">Vikram Malhotra</div>
+          </div>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Tax ID / PAN / GSTIN</span>
+            <div class="sp-field-val" style="font-family:'JetBrains Mono',monospace;color:var(--sp-mint);">
+              ABCDE1234F &bull; GSTIN-29AAACA1234F1Z5
+            </div>
+          </div>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Business Registration Type</span>
+            <div class="sp-field-val">SOLE PROPRIETORSHIP / VERIFIED COMPANY</div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Offline Store & Payouts -->
+        <div class="sp-panel">
+          <h3 class="sp-panel-title">
+            <span>📍</span>
+            <span>Offline Store &amp; Escrow Payouts</span>
+          </h3>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Physical Retail Location</span>
+            <div class="sp-field-val">
+              Shop 12, Level 2, UB City Mall, Vittal Mallya Rd, Bengaluru, Karnataka 560001
+            </div>
+          </div>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Business Contact Phone</span>
+            <div class="sp-field-val" id="dispPhone">+91 98765 43210</div>
+          </div>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Official Store Email</span>
+            <div class="sp-field-val" id="dispEmail">contact@apexstore.com</div>
+          </div>
+
+          <div class="sp-field-group">
+            <span class="sp-field-label">Escrow Settlement Status</span>
+            <div class="sp-field-val" style="color:var(--sp-mint);font-weight:700;">
+              ✓ INSTANT DIRECT DISBURSEMENT ENABLED
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/header.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderHeader === 'function') renderHeader();
+
+      const user = window.auth ? window.auth.getUser() : null;
+      if (user) {
+        const storeName = user.store_name || user.name || 'Apex Luxury Electronics';
+        document.getElementById('dispStoreName').textContent = storeName;
+        document.getElementById('sideStoreName').textContent = storeName;
+        document.getElementById('dispStoreVal').textContent = storeName;
+        document.getElementById('dispRepName').textContent = user.name || 'Vikram Malhotra';
+        if (user.email) document.getElementById('dispEmail').textContent = user.email;
+        if (user.phone) document.getElementById('dispPhone').textContent = user.phone;
+      }
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,336 @@
+/* =====================================================================
+   BIDMART MODERN DUAL-SIDED EXPLORE DIALOG (RECTANGLE MODAL)
+   Left: Clean Sign In/Sign Up options (Google, Microsoft, Email, Guest)
+   Right: Visual illustration banner
+   ===================================================================== */
+
+.bm-explore-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 12, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.bm-explore-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bm-explore-modal-card {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  min-height: 520px;
+  background: #0E131F;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(216, 255, 0, 0.05);
+  position: relative;
+  transform: translateY(20px) scale(0.98);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bm-explore-modal-overlay.active .bm-explore-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+/* Close Button */
+.bm-explore-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s ease;
+}
+
+.bm-explore-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Left Form Section */
+.bm-explore-left {
+  flex: 1.15;
+  padding: 40px 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #FFFFFF;
+  background: #0E131F;
+}
+
+.bm-explore-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(216, 255, 0, 0.12);
+  border: 1px solid rgba(216, 255, 0, 0.3);
+  color: #D8FF00;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  align-self: flex-start;
+  margin-bottom: 12px;
+}
+
+.bm-explore-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.5px;
+  color: #FFFFFF;
+}
+
+.bm-explore-sub {
+  color: #94A3B8;
+  font-size: 0.88rem;
+  margin: 0 0 24px 0;
+  line-height: 1.45;
+}
+
+/* Social Buttons Row */
+.bm-social-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.bm-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.bm-social-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.bm-social-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Divider with 'OR' */
+.bm-explore-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 16px 0;
+  color: #64748B;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.bm-explore-divider::before,
+.bm-explore-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Email Inputs & Submit */
+.bm-email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bm-input-wrap {
+  position: relative;
+}
+
+.bm-input-wrap input {
+  width: 100%;
+  padding: 11px 14px 11px 38px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.bm-input-wrap input:focus {
+  border-color: #D8FF00;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.bm-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.bm-btn-submit-mail {
+  background: #D8FF00;
+  color: #080808;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.bm-btn-submit-mail:hover {
+  background: #EBFF4D;
+  box-shadow: 0 4px 20px rgba(216, 255, 0, 0.35);
+}
+
+/* Guest Button */
+.bm-btn-guest-enter {
+  margin-top: 14px;
+  padding: 11px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  color: #CBD5E1;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.bm-btn-guest-enter:hover {
+  border-color: #D8FF00;
+  color: #D8FF00;
+  background: rgba(216, 255, 0, 0.05);
+}
+
+/* Right Illustration Section */
+.bm-explore-right {
+  flex: 0.95;
+  background: linear-gradient(135deg, #151D2C 0%, #080C14 100%);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 36px 32px;
+  overflow: hidden;
+}
+
+.bm-explore-right-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  transition: transform 0.4s ease;
+}
+
+.bm-explore-right:hover .bm-explore-right-img {
+  transform: scale(1.03);
+}
+
+.bm-explore-right-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 12, 20, 0.15) 0%, rgba(8, 12, 20, 0.95) 100%);
+  pointer-events: none;
+}
+
+.bm-explore-right-content {
+  position: relative;
+  z-index: 10;
+  color: #FFFFFF;
+}
+
+.bm-explore-right-tag {
+  background: #D8FF00;
+  color: #080808;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.bm-explore-right-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.3px;
+}
+
+.bm-explore-right-desc {
+  font-size: 0.82rem;
+  color: #CBD5E1;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive collapse on mobile */
+@media (max-width: 768px) {
+  .bm-explore-modal-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .bm-explore-right {
+    min-height: 180px;
+  }
+}
+

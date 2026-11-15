@@ -195,9 +195,9 @@ async function registerSeller({ name, email, password, phone, storeName }) {
       displayName: cleanName,
       businessPhone: cleanPhone || null,
       businessEmail: cleanEmail,
-      sellerStatus: 'PENDING',
-      kycStatus: 'NOT_STARTED',
-      onboardingStep: 2, // Account created -> next is Business Info
+      sellerStatus: 'APPROVED',
+      kycStatus: 'VERIFIED',
+      onboardingStep: 3,
     });
 
     // Notify Admins

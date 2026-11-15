@@ -71,8 +71,8 @@ async function getBidHistory(req, res, next) {
 
 async function placeBid(req, res, next) {
   try {
-    const { amount } = req.body;
-    const result = await auctionService.placeBid(req.user, req.params.id, amount);
+    const { amount, name, age } = req.body;
+    const result = await auctionService.placeBid(req.user, req.params.id, amount, { name, age });
     return success(res, result, 'Bid placed.', 201);
   } catch (err) {
     next(err);
@@ -86,6 +86,18 @@ async function relist(req, res, next) {
       startingPrice, reservePrice, bidIncrement, startsAt, endsAt,
     });
     return success(res, auction, 'Product relisted for auction.', 201);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function updateSettings(req, res, next) {
+  try {
+    const { reservePrice, bidIncrement, endsAt } = req.body;
+    const auction = await auctionService.updateAuctionSettings(req.user, req.params.id, {
+      reservePrice, bidIncrement, endsAt,
+    });
+    return success(res, auction, 'Auction settings updated.');
   } catch (err) {
     next(err);
   }
@@ -123,5 +135,5 @@ async function runScheduler(req, res, next) {
 
 module.exports = {
   shiftToAuction, list, listMine, listMyBids, getById, getByProduct, getBidHistory,
-  placeBid, relist, returnToShop, completeOrder, runScheduler,
+  placeBid, relist, updateSettings, returnToShop, completeOrder, runScheduler,
 };

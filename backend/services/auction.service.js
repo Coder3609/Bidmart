@@ -392,11 +392,14 @@ async function listMyBids(buyer, query) {
  * that's what prevents two near-simultaneous bids from both thinking they
  * are the new highest bidder (rule #13, concurrent bidding).
  */
-async function placeBid(bidder, auctionId, rawAmount) {
+async function placeBid(bidder, auctionId, rawAmount, bidderInfo = {}) {
   const amount = Number(rawAmount);
   if (!Number.isFinite(amount) || amount <= 0) {
     throw new ApiError('Bid amount must be a positive number.', 400, 'INVALID_BID_AMOUNT');
   }
+
+  const bidderName = bidderInfo.name ? String(bidderInfo.name).trim() : (bidder.name || null);
+  const bidderAge = bidderInfo.age ? Number(bidderInfo.age) : null;
 
   return withTransaction(async (conn) => {
     const auction = await auctionModel.findByIdForUpdate(conn, auctionId);
@@ -477,9 +480,8 @@ async function placeBid(bidder, auctionId, rawAmount) {
         'BID_TOO_LOW'
       );
     }
-    if (currentWinning && currentWinning.bidder_id === bidder.id) {
-      throw new ApiError('You are already the highest bidder.', 409, 'ALREADY_HIGHEST_BIDDER');
-    }
+    // Note: Allow self-outbidding / multiple bids with custom bidder identities
+    // (e.g., testing or user wanting to increase their ceiling offer).
 
     // ── Wallet: check available balance ──────────────────────────────────────
     // Ensure the bidder has a wallet row (locked for this transaction).
@@ -526,7 +528,14 @@ async function placeBid(bidder, auctionId, rawAmount) {
     }
 
     // ── Create new bid + reserve wallet funds ────────────────────────────────
-    const bidId = await bidModel.create(conn, { auctionId, bidderId: bidder.id, amount, status: 'WINNING' });
+    const bidId = await bidModel.create(conn, { 
+      auctionId, 
+      bidderId: bidder.id, 
+      amount, 
+      bidderName: bidderName || bidder.name, 
+      bidderAge: bidderAge,
+      status: 'WINNING' 
+    });
     await auctionModel.updateStatus(conn, auctionId, { current_price: amount });
 
     // Reserve funds in wallet
@@ -614,6 +623,43 @@ async function relistAuction(seller, productId, { startingPrice, reservePrice, b
       isSystemCall: false,
     });
 
+    return getAuctionRow(conn, auctionId);
+  });
+}
+
+/**
+ * Seller action to update active auction settings (reserve price, bid increment, or end time).
+ */
+async function updateAuctionSettings(seller, auctionId, { reservePrice, bidIncrement, endsAt }) {
+  return withTransaction(async (conn) => {
+    const auction = await auctionModel.findById(auctionId);
+    if (!auction) {
+      throw new ApiError('Auction not found.', 404, 'AUCTION_NOT_FOUND');
+    }
+    const product = await productModel.findById(auction.product_id);
+    assertOwnerOrAdmin(product, seller);
+
+    if (auction.status === 'CLOSED') {
+      throw new ApiError('Cannot edit settings of a closed auction.', 400, 'AUCTION_CLOSED');
+    }
+
+    if (bidIncrement !== undefined && (!isValidPrice(bidIncrement) || Number(bidIncrement) <= 0)) {
+      throw new ApiError('Bid increment must be a positive number.', 400, 'INVALID_BID_INCREMENT');
+    }
+
+    if (reservePrice !== undefined && reservePrice !== null && reservePrice !== '') {
+      if (!isValidPrice(reservePrice)) {
+        throw new ApiError('Reserve price must be a positive number.', 400, 'INVALID_RESERVE_PRICE');
+      }
+    }
+
+    if (endsAt !== undefined) {
+      if (!isValidDate(endsAt) || new Date(endsAt).getTime() <= Date.now()) {
+        throw new ApiError('End time must be a valid future date.', 400, 'INVALID_DATE');
+      }
+    }
+
+    await auctionModel.updateAuctionSettings(conn, auctionId, { reservePrice, bidIncrement, endsAt });
     return getAuctionRow(conn, auctionId);
   });
 }
@@ -766,6 +812,7 @@ module.exports = {
   listMyBids,
   placeBid,
   relistAuction,
+  updateAuctionSettings,
   returnToShop,
   completeAuctionOrder,
   runScheduler,

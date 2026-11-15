@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIDMART &bull; The Dual-Lifecycle Marketplace</title>
+  <meta name="description" content="Shop verified retail goods or enter live auctions to bid below store value across flagship tech, luxury timepieces, and lifestyle gear." />
+  <link rel="stylesheet" href="/shared/market-hub.css" />
+  <link rel="stylesheet" href="/shared/explore-dialog.css" />
+  <link rel="stylesheet" href="/shared/checkout-modal.css" />
+  <link rel="stylesheet" href="/shared/global-dark.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
+</head>
+<body class="bm-market-body">
+
+  <!-- =====================================================================
+       1. SIGNATURE HEADER & UNIVERSAL OMNIBAR
+       ===================================================================== -->
+  <div id="site-header"></div>
+
+  <!-- =====================================================================
+       2. EDITORIAL HERO SPOTLIGHT STRIP
+       ===================================================================== -->
+  <div class="bm-hero-strip">
+    <div class="bm-hero-card">
+      <div class="bm-hero-info">
+        <div class="bm-hero-badge">
+          <span>●</span>
+          <span>THE DUAL-LIFECYCLE MARKET</span>
+        </div>
+        <h1 class="bm-hero-title">Shop Today. Or Name Your Price.</h1>
+        <p class="bm-hero-sub">
+          Buy verified retail drops immediately, or enter timed live auctions to score up to 40% below store value.
+        </p>
+        <div class="bm-hero-buttons">
+          <a href="/shop/shop.html" class="bm-btn-primary">
+            <span>Explore Catalog &rarr;</span>
+          </a>
+          <a href="#live-auctions-strip" class="bm-btn-ghost" onclick="smoothScrollTo('live-auctions-strip')">
+            <span>⚡ Live Auctions</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="bm-hero-art">
+        <img src="/assets/real/clean_white_tech_gadget.jpg" alt="Curated Premium Products" />
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       3. SIGNATURE SQUARE BOXES ARCHITECTURE
+       ===================================================================== -->
+  <main class="bm-boxes-section">
+    <div class="bm-boxes-grid">
+      
+      <!-- BOX 1: SPECIAL AUCTION ADVERTISEMENT BOX -->
+      <div class="bm-square-box bm-auction-feature-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Live Auctions</h2>
+          <div class="bm-live-beacon">
+            <span class="bm-beacon-dot"></span>
+            <span>LIVE NOW</span>
+          </div>
+        </div>
+
+        <!-- Featured Auction Item Banner -->
+        <div class="bm-auction-stage-hero">
+          <div class="bm-auction-img-cover">
+            <img src="/assets/real/ps5.jpg" alt="PlayStation 5" class="bm-auction-stage-img" />
+            <div class="bm-auction-badge-overlay">⚡ 42% Below Retail</div>
+          </div>
+          <div class="bm-auction-stage-meta">
+            <span class="bm-auction-stage-name">PlayStation 5 Console (Disc Edition)</span>
+            <div class="bm-auction-price-row">
+              <span class="bm-auction-bid-tag">₹32,000</span>
+              <span class="bm-auction-retail-cross">MRP ₹54,999</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="bm-auction-box-copy">
+          Place live bids or name your price against active buyers before the countdown expires.
+        </p>
+
+        <a href="/auction/auctions.html" class="bm-btn-box-auction">
+          <span>Enter Live Auctions &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 2: TECH & COMPUTING (4-ITEM QUAD) -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Flagship Tech & Computing</h2>
+          <span class="bm-box-tag">PRO GEAR</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <div class="bm-quad-tile">
+            <div class="bm-quad-img-wrap" onclick="window.location.href='/shop/shop.html?category=computers-laptops'">
+              <img src="/assets/real/ultrabook.jpg" alt="Ultrabook" />
+            </div>
+            <span class="bm-quad-title">Ultrabook X1</span>
+            <span class="bm-quad-price">₹89,990</span>
+            <button type="button" class="bm-quad-cart-btn" onclick="quickAddCart(event, 2, 'Ultrabook X1', 89990, '/assets/real/ultrabook.jpg')">+ Cart</button>
+          </div>
+          <div class="bm-quad-tile">
+            <div class="bm-quad-img-wrap" onclick="window.location.href='/shop/shop.html?category=mobiles-accessories'">
+              <img src="/assets/real/iphone15pro.jpg" alt="Pro Mobiles" />
+            </div>
+            <span class="bm-quad-title">iPhone 15 Pro</span>
+            <span class="bm-quad-price">₹1,19,990</span>
+            <button type="button" class="bm-quad-cart-btn" onclick="quickAddCart(event, 1, 'iPhone 15 Pro', 119990, '/assets/real/iphone15pro.jpg')">+ Cart</button>
+          </div>
+          <div class="bm-quad-tile">
+            <div class="bm-quad-img-wrap" onclick="window.location.href='/shop/shop.html?category=gaming'">
+              <img src="/assets/real/ps5.jpg" alt="Gaming" />
+            </div>
+            <span class="bm-quad-title">PS5 Console</span>
+            <span class="bm-quad-price">₹54,999</span>
+            <button type="button" class="bm-quad-cart-btn" onclick="quickAddCart(event, 5, 'PlayStation 5 Console', 54999, '/assets/real/ps5.jpg')">+ Cart</button>
+          </div>
+          <div class="bm-quad-tile">
+            <div class="bm-quad-img-wrap" onclick="window.location.href='/shop/shop.html?category=computers-laptops'">
+              <img src="/assets/real/monitor4k.jpg" alt="Displays" />
+            </div>
+            <span class="bm-quad-title">4K Monitors</span>
+            <span class="bm-quad-price">₹24,990</span>
+            <button type="button" class="bm-quad-cart-btn" onclick="quickAddCart(event, 25, 'Dell 24-inch Full HD Monitor', 24990, '/assets/real/monitor4k.jpg')">+ Cart</button>
+          </div>
+        </div>
+        <a href="/shop/shop.html?category=computers-laptops" class="bm-box-cta-link">
+          <span>Explore Computing Catalog &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 3: AUDIOPHILE & ACOUSTICS (4-ITEM QUAD) -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Studio Sound & Headphones</h2>
+          <span class="bm-box-tag">HI-RES</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=audio" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/sony_headphones.jpg" alt="Sony Headphones" />
+            </div>
+            <span class="bm-quad-title">Sony WH-1000XM5</span>
+            <span class="bm-quad-price">₹26,990</span>
+          </a>
+          <a href="/shop/shop.html?category=audio" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/earbuds.jpg" alt="TWS Earbuds" />
+            </div>
+            <span class="bm-quad-title">Hi-Res Earbuds</span>
+            <span class="bm-quad-price">₹11,999</span>
+          </a>
+          <a href="/shop/shop.html?category=audio" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/speaker.jpg" alt="JBL Speaker" />
+            </div>
+            <span class="bm-quad-title">Party Speakers</span>
+            <span class="bm-quad-price">₹9,999</span>
+          </a>
+          <a href="/shop/shop.html?category=audio" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/boat_earbuds.jpg" alt="boAt Audio" />
+            </div>
+            <span class="bm-quad-title">Daily Earbuds</span>
+            <span class="bm-quad-price">₹1,499</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=audio" class="bm-box-cta-link">
+          <span>Shop All Audio Gear &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 4: THE VAULT & TIMEPIECES (4-ITEM QUAD) -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Certified Luxury Timepieces</h2>
+          <span class="bm-box-tag">THE VAULT</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=bags-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/rolex_watch.jpg" alt="Rolex" />
+            </div>
+            <span class="bm-quad-title">Rolex Chronometer</span>
+            <span class="bm-quad-price">₹2,65,000</span>
+          </a>
+          <a href="/shop/shop.html?category=bags-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/submariner.jpg" alt="Submariner" />
+            </div>
+            <span class="bm-quad-title">Submariner Date</span>
+            <span class="bm-quad-price">₹8,50,000</span>
+          </a>
+          <a href="/shop/shop.html?category=bags-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/smartwatch.jpg" alt="Smartwatch" />
+            </div>
+            <span class="bm-quad-title">Titanium Smartwear</span>
+            <span class="bm-quad-price">₹34,999</span>
+          </a>
+          <a href="/shop/shop.html?category=fashion" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/leather_wallet.jpg" alt="Leather" />
+            </div>
+            <span class="bm-quad-title">Designer Leather</span>
+            <span class="bm-quad-price">₹45,000</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=bags-accessories" class="bm-box-cta-link">
+          <span>Enter The Luxury Vault &rarr;</span>
+        </a>
+      </div>
+
+      <!-- =====================================================================
+           INTERSTITIAL: THE BIG TRAVEL SALE ULTRA-WIDE BANNER
+           ===================================================================== -->
+      <a href="/shop/shop.html?category=bags-accessories" class="bm-travel-poster-link" title="The Big Travel Sale - Up to 50% Off">
+        <img src="/assets/real/big_travel_sale_wide.jpg" alt="The Big Travel Sale - Upgrade Your Journey - Up to 50% Off" class="bm-travel-poster-img" />
+      </a>
+
+      <!-- BOX 5: GAMING & CONSOLES -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Gaming Arenas & Hardware</h2>
+          <span class="bm-box-tag">NEXT-GEN</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=gaming" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/ps5.jpg" alt="PS5" />
+            </div>
+            <span class="bm-quad-title">PlayStation 5</span>
+            <span class="bm-quad-price">₹54,999</span>
+          </a>
+          <a href="/shop/shop.html?category=gaming" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/controller.jpg" alt="Controllers" />
+            </div>
+            <span class="bm-quad-title">Dual Wireless Pads</span>
+            <span class="bm-quad-price">₹5,999</span>
+          </a>
+          <a href="/shop/shop.html?category=gaming" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/headset.jpg" alt="Headsets" />
+            </div>
+            <span class="bm-quad-title">Spatial Headsets</span>
+            <span class="bm-quad-price">₹8,499</span>
+          </a>
+          <a href="/shop/shop.html?category=gaming" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/gaming_game.jpg" alt="AAA Titles" />
+            </div>
+            <span class="bm-quad-title">AAA Game Drops</span>
+            <span class="bm-quad-price">From ₹2,499</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=gaming" class="bm-box-cta-link">
+          <span>Browse All Gaming Gear &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 6: 4K TELEVISIONS & HOME DISPLAYS -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Smart Home & 4K Displays</h2>
+          <span class="bm-box-tag">ULTRA HD</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=electronics" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/samsung_tv.jpg" alt="Samsung 4K" />
+            </div>
+            <span class="bm-quad-title">Samsung 55" 4K</span>
+            <span class="bm-quad-price">₹49,990</span>
+          </a>
+          <a href="/shop/shop.html?category=electronics" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/sony_tv.jpg" alt="Sony Bravia" />
+            </div>
+            <span class="bm-quad-title">Sony Bravia 43"</span>
+            <span class="bm-quad-price">₹42,990</span>
+          </a>
+          <a href="/shop/shop.html?category=electronics" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/oneplus_tv.jpg" alt="OnePlus UHD" />
+            </div>
+            <span class="bm-quad-title">OnePlus 55" UHD</span>
+            <span class="bm-quad-price">₹38,990</span>
+          </a>
+          <a href="/shop/shop.html?category=electronics" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/soundbar.jpg" alt="Sound System" />
+            </div>
+            <span class="bm-quad-title">Surround Audio</span>
+            <span class="bm-quad-price">₹14,990</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=electronics" class="bm-box-cta-link">
+          <span>See All Televisions &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 7: DAILY TECH ESSENTIALS -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Curated Tech Essentials</h2>
+          <span class="bm-box-tag">FAST SHIP</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=mobiles-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/powerbank.jpg" alt="Power Bank" />
+            </div>
+            <span class="bm-quad-title">Fast Power Banks</span>
+            <span class="bm-quad-price">₹1,299</span>
+          </a>
+          <a href="/shop/shop.html?category=mobiles-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/gan_charger.jpg" alt="GaN Charger" />
+            </div>
+            <span class="bm-quad-title">65W GaN Chargers</span>
+            <span class="bm-quad-price">₹899</span>
+          </a>
+          <a href="/shop/shop.html?category=computers-laptops" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/usb_dock.jpg" alt="USB Docks" />
+            </div>
+            <span class="bm-quad-title">Type-C Docks</span>
+            <span class="bm-quad-price">₹1,999</span>
+          </a>
+          <a href="/shop/shop.html?category=bags-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/laptop_sleeve.jpg" alt="Sleeves" />
+            </div>
+            <span class="bm-quad-title">Pro Sleeves</span>
+            <span class="bm-quad-price">₹799</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=mobiles-accessories" class="bm-box-cta-link">
+          <span>Shop Everyday Deals &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 8: MEN'S STYLE & URBAN COUTURE -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Men's Wardrobe & Footwear</h2>
+          <span class="bm-box-tag">TRENDING</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=mens-fashion" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/mens_jacket.jpg" alt="Biker Jacket" />
+            </div>
+            <span class="bm-quad-title">Leather Jackets</span>
+            <span class="bm-quad-price">₹4,999</span>
+          </a>
+          <a href="/shop/shop.html?category=shoes" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/mens_sneakers.jpg" alt="Sneakers" />
+            </div>
+            <span class="bm-quad-title">Air Runners</span>
+            <span class="bm-quad-price">₹6,499</span>
+          </a>
+          <a href="/shop/shop.html?category=mens-fashion" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/mens_shirt.jpg" alt="Casual Shirts" />
+            </div>
+            <span class="bm-quad-title">Linen Over-Shirts</span>
+            <span class="bm-quad-price">₹1,899</span>
+          </a>
+          <a href="/shop/shop.html?category=bags-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/sunglasses.jpg" alt="Sunglasses" />
+            </div>
+            <span class="bm-quad-title">Polarized Shades</span>
+            <span class="bm-quad-price">₹2,499</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=mens-fashion" class="bm-box-cta-link">
+          <span>Explore Men's Store &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 9: WOMEN'S FASHION & RUNWAY EDIT -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Women's Fashion & Luxury</h2>
+          <span class="bm-box-tag">NEW SEASON</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=womens-fashion" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/womens_dress.jpg" alt="Dresses" />
+            </div>
+            <span class="bm-quad-title">Designer Dresses</span>
+            <span class="bm-quad-price">₹3,999</span>
+          </a>
+          <a href="/shop/shop.html?category=bags-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/handbag.jpg" alt="Handbag" />
+            </div>
+            <span class="bm-quad-title">Couture Handbags</span>
+            <span class="bm-quad-price">₹8,999</span>
+          </a>
+          <a href="/shop/shop.html?category=shoes" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/heels.jpg" alt="Heels" />
+            </div>
+            <span class="bm-quad-title">Stiletto Pumps</span>
+            <span class="bm-quad-price">₹4,299</span>
+          </a>
+          <a href="/shop/shop.html?category=bags-accessories" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/jewelry.jpg" alt="Jewelry" />
+            </div>
+            <span class="bm-quad-title">Fine Gold Jewelry</span>
+            <span class="bm-quad-price">₹14,499</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=womens-fashion" class="bm-box-cta-link">
+          <span>Discover Women's Edit &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 10: HOME DECOR & AESTHETIC LIVING -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Modern Home Decor & Living</h2>
+          <span class="bm-box-tag">AESTHETIC</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=furniture" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/sofa_living.jpg" alt="Sofa" />
+            </div>
+            <span class="bm-quad-title">Velvet Lounge Chairs</span>
+            <span class="bm-quad-price">₹18,990</span>
+          </a>
+          <a href="/shop/shop.html?category=home-kitchen" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/table_lamp.jpg" alt="Lamp" />
+            </div>
+            <span class="bm-quad-title">Minimalist Ambient Lamps</span>
+            <span class="bm-quad-price">₹2,899</span>
+          </a>
+          <a href="/shop/shop.html?category=home-kitchen" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/wall_art.jpg" alt="Wall Art" />
+            </div>
+            <span class="bm-quad-title">Abstract Canvas Art</span>
+            <span class="bm-quad-price">₹3,499</span>
+          </a>
+          <a href="/shop/shop.html?category=home-kitchen" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/ceramic_vase.jpg" alt="Ceramic Vase" />
+            </div>
+            <span class="bm-quad-title">Artisan Sculpt Vases</span>
+            <span class="bm-quad-price">₹1,799</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=home-kitchen" class="bm-box-cta-link">
+          <span>Upgrade Your Living Space &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 11: CHEF'S KITCHEN & APPLIANCES -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Chef's Kitchen & Cookware</h2>
+          <span class="bm-box-tag">GOURMET</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=home-kitchen" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/coffee_maker.jpg" alt="Coffee Maker" />
+            </div>
+            <span class="bm-quad-title">Espresso Machines</span>
+            <span class="bm-quad-price">₹12,499</span>
+          </a>
+          <a href="/shop/shop.html?category=home-kitchen" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/cookware_set.jpg" alt="Cookware" />
+            </div>
+            <span class="bm-quad-title">Cast Iron Cookware</span>
+            <span class="bm-quad-price">₹5,999</span>
+          </a>
+          <a href="/shop/shop.html?category=home-kitchen" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/air_fryer.jpg" alt="Air Fryer" />
+            </div>
+            <span class="bm-quad-title">Digital Air Fryers</span>
+            <span class="bm-quad-price">₹6,999</span>
+          </a>
+          <a href="/shop/shop.html?category=home-kitchen" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/dinnerware.jpg" alt="Dinnerware" />
+            </div>
+            <span class="bm-quad-title">Porcelain Dining Sets</span>
+            <span class="bm-quad-price">₹3,499</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=home-kitchen" class="bm-box-cta-link">
+          <span>Shop Kitchen Essentials &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 12: LUXURY BEAUTY, GROOMING & PARFUM -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Beauty, Skincare & Fragrance</h2>
+          <span class="bm-box-tag">GLOW</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=beauty-personal-care" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/luxury_perfume.jpg" alt="Perfume" />
+            </div>
+            <span class="bm-quad-title">Niche Eau De Parfum</span>
+            <span class="bm-quad-price">₹8,500</span>
+          </a>
+          <a href="/shop/shop.html?category=beauty-personal-care" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/skincare_serum.jpg" alt="Serum" />
+            </div>
+            <span class="bm-quad-title">Hydra Peptide Serums</span>
+            <span class="bm-quad-price">₹2,199</span>
+          </a>
+          <a href="/shop/shop.html?category=beauty-personal-care" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/hair_styling.jpg" alt="Hair Styling" />
+            </div>
+            <span class="bm-quad-title">Salon Ionic Dryers</span>
+            <span class="bm-quad-price">₹4,899</span>
+          </a>
+          <a href="/shop/shop.html?category=beauty-personal-care" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/grooming_kit.jpg" alt="Grooming Kit" />
+            </div>
+            <span class="bm-quad-title">Pro Beard Care Kits</span>
+            <span class="bm-quad-price">₹1,999</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=beauty-personal-care" class="bm-box-cta-link">
+          <span>Explore Luxury Beauty &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 13: SPORTS, WORKOUT & ATHLETICS -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Pro Fitness & Training Gear</h2>
+          <span class="bm-box-tag">ACTIVE</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=sports-fitness" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/dumbbells.jpg" alt="Dumbbells" />
+            </div>
+            <span class="bm-quad-title">Cast Iron Dumbbells</span>
+            <span class="bm-quad-price">₹3,299</span>
+          </a>
+          <a href="/shop/shop.html?category=sports-fitness" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/yoga_mat.jpg" alt="Yoga Mat" />
+            </div>
+            <span class="bm-quad-title">Eco Grip Yoga Mats</span>
+            <span class="bm-quad-price">₹1,499</span>
+          </a>
+          <a href="/shop/shop.html?category=sports-fitness" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/smart_band.jpg" alt="Fitness Tracker" />
+            </div>
+            <span class="bm-quad-title">Cardio Trackers</span>
+            <span class="bm-quad-price">₹2,999</span>
+          </a>
+          <a href="/shop/shop.html?category=sports-fitness" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/sports_sipper.jpg" alt="Sipper" />
+            </div>
+            <span class="bm-quad-title">Insulated Shakers</span>
+            <span class="bm-quad-price">₹899</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=sports-fitness" class="bm-box-cta-link">
+          <span>Shop Gym & Outdoor &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 14: AUTOMOTIVE, DASHCAMS & GARAGE -->
+      <div class="bm-square-box">
+        <div class="bm-box-header">
+          <h2 class="bm-box-title">Automotive & Garage Tools</h2>
+          <span class="bm-box-tag">GARAGE</span>
+        </div>
+        <div class="bm-quad-tiles">
+          <a href="/shop/shop.html?category=automotive" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/car_dashcam.jpg" alt="Dashcam" />
+            </div>
+            <span class="bm-quad-title">4K Night Dashcams</span>
+            <span class="bm-quad-price">₹5,499</span>
+          </a>
+          <a href="/shop/shop.html?category=automotive" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/power_drill.jpg" alt="Power Drill" />
+            </div>
+            <span class="bm-quad-title">Cordless Impact Drills</span>
+            <span class="bm-quad-price">₹4,299</span>
+          </a>
+          <a href="/shop/shop.html?category=automotive" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/car_care_kit.jpg" alt="Car Care" />
+            </div>
+            <span class="bm-quad-title">Ceramic Coating Kits</span>
+            <span class="bm-quad-price">₹1,799</span>
+          </a>
+          <a href="/shop/shop.html?category=automotive" class="bm-quad-tile">
+            <div class="bm-quad-img-wrap">
+              <img src="/assets/real/pressure_washer.jpg" alt="Pressure Washer" />
+            </div>
+            <span class="bm-quad-title">High-Bar Washers</span>
+            <span class="bm-quad-price">₹7,999</span>
+          </a>
+        </div>
+        <a href="/shop/shop.html?category=automotive" class="bm-box-cta-link">
+          <span>View Auto & Hardware &rarr;</span>
+        </a>
+      </div>
+
+      <!-- BOX 15: MERCHANT ONBOARDING -->
+      <div class="bm-square-box" style="justify-content:space-between;">
+        <div>
+          <div class="bm-box-header">
+            <h2 class="bm-box-title">Sell on BidMart</h2>
+            <span class="bm-box-tag">MERCHANT</span>
+          </div>
+          <div style="background:var(--bm-tile-bg);border:1px solid var(--bm-border);border-radius:8px;padding:16px;margin-bottom:12px;text-align:center;">
+            <div style="font-size:24px;margin-bottom:4px;">📦 &rarr; ⚡</div>
+            <div style="font-weight:700;color:var(--bm-text-head);font-size:13px;">Store or Auction</div>
+            <div style="font-size:12px;color:var(--bm-text-muted);">Sell at retail or launch live bidding.</div>
+          </div>
+          <p style="font-size:13px;color:var(--bm-text-body);line-height:1.4;margin:0 0 14px;">
+            Reach active buyers with 100% escrow protection and zero listing fees across tech, lifestyle, decor, and fashion.
+          </p>
+        </div>
+        <a href="/seller/login.html" class="bm-btn-primary" style="display:block;text-align:center;text-decoration:none;">
+          Start Selling
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =====================================================================
+       FESTIVE PERKS & BANK OFFERS RIBBON
+       ===================================================================== -->
+  <section class="bm-bank-offers-strip">
+    <div class="bm-bank-offer-card">
+      <div class="bm-bank-icon-box">💳</div>
+      <div class="bm-bank-info">
+        <span class="bm-bank-heading">10% Instant Bank Off</span>
+        <span class="bm-bank-desc">On HDFC, ICICI, SBI Cards up to ₹7,500</span>
+      </div>
+    </div>
+    <div class="bm-bank-offer-card">
+      <div class="bm-bank-icon-box">⚡</div>
+      <div class="bm-bank-info">
+        <span class="bm-bank-heading">Bonus Auction Tokens</span>
+        <span class="bm-bank-desc">500 free bid units on orders above ₹4,999</span>
+      </div>
+    </div>
+    <div class="bm-bank-offer-card">
+      <div class="bm-bank-icon-box">🔄</div>
+      <div class="bm-bank-info">
+        <span class="bm-bank-heading">Festive Exchange Upgrade</span>
+        <span class="bm-bank-desc">Extra ₹5,000 on smartphone & laptop swaps</span>
+      </div>
+    </div>
+    <div class="bm-bank-offer-card">
+      <div class="bm-bank-icon-box">📦</div>
+      <div class="bm-bank-info">
+        <span class="bm-bank-heading">Priority Insured Dispatch</span>
+        <span class="bm-bank-desc">Free 24H shipping + 100% escrow protection</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. HORIZONTAL PRODUCT STRIP 1: LIVE AUCTIONS FLOOR
+       ===================================================================== -->
+  <section class="bm-shelf-section" id="live-auctions-strip">
+    <div class="bm-shelf-card">
+      <div class="bm-shelf-header">
+        <div class="bm-shelf-title-wrap">
+          <div style="width:10px;height:10px;background:var(--bm-accent);border-radius:50%;box-shadow:0 0 10px var(--bm-accent);"></div>
+          <h3 class="bm-shelf-title">Live Auction Floor &bull; Ending Soon</h3>
+          <span class="bm-shelf-tag">REAL-TIME BIDDING</span>
+        </div>
+        <a href="/auction/auctions.html" class="bm-shelf-link">View Full Arena Floor &rarr;</a>
+      </div>
+
+      <div class="bm-shelf-products" id="liveAuctionsRow">
+        
+        <!-- Live Item 1 -->
+        <a href="/auction/auction-detail.html?productId=5" class="bm-product-item">
+          <div class="bm-prod-img-stage">
+            <span class="bm-prod-badge bm-badge-auction">⚡ 38% OFF</span>
+            <img src="/assets/real/ps5.jpg" alt="PlayStation 5" />
+          </div>
+          <span class="bm-prod-meta">GAMING &bull; LIVE AUCTION</span>
+          <h4 class="bm-prod-title">Sony PlayStation 5 Console (Disc Edition)</h4>
+          <div class="bm-prod-pricing">
+            <span class="bm-prod-price-now">₹32,000</span>
+            <span class="bm-prod-price-orig">₹54,999</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bm-accent);margin-bottom:8px;font-weight:700;">⏱ Closes in 47h 30m</span>
+          <div class="bm-btn-cart-sm">
+            Place Live Bid &rarr;
+          </div>
+        </a>
+
+        <!-- Live Item 2 -->
+        <a href="/auction/auction-detail.html?productId=6" class="bm-product-item">
+          <div class="bm-prod-img-stage">
+            <span class="bm-prod-badge bm-badge-auction">⚡ 39% OFF</span>
+            <img src="/assets/real/iphone15pro.jpg" alt="iPhone 15 Pro" />
+          </div>
+          <span class="bm-prod-meta">MOBILES &bull; LIVE AUCTION</span>
+          <h4 class="bm-prod-title">Apple iPhone 15 Pro (Auction Drop, 128GB)</h4>
+          <div class="bm-prod-pricing">
+            <span class="bm-prod-price-now">₹48,500</span>
+            <span class="bm-prod-price-orig">₹79,999</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bm-accent);margin-bottom:8px;font-weight:700;">⏱ Closes in 47h 30m</span>
+          <div class="bm-btn-cart-sm">
+            Place Live Bid &rarr;
+          </div>
+        </a>
+
+        <!-- Live Item 3 -->
+        <a href="/auction/auction-detail.html?productId=7" class="bm-product-item">
+          <div class="bm-prod-img-stage">
+            <span class="bm-prod-badge bm-badge-auction">⚡ 24% OFF</span>
+            <img src="/assets/real/rolex_watch.jpg" alt="Rolex" />
+          </div>
+          <span class="bm-prod-meta">LUXURY &bull; LIVE AUCTION</span>
+          <h4 class="bm-prod-title">Rolex Oyster Perpetual (Certified Luxury)</h4>
+          <div class="bm-prod-pricing">
+            <span class="bm-prod-price-now">₹2,65,000</span>
+            <span class="bm-prod-price-orig">₹3,50,000</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bm-accent);margin-bottom:8px;font-weight:700;">⏱ Closes in 47h 30m</span>
+          <div class="bm-btn-cart-sm">
+            Place Live Bid &rarr;
+          </div>
+        </a>
+
+        <!-- Arena Access Card -->
+        <a href="/auction/auctions.html" class="bm-product-item" style="justify-content:center;text-align:center;background:var(--bm-card);border:2px dashed var(--bm-accent);">
+          <div style="padding:16px;">
+            <div style="font-size:32px;margin-bottom:6px;">⚡</div>
+            <h4 style="font-size:16px;font-weight:700;color:var(--bm-text-head);margin:0 0 6px;">Live Arena Floor</h4>
+            <p style="font-size:12px;color:var(--bm-text-muted);margin:0 0 12px;">Discover upcoming scheduled auction drops</p>
+            <span class="bm-shelf-link">Enter Pit Floor &rarr;</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       5. HORIZONTAL PRODUCT STRIP 2: VERIFIED STORE BEST SELLERS
+       ===================================================================== -->
+  <section class="bm-shelf-section" id="best-sellers-strip">
+    <div class="bm-shelf-card">
+      <div class="bm-shelf-header">
+        <div class="bm-shelf-title-wrap">
+          <h3 class="bm-shelf-title">Verified Store Best Sellers &bull; Instant Buy</h3>
+          <span class="bm-shelf-tag">IN STOCK</span>
+        </div>
+        <a href="/shop/shop.html" class="bm-shelf-link">View All 208 Catalog Items &rarr;</a>
+      </div>
+
+      <div class="bm-shelf-products" id="trendingProductsRow">
+        <p style="color:var(--bm-text-muted);font-family:'JetBrains Mono',monospace;">LOADING BEST SELLERS...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       6. ALWAYS FLOATING AUCTION MODE BUTTON (OPENS LIVE AUCTION GUIDE PAGE)
+       ===================================================================== -->
+  <a href="/auction/guide.html" class="bm-floating-switch" id="bmFloatingSwitch" title="How Live Auctions Work">
+    <span class="bm-switch-dot"></span>
+    <span class="bm-switch-text" id="bmSwitchLabel">⚡ ENTER AUCTION MODE</span>
+    <span class="bm-switch-counter" id="bmSwitchBadge">3 LIVE</span>
+  </a>
+
+  <!-- Toast Feedback -->
+  <div class="bm-toast" id="bmToast">
+    <span id="bmToastText">Added to Cart</span>
+  </div>
+
+  <!-- =====================================================================
+       7. SIGNATURE FOOTER
+       ===================================================================== -->
+  <footer class="bm-footer">
+    <div class="bm-footer-inner">
+      <div class="bm-footer-grid">
+        <div class="bm-footer-col">
+          <h5>About BidMart</h5>
+          <ul>
+            <li><a href="/index.html?open=how-it-works">The Dual-Lifecycle Engine</a></li>
+            <li><a href="/index.html">Brutalist Manifesto</a></li>
+            <li><a href="#">Escrow Buyer Security</a></li>
+            <li><a href="#">Authentication Protocols</a></li>
+          </ul>
+        </div>
+        <div class="bm-footer-col">
+          <h5>Departments</h5>
+          <ul>
+            <li><a href="/shop/shop.html?category=mobiles-accessories">Flagship Mobiles</a></li>
+            <li><a href="/shop/shop.html?category=computers-laptops">Laptops & PCs</a></li>
+            <li><a href="/shop/shop.html?category=audio">Studio Acoustics</a></li>
+            <li><a href="/shop/shop.html?category=bags-accessories">Luxury Vault</a></li>
+          </ul>
+        </div>
+        <div class="bm-footer-col">
+          <h5>Merchant Program</h5>
+          <ul>
+            <li><a href="/seller/login.html">Merchant Sign In</a></li>
+            <li><a href="/seller/register.html">Apply as Verified Seller</a></li>
+            <li><a href="#">Shift Inventory to Auction</a></li>
+            <li><a href="#">Zero Listing Fees</a></li>
+          </ul>
+        </div>
+        <div class="bm-footer-col">
+          <h5>Customer Care</h5>
+          <ul>
+            <li><a href="/dashboards/buyer.html">Buyer Dashboard</a></li>
+            <li><a href="/shop/cart.html">View Cart</a></li>
+            <li><a href="#">48h Return Guarantee</a></li>
+            <li><a href="#">Support Hotline</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bm-footer-bottom">
+        <div>&copy; 2026 BIDMART TECHNOLOGIES INC. &bull; DUAL-ENGINE COMMERCE ARCHITECTURE</div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span>ALL ENGINES ONLINE</span>
+          <span style="color:var(--bm-accent);">&bull; ESCROW SECURED</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+
+  <script>
+    // =====================================================================
+    // 1. LIGHT / DARK THEME ENGINE
+    // =====================================================================
+    const BM_THEME_STORAGE_KEY = 'bidmart_market_theme';
+
+    function initBidmartTheme() {
+      const saved = localStorage.getItem(BM_THEME_STORAGE_KEY) || 'dark';
+      applyBidmartTheme(saved);
+    }
+
+    function toggleBidmartTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyBidmartTheme(next);
+      localStorage.setItem(BM_THEME_STORAGE_KEY, next);
+    }
+
+    function applyBidmartTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const emoji = document.getElementById('themeEmoji');
+      if (emoji) {
+        emoji.innerText = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+
+    initBidmartTheme();
+
+    // =====================================================================
+    // 2. ALWAYS FLOATING AUCTION MODE SWITCH BUTTON
+    // =====================================================================
+    let isAuctionModeEngaged = false;
+
+    function toggleFloatingAuctionMode() {
+      isAuctionModeEngaged = !isAuctionModeEngaged;
+      const body = document.body;
+      const label = document.getElementById('bmSwitchLabel');
+      const strip = document.getElementById('live-auctions-strip');
+
+      if (isAuctionModeEngaged) {
+        body.classList.add('bm-auction-arena-mode');
+        if (label) label.innerText = '🛍️ STORE MODE';
+        showToast('⚡ AUCTION MODE ENGAGED: Live Pit Floor Activated');
+        if (strip) strip.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        body.classList.remove('bm-auction-arena-mode');
+        if (label) label.innerText = '⚡ ENTER AUCTION MODE';
+        showToast('🛍️ Switched back to Standard Store Mode');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function smoothScrollTo(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // =====================================================================
+    // 3. TOAST & CART HELPERS
+    // =====================================================================
+    function showToast(msg) {
+      const toast = document.getElementById('bmToast');
+      const text = document.getElementById('bmToastText');
+      if (!toast) return;
+      text.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function formatINR(val) {
+      return '₹' + Number(val || 0).toLocaleString('en-IN');
+    }
+
+    async function quickAddCart(event, productId, title, price, img) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      try {
+        let guestCart = [];
+        try {
+          guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+        } catch (_) {}
+
+        const existing = guestCart.find(i => i.productId === productId);
+        if (existing) {
+          existing.quantity += 1;
+        } else {
+          guestCart.push({
+            productId,
+            title: title || 'BidMart Item',
+            price: price || 999,
+            img: img || '/assets/products/placeholder.svg',
+            quantity: 1,
+            addedAt: Date.now()
+          });
+        }
+        localStorage.setItem('bidmart_guest_cart', JSON.stringify(guestCart));
+        showToast(`Added "${title}" &bull; Opening Checkout...`);
+        updateCartBadge();
+
+        // Also sync with backend if user has account
+        if (window.auth && window.auth.isLoggedIn()) {
+          try { await window.api.post('/cart', { productId, quantity: 1 }); } catch (_) {}
+        }
+
+        // Open checkout modal after brief visual toast confirmation
+        setTimeout(() => {
+          if (window.bmCheckout) window.bmCheckout.open();
+        }, 350);
+
+      } catch (err) {
+        console.error('Cart add error:', err);
+        showToast(`Could not add "${title}" right now`);
+      }
+    }
+
+    async function updateCartBadge() {
+      const badge = document.getElementById('bmCartBadge');
+      if (!badge) return;
+      try {
+        if (window.auth && window.auth.isLoggedIn()) {
+          const res = await window.api.get('/cart');
+          const count = res.items ? res.items.length : (res.itemCount || 0);
+          badge.innerText = count;
+        } else {
+          const guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+          badge.innerText = guestCart.length;
+        }
+      } catch (_) {
+        const guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+        badge.innerText = guestCart.length;
+      }
+    }
+
+    // =====================================================================
+    // 4. LOAD DYNAMIC BEST SELLERS
+    // =====================================================================
+    async function loadBestSellers() {
+      const container = document.getElementById('trendingProductsRow');
+      try {
+        const res = await window.api.get('/products?page=1&limit=8');
+        const items = res.items || [];
+        if (!items || items.length === 0) {
+          container.innerHTML = '<p style="color:var(--bm-text-muted);">No products currently available.</p>';
+          return;
+        }
+
+        container.innerHTML = items.map(p => {
+          let imageSrc = '/assets/products/placeholder.svg';
+          if (Array.isArray(p.images) && p.images.length > 0) {
+            imageSrc = p.images[0];
+          } else if (typeof p.images === 'string') {
+            try {
+              const parsed = JSON.parse(p.images);
+              if (Array.isArray(parsed) && parsed.length > 0) imageSrc = parsed[0];
+            } catch (_) {}
+          }
+
+          const discount = Math.floor(Math.random() * 20 + 15);
+          const origPrice = Math.round(Number(p.price) * (1 + discount / 100));
+
+          return `
+            <a href="/shop/product.html?id=${p.id}" class="bm-product-item">
+              <div class="bm-prod-img-stage">
+                <span class="bm-prod-badge bm-badge-deal">${discount}% OFF</span>
+                <img src="${imageSrc}" alt="${p.title}" onerror="this.onerror=null;this.src='/assets/products/placeholder.svg';" loading="lazy" />
+              </div>
+              <span class="bm-prod-meta">${p.brand || 'BIDMART PRIME'}</span>
+              <h4 class="bm-prod-title" title="${p.title}">${p.title}</h4>
+              <div class="bm-prod-pricing">
+                <span class="bm-prod-price-now">${formatINR(p.price)}</span>
+                <span class="bm-prod-price-orig">${formatINR(origPrice)}</span>
+              </div>
+              <button type="button" class="bm-btn-cart-sm" onclick="quickAddCart(event, ${p.id}, '${p.title.replace(/'/g, "\\'")}', ${p.price}, '${imageSrc}')">
+                + Add to Cart
+              </button>
+            </a>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Failed to load products:', err);
+        container.innerHTML = '<p style="color:var(--bm-text-muted);">Failed to load verified items.</p>';
+      }
+    }
+
+    // =====================================================================
+    // 5. SEARCH & AUTH
+    // =====================================================================
+    function handleMarketSearch(e) {
+      e.preventDefault();
+      const q = document.getElementById('marketSearchQuery').value.trim();
+      const dept = document.getElementById('marketDeptSelect').value;
+      const params = new URLSearchParams();
+      if (q) params.set('search', q);
+      if (dept) params.set('category', dept);
+      window.location.href = `/shop/shop.html?${params.toString()}`;
+    }
+
+    function handleAuthClick() {
+      if (window.auth && window.auth.isLoggedIn()) {
+        window.location.href = '/dashboards/buyer.html';
+      } else if (window.bmExploreModal) {
+        window.bmExploreModal.open();
+      } else {
+        window.location.href = '/auth/login.html';
+      }
+    }
+
+    // =====================================================================
+    // INITIALIZATION
+    // =====================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBestSellers();
+      updateCartBadge();
+
+      if (window.auth && window.auth.isLoggedIn()) {
+        const user = window.auth.getUser();
+        const lbl = document.getElementById('userAccountLabel');
+        if (lbl && user) {
+          lbl.innerText = (user.name || 'USER').split(' ')[0].toUpperCase();
+        }
+      }
+    });
+  </script>
+  <script src="/shared/explore-dialog.js"></script>
+  <script src="/shared/checkout-modal.js"></script>
+  <script src="/shared/header.js"></script>
+</body>
+</html>

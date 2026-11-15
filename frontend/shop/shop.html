@@ -1,163 +1,531 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shop — BidMart</title>
-  <link rel="stylesheet" href="/shared/theme.css" />
+  <title>THE MARKET CATALOG // BIDMART</title>
+  <meta name="description" content="Explore verified retail goods and live auction opportunities across 20 premium categories." />
+  <link rel="stylesheet" href="/shared/shop-dual-theme.css" />
+  <link rel="stylesheet" href="/shared/explore-dialog.css" />
+  <link rel="stylesheet" href="/shared/checkout-modal.css" />
+  <link rel="stylesheet" href="/shared/global-dark.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
 </head>
-<body>
+<body class="shop-page-body">
 
+  <!-- Unified Top Navigation Bar -->
   <div id="site-header"></div>
 
-  <main class="container" style="padding-top:20px;padding-bottom:40px;">
-    <!-- Page Header with Back Button & Breadcrumbs -->
-    <div class="bm-page-header-top" style="margin-bottom:18px;">
-      <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/index.html')" aria-label="Go back to Home">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-        <span>Back to Home</span>
+  <!-- Main View Container -->
+  <div class="shop-view-wrapper">
+    
+    <!-- Top Catalog Header Banner -->
+    <div class="shop-top-header" style="margin-top:12px;">
+      <div class="shop-headline-group">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <a href="/index.html" class="btn-back-home" title="Return to Terminal Home">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span>HOME</span>
+          </a>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted);">// VERIFIED MARKET CATALOG</span>
+        </div>
+        <h1>THE MARKET CATALOG</h1>
+        <p>EXPLORE FIXED RETAIL GOODS &bull; OR ENTER TIMED AUCTIONS TO BID BELOW STORE VALUE</p>
+      </div>
+
+      <div class="shop-header-controls">
+        <a href="/auction/auctions.html" class="btn-back-home" style="border-color:var(--accent-lime);color:var(--accent-lime);font-weight:700;">
+          <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
+          <span>ENTER LIVE AUCTION PIT &rarr;</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Filter Mode Tabs (All / Buy Now / Live Auctions) + Sorting -->
+    <div class="filter-tabs-row">
+      <button type="button" class="filter-mode-tab active" id="tabModeAll" onclick="setFilterMode('ALL')">
+        <span>ALL ITEMS</span>
       </button>
-      <nav class="bm-breadcrumbs" aria-label="Breadcrumb">
-        <a href="/index.html" class="bm-breadcrumb-item">Home</a>
-        <span class="bm-breadcrumb-sep">/</span>
-        <span class="bm-breadcrumb-item active" aria-current="page">Shop Catalog</span>
-      </nav>
+      <button type="button" class="filter-mode-tab" id="tabModeStore" onclick="setFilterMode('STORE')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>BUY NOW (STORE)</span>
+      </button>
+      <button type="button" class="filter-mode-tab" id="tabModeAuction" onclick="setFilterMode('AUCTION')">
+        <span style="color:var(--accent-lime);">⚡</span>
+        <span>LIVE AUCTIONS</span>
+      </button>
+
+      <!-- Sort Controls -->
+      <div class="sort-select-wrap">
+        <span>SORT:</span>
+        <select class="sort-select" id="sortSelect" onchange="handleSortChange(this.value)">
+          <option value="default">Featured / Default</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="name_asc">Alphabetical (A-Z)</option>
+        </select>
+      </div>
     </div>
 
-    <div class="page-head">
-      <h1>Shop</h1>
-      <span class="text-muted" id="result-count"></span>
-    </div>
+    <!-- Main Core Grid (Left Sidebar + Right Product View) -->
+    <div class="shop-core-grid">
+      
+      <!-- Left Sidebar: Categories Navigation -->
+      <aside class="shop-sidebar">
+        <div class="sidebar-title">
+          <span>COLLECTIONS</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--accent-lime);" id="categoryTotalBadge">20 ACTIVE</span>
+        </div>
 
-    <div class="shop-layout">
-      <aside class="card filter-panel">
-        <h4>Categories</h4>
-        <div id="category-filters">
-          <label class="filter-option active" data-value="">
-            <input type="radio" name="category" value="" checked /> All categories
-          </label>
+        <div class="category-pill-list" id="categoryPillContainer">
+          <button type="button" class="category-item-btn active" data-category="" onclick="selectCategory('')">
+            <span>All Products</span>
+            <span class="cat-count">ALL</span>
+          </button>
+          <!-- Dynamic category pills injected here -->
         </div>
       </aside>
 
-      <div>
-        <div class="shop-toolbar">
-          <form id="search-form" class="site-search" style="max-width:340px;">
-            <input type="search" id="search-input" placeholder="Search this catalog..." />
-            <button type="submit" aria-label="Search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            </button>
-          </form>
+      <!-- Right Main: Search Bar, Status Counters & Product Cards -->
+      <main class="shop-content-panel">
+        
+        <!-- Search & Metric Bar -->
+        <div class="shop-search-bar">
+          <div class="search-input-field">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="search" id="catalogSearchInput" placeholder="Search by product name, brand, or model..." autocomplete="off" />
+          </div>
+
+          <div class="catalog-metric-pill" id="catalogMetricPill">
+            <span>TOTAL:</span> <strong id="itemCountDisplay" style="color:var(--accent-lime);">FETCHING...</strong>
+          </div>
         </div>
 
-        <div class="grid-4" id="product-grid">
-          <p class="text-muted">Loading products…</p>
+        <!-- Products Cards Grid -->
+        <div class="products-display-grid" id="productsGridContainer">
+          <p style="color:var(--text-muted);font-family:'JetBrains Mono',monospace;">INITIALIZING MARKET CATALOG...</p>
         </div>
 
-        <div style="display:flex;justify-content:center;gap:10px;margin-top:32px;" id="pagination"></div>
-      </div>
+        <!-- Pagination Controls -->
+        <div class="shop-pagination-wrap" id="paginationWrap"></div>
+
+      </main>
+
     </div>
-  </main>
 
-  <div id="site-footer"></div>
+  </div>
 
+  <!-- Toast Notification Feedback -->
+  <div class="toast-notice" id="toastNotice">
+    <span id="toastIcon">✓</span>
+    <span id="toastText">Item updated</span>
+  </div>
+
+  <!-- Shared Auth & Modal Scripts -->
   <script src="/shared/auth.js"></script>
   <script src="/shared/api.js"></script>
-  <script src="/shared/navigation.js"></script>
-  <script src="/shared/product-card.js"></script>
-  <script src="/shared/header.js"></script>
-  <script src="/shared/footer.js"></script>
 
   <script>
-    const state = { categoryId: '', search: '', page: 1 };
+    // =====================================================================
+    // 1. THEME SWITCHER (LIGHT / DARK) WITH PERSISTENCE
+    // =====================================================================
+    const THEME_STORAGE_KEY = 'bidmart_catalog_theme';
 
-    async function loadCategories() {
-      const categories = await window.api.get('/categories');
-      const container = document.getElementById('category-filters');
-
-      categories.filter((c) => c.parent_id === null).forEach((c) => {
-        const label = document.createElement('label');
-        label.className = 'filter-option';
-        label.dataset.value = c.id;
-        label.innerHTML = `<input type="radio" name="category" value="${c.id}" /> ${c.name}`;
-        container.appendChild(label);
-      });
-
-      container.addEventListener('change', (event) => {
-        if (event.target.name !== 'category') return;
-        state.categoryId = event.target.value;
-        state.page = 1;
-        container.querySelectorAll('.filter-option').forEach((el) => {
-          el.classList.toggle('active', el.dataset.value === event.target.value);
-        });
-        loadProducts();
-      });
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+      applyTheme(saved);
     }
 
-    async function loadProducts() {
-      const grid = document.getElementById('product-grid');
-      grid.innerHTML = '<p class="text-muted">Loading products…</p>';
+    function setTheme(mode) {
+      applyTheme(mode);
+      localStorage.setItem(THEME_STORAGE_KEY, mode);
+    }
 
-      try {
-        const params = new URLSearchParams();
-        if (state.categoryId) params.set('categoryId', state.categoryId);
-        if (state.search) params.set('search', state.search);
-        params.set('page', state.page);
-        params.set('limit', 12);
-
-        const { items, pagination } = await window.api.get(`/products?${params.toString()}`);
-
-        document.getElementById('result-count').textContent = `${pagination.total} product(s)`;
-        grid.innerHTML = items.length
-          ? items.map(window.shopHelpers.renderProductCard).join('')
-          : '<div class="empty-state">No products match your filters.</div>';
-
-        renderPagination(pagination);
-      } catch (err) {
-        grid.innerHTML = `<p class="text-muted">Could not load products: ${err.message}</p>`;
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const darkBtn = document.getElementById('themeDarkBtn');
+      const lightBtn = document.getElementById('themeLightBtn');
+      if (darkBtn && lightBtn) {
+        darkBtn.classList.toggle('active', theme === 'dark');
+        lightBtn.classList.toggle('active', theme === 'light');
       }
     }
 
+    initTheme();
+
+    // =====================================================================
+    // 2. STATE & QUERY ENGINE
+    // =====================================================================
+    const catalogState = {
+      category_id: '',
+      search: '',
+      filterMode: 'ALL', // 'ALL' | 'STORE' | 'AUCTION'
+      sort: 'default',
+      page: 1,
+      limit: 24
+    };
+
+    let allFetchedItems = []; // client-side caching for fast mode filtering
+
+    function formatINR(val) {
+      return '₹' + Number(val || 0).toLocaleString('en-IN');
+    }
+
+    // Toast alert helper
+    function showToast(message, isSuccess = true) {
+      const toast = document.getElementById('toastNotice');
+      const text = document.getElementById('toastText');
+      const icon = document.getElementById('toastIcon');
+      if (!toast) return;
+      text.innerText = message;
+      icon.innerText = isSuccess ? '✓' : 'ℹ';
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    // Quick Add to Cart (Guest or Logged In)
+    async function quickAddToCart(event, productId, title) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      try {
+        if (window.auth && window.auth.isLoggedIn()) {
+          await window.api.post('/cart', { productId, quantity: 1 });
+          showToast(`Added "${title}" to your cart!`);
+          updateCartBadge();
+        } else {
+          // Guest Cart support
+          let guestCart = [];
+          try {
+            guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+          } catch (_) {}
+          const existing = guestCart.find(i => i.productId === productId);
+          if (existing) {
+            existing.quantity += 1;
+          } else {
+            guestCart.push({ productId, quantity: 1, addedAt: Date.now() });
+          }
+          localStorage.setItem('bidmart_guest_cart', JSON.stringify(guestCart));
+          showToast(`Added "${title}" to cart (Guest)!`);
+          updateCartBadge();
+        }
+      } catch (err) {
+        console.error('Cart add error:', err);
+        showToast(`Could not add "${title}" right now`, false);
+      }
+    }
+
+    // Update Nav Cart Badge Count
+    async function updateCartBadge() {
+      const badge = document.getElementById('cartCountBadge');
+      if (!badge) return;
+
+      try {
+        if (window.auth && window.auth.isLoggedIn()) {
+          const res = await window.api.get('/cart');
+          const count = res.items ? res.items.length : (res.itemCount || 0);
+          badge.innerText = count;
+        } else {
+          const guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+          badge.innerText = guestCart.length;
+        }
+      } catch (_) {
+        const guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+        badge.innerText = guestCart.length;
+      }
+    }
+
+    // Load Categories into Sidebar & Apply URL Query
+    async function loadCategories() {
+      try {
+        const categories = await window.api.get('/categories');
+        const container = document.getElementById('categoryPillContainer');
+        const topCategories = (categories || []).filter(c => c.parent_id === null);
+        
+        topCategories.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'category-item-btn';
+          btn.dataset.category = cat.id;
+          btn.dataset.slug = cat.slug;
+          btn.onclick = () => selectCategory(cat.id, cat.name);
+          btn.innerHTML = `
+            <span>${cat.name}</span>
+            <span class="cat-count">#${cat.slug}</span>
+          `;
+          container.appendChild(btn);
+        });
+
+        // Check if category or slug is specified in URL query
+        const urlParams = new URLSearchParams(window.location.search);
+        const catQuery = urlParams.get('category') || urlParams.get('categoryId') || urlParams.get('cat');
+        const searchQuery = urlParams.get('search') || urlParams.get('q');
+        
+        if (searchQuery) {
+          catalogState.search = searchQuery;
+          const searchInput = document.getElementById('catalogSearchInput');
+          if (searchInput) searchInput.value = searchQuery;
+        }
+
+        if (catQuery) {
+          // Match by id or slug
+          const matched = (categories || []).find(c => String(c.id) === catQuery || c.slug === catQuery);
+          if (matched) {
+            selectCategory(matched.id, matched.name, false);
+          } else {
+            loadCatalog();
+          }
+        } else {
+          loadCatalog();
+        }
+      } catch (err) {
+        console.error('Failed to load categories:', err);
+        loadCatalog();
+      }
+    }
+
+    function selectCategory(id, name, fetchImmediately = true) {
+      catalogState.category_id = id;
+      catalogState.page = 1;
+
+      document.querySelectorAll('.category-item-btn').forEach(btn => {
+        btn.classList.toggle('active', (btn.dataset.category || '') === String(id || ''));
+      });
+
+      // Update banner heading if a category is selected
+      const headerTitle = document.querySelector('.shop-header-title h1');
+      const headerSub = document.querySelector('.shop-header-title p');
+      if (id && name) {
+        if (headerTitle) headerTitle.innerText = name.toUpperCase();
+        if (headerSub) headerSub.innerHTML = `SHOWING VERIFIED PRODUCTS &bull; FIXED RETAIL &amp; LIVE AUCTIONS IN ${name.toUpperCase()}`;
+      } else {
+        if (headerTitle) headerTitle.innerText = 'THE MARKET CATALOG';
+        if (headerSub) headerSub.innerHTML = 'EXPLORE FIXED RETAIL GOODS &bull; OR ENTER TIMED AUCTIONS TO BID BELOW STORE VALUE';
+      }
+
+      if (fetchImmediately) {
+        loadCatalog();
+      }
+    }
+
+    function setFilterMode(mode) {
+      catalogState.filterMode = mode;
+      catalogState.page = 1;
+
+      document.getElementById('tabModeAll').classList.toggle('active', mode === 'ALL');
+      document.getElementById('tabModeStore').classList.toggle('active', mode === 'STORE');
+      document.getElementById('tabModeAuction').classList.toggle('active', mode === 'AUCTION');
+
+      renderFilteredCards();
+    }
+
+    function handleSortChange(sortVal) {
+      catalogState.sort = sortVal;
+      renderFilteredCards();
+    }
+
+    // Render Product Cards
+    function renderCard(product) {
+      const isAuction = product.status === 'ACTIVE_AUCTION';
+      const price = isAuction ? (product.current_price ?? product.price) : product.price;
+      
+      let imageSrc = '/assets/products/placeholder.svg';
+      if (Array.isArray(product.images) && product.images.length > 0) {
+        imageSrc = product.images[0];
+      } else if (typeof product.images === 'string') {
+        try {
+          const parsed = JSON.parse(product.images);
+          if (Array.isArray(parsed) && parsed.length > 0) imageSrc = parsed[0];
+        } catch (_) {}
+      }
+
+      const detailUrl = isAuction 
+        ? `/auction/auction-detail.html?productId=${product.id}` 
+        : `/shop/product.html?id=${product.id}`;
+
+      return `
+        <a href="${detailUrl}" class="modern-product-card" data-is-auction="${isAuction}">
+          <div class="product-image-stage">
+            <img src="${imageSrc}" alt="${product.title}" onerror="this.onerror=null;this.src='/assets/products/placeholder.svg';" loading="lazy" />
+            ${isAuction ? `
+              <div class="live-auction-badge">
+                <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;"></span>
+                <span>AUCTION PIT</span>
+              </div>
+            ` : `
+              <div style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);color:var(--text-secondary);font-family:'JetBrains Mono',monospace;font-size:0.68rem;padding:2px 6px;border-radius:3px;">
+                FIXED RETAIL
+              </div>
+            `}
+          </div>
+
+          <div class="product-meta-row">
+            <span class="product-brand-tag">${product.brand || 'BIDMART'}</span>
+            <span class="product-cond-tag">${product.condition || 'VERIFIED NEW'}</span>
+          </div>
+
+          <h3 class="product-title-text" title="${product.title}">${product.title}</h3>
+
+          <div class="product-card-bottom ${isAuction ? 'is-auction-price' : ''}">
+            <div class="price-container">
+              <span class="price-sub-label">${isAuction ? 'CURRENT BID' : 'BUY NOW PRICE'}</span>
+              <span class="price-bold-amount">${formatINR(price)}</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:6px;">
+              ${!isAuction ? `
+                <button type="button" class="btn-quick-cart" onclick="quickAddToCart(event, ${product.id}, '${product.title.replace(/'/g, "\\'")}')" title="Quick Add to Cart">
+                  + CART
+                </button>
+              ` : `
+                <span class="btn-quick-cart" style="background:var(--accent-lime);color:#080808;font-weight:800;" title="Bid on Item">
+                  BID ⚡
+                </span>
+              `}
+              <div class="btn-card-action" title="View Details">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+
+    // Load & Query Products from Backend API
+    async function loadCatalog() {
+      const grid = document.getElementById('productsGridContainer');
+      grid.innerHTML = '<p style="color:var(--text-muted);font-family:\'JetBrains Mono\',monospace;">FETCHING LIVE MARKET ASSETS...</p>';
+
+      const params = new URLSearchParams();
+      params.set('page', catalogState.page);
+      params.set('limit', catalogState.limit);
+      if (catalogState.category_id) params.set('category_id', catalogState.category_id);
+      if (catalogState.search) params.set('search', catalogState.search);
+
+      try {
+        const response = await window.api.get(`/products?${params.toString()}`);
+        allFetchedItems = response.items || [];
+        const pagination = response.pagination || { total: allFetchedItems.length, totalPages: 1 };
+
+        renderFilteredCards(pagination);
+      } catch (err) {
+        console.error('Failed to load products:', err);
+        grid.innerHTML = '<p style="color:var(--text-muted);">Failed to retrieve market products. Check server connection.</p>';
+      }
+    }
+
+    // Filter & Sort In-Memory for instantaneous interaction
+    function renderFilteredCards(pagination) {
+      const grid = document.getElementById('productsGridContainer');
+      let items = [...allFetchedItems];
+
+      // Filter Mode
+      if (catalogState.filterMode === 'STORE') {
+        items = items.filter(p => p.status !== 'ACTIVE_AUCTION');
+      } else if (catalogState.filterMode === 'AUCTION') {
+        items = items.filter(p => p.status === 'ACTIVE_AUCTION');
+      }
+
+      // Sort
+      if (catalogState.sort === 'price_asc') {
+        items.sort((a, b) => Number(a.price) - Number(b.price));
+      } else if (catalogState.sort === 'price_desc') {
+        items.sort((a, b) => Number(b.price) - Number(a.price));
+      } else if (catalogState.sort === 'name_asc') {
+        items.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      }
+
+      // Counter
+      const countDisplay = document.getElementById('itemCountDisplay');
+      if (countDisplay) {
+        countDisplay.innerText = `${items.length} PRODUCTS`;
+      }
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;padding:60px 20px;text-align:center;background:var(--bg-card);border:1px dashed var(--border-subtle);border-radius:12px;">
+            <p style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin:0 0 8px;">No products match this filter</p>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0;">Try switching tabs or searching for another keyword.</p>
+          </div>
+        `;
+        renderPagination(pagination || { totalPages: 1 });
+        return;
+      }
+
+      grid.innerHTML = items.map(renderCard).join('');
+      renderPagination(pagination || { totalPages: 1 });
+    }
+
+    // Render Pagination Controls
     function renderPagination(pagination) {
-      const container = document.getElementById('pagination');
-      if (pagination.totalPages <= 1) {
+      const container = document.getElementById('paginationWrap');
+      if (!container) return;
+      if (!pagination || pagination.totalPages <= 1) {
         container.innerHTML = '';
         return;
       }
-      let buttons = '';
-      for (let i = 1; i <= pagination.totalPages; i++) {
-        buttons += `<button class="btn ${i === pagination.page ? 'btn-primary' : 'btn-ghost'} btn-sm" data-page="${i}">${i}</button>`;
+
+      let html = '';
+      html += `<button type="button" class="page-nav-btn" ${catalogState.page <= 1 ? 'disabled' : ''} onclick="changePage(${catalogState.page - 1})">&larr; PREV</button>`;
+      
+      const total = pagination.totalPages;
+      for (let p = 1; p <= total; p++) {
+        if (p === 1 || p === total || (p >= catalogState.page - 1 && p <= catalogState.page + 1)) {
+          html += `<button type="button" class="page-nav-btn ${p === catalogState.page ? 'active' : ''}" onclick="changePage(${p})">${p}</button>`;
+        } else if (p === catalogState.page - 2 || p === catalogState.page + 2) {
+          html += `<span style="color:var(--text-muted);padding:0 4px;">...</span>`;
+        }
       }
-      container.innerHTML = buttons;
-      container.querySelectorAll('[data-page]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          state.page = Number(btn.dataset.page);
-          loadProducts();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      });
+
+      html += `<button type="button" class="page-nav-btn" ${catalogState.page >= total ? 'disabled' : ''} onclick="changePage(${catalogState.page + 1})">NEXT &rarr;</button>`;
+      container.innerHTML = html;
     }
 
-    document.getElementById('search-form').addEventListener('submit', (event) => {
-      event.preventDefault();
-      state.search = document.getElementById('search-input').value.trim();
-      state.page = 1;
-      loadProducts();
+    function changePage(newPage) {
+      catalogState.page = newPage;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      loadCatalog();
+    }
+
+    // Search Input Debouncing
+    let searchDebounce;
+    document.getElementById('catalogSearchInput').addEventListener('input', (e) => {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        catalogState.search = e.target.value.trim();
+        catalogState.page = 1;
+        loadCatalog();
+      }, 300);
     });
 
-    // Support /shop.html?search=xyz deep links (e.g. from the header search bar)
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('q')) {
-      state.search = params.get('q');
-      document.getElementById('search-input').value = state.search;
+    function handleAuthClick() {
+      if (window.auth && window.auth.isLoggedIn()) {
+        window.location.href = '/dashboards/buyer.html';
+      } else if (window.bmExploreModal) {
+        window.bmExploreModal.open();
+      } else {
+        window.location.href = '/auth/login.html';
+      }
     }
 
-    (async () => {
-      await loadCategories();
-      await loadProducts();
-    })();
-  </script>
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategories(); // loadCategories handles url params and calls loadCatalog()
+      updateCartBadge();
 
+      if (window.auth && window.auth.isLoggedIn()) {
+        const user = window.auth.getUser();
+        const lbl = document.getElementById('authStatusLabel');
+        if (lbl && user) lbl.innerText = (user.name || 'USER').split(' ')[0].toUpperCase();
+      }
+    });
+  </script>
+  <script src="/shared/explore-dialog.js"></script>
+  <script src="/shared/checkout-modal.js"></script>
+  <script src="/shared/header.js"></script>
 </body>
 </html>

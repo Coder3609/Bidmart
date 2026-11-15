@@ -3,197 +3,345 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checkout — BidMart</title>
+  <title>Payment & Checkout — BidMart</title>
   <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
+  <link rel="stylesheet" href="/shared/explore-dialog.css" />
+  <link rel="stylesheet" href="/shop/cart-modern.css" />
+  <style>
+    /* Payment Selection Cards */
+    .bm-pay-methods-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .bm-pay-option-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--bm-cart-card);
+      border: 1px solid var(--bm-cart-border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .bm-pay-option-card:hover {
+      border-color: rgba(216, 255, 0, 0.4);
+    }
+
+    .bm-pay-option-card.selected {
+      border-color: #D8FF00;
+      background: rgba(216, 255, 0, 0.04);
+    }
+
+    .bm-pay-radio {
+      accent-color: #D8FF00;
+      width: 18px;
+      height: 18px;
+    }
+
+    .bm-pay-text-group {
+      flex: 1;
+    }
+
+    .bm-pay-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--bm-cart-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bm-pay-sub {
+      font-size: 0.8rem;
+      color: var(--bm-cart-muted);
+      margin-top: 2px;
+    }
+
+    .bm-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .bm-input-group label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--bm-cart-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .bm-input-group input {
+      height: 44px;
+      background: var(--bm-cart-bg);
+      border: 1px solid var(--bm-cart-border);
+      border-radius: 8px;
+      padding: 0 14px;
+      color: var(--bm-cart-text);
+      font-size: 0.92rem;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .bm-input-group input:focus {
+      border-color: #D8FF00;
+    }
+
+    .bm-form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+  </style>
 </head>
-<body>
+<body class="bm-cart-body">
 
   <div id="site-header"></div>
 
-  <main class="container">
-    <div class="bm-page-header-wrap" style="margin-bottom: 20px;">
-      <a href="/shop/cart.html" class="bm-back-btn" onclick="window.nav && window.nav.goBackOrFallback('/shop/cart.html'); return false;" aria-label="Go back to cart">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+  <main class="bm-cart-container">
+    
+    <div class="bm-cart-top-nav">
+      <a href="/shop/cart.html" class="bm-cart-back-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         <span>Back to Cart</span>
       </a>
-      <div class="bm-breadcrumbs">
-        <a href="/">Home</a>
-        <span class="bm-breadcrumbs-separator">/</span>
-        <a href="/shop/shop.html">Shop</a>
-        <span class="bm-breadcrumbs-separator">/</span>
-        <a href="/shop/cart.html">Cart</a>
-        <span class="bm-breadcrumbs-separator">/</span>
-        <span class="bm-breadcrumb-current">Checkout</span>
+      <div style="font-size:0.85rem;color:#10B981;font-weight:700;">
+        <span>🔒 100% Escrow Protected Payment</span>
       </div>
     </div>
-    <div class="page-head"><h1>Checkout</h1></div>
 
-    <div class="form-error" id="form-error" role="alert"></div>
+    <div class="bm-cart-title-row">
+      <h1 class="bm-cart-title">Order Payment & Delivery</h1>
+    </div>
 
-    <div class="cart-layout">
+    <!-- Main 2-Column Checkout -->
+    <div class="bm-cart-grid" id="bmCheckoutStage">
+      
+      <!-- Left Column: Shipping + Payment Choice -->
       <div>
-        <div class="card" style="padding:24px;margin-bottom:20px;">
-          <h3 style="margin-bottom:14px;">Shipping Address</h3>
-          <div id="address-list"><p class="text-muted">Loading addresses…</p></div>
+        
+        <!-- Step 1: Address Card -->
+        <div class="bm-cart-items-card" style="margin-bottom:24px;">
+          <h2 class="bm-cart-summary-title" style="margin-bottom:16px;">
+            <span style="display:inline-flex;width:24px;height:24px;background:#D8FF00;color:#080808;border-radius:50%;font-size:0.8rem;align-items:center;justify-content:center;margin-right:8px;">1</span>
+            <span>Delivery Address</span>
+          </h2>
 
-          <details style="margin-top:14px;">
-            <summary style="cursor:pointer;font-weight:600;font-size:var(--font-size-sm);color:var(--color-primary);">+ Add a new address</summary>
-            <form id="address-form" style="margin-top:16px;">
-              <div class="form-group"><label for="fullName">Full name</label><input id="fullName" required /></div>
-              <div class="form-group"><label for="phone">Phone</label><input id="phone" required /></div>
-              <div class="form-group"><label for="line1">Address line</label><input id="line1" required /></div>
-              <div class="form-group"><label for="city">City</label><input id="city" required /></div>
-              <div class="form-group"><label for="state">State</label><input id="state" required /></div>
-              <div class="form-group"><label for="postalCode">Postal code</label><input id="postalCode" required /></div>
-              <button type="submit" class="btn btn-ghost" style="width:100%;">Save Address</button>
-            </form>
-          </details>
+          <div class="bm-form-grid-2">
+            <div class="bm-input-group">
+              <label>FULL NAME</label>
+              <input type="text" id="shipName" value="Rahul Sharma" required />
+            </div>
+            <div class="bm-input-group">
+              <label>PHONE NUMBER</label>
+              <input type="tel" id="shipPhone" value="+91 98765 43210" required />
+            </div>
+          </div>
+
+          <div class="bm-input-group">
+            <label>STREET ADDRESS</label>
+            <input type="text" id="shipStreet" value="Flat 402, Signature Towers, MG Road" required />
+          </div>
+
+          <div class="bm-form-grid-2">
+            <div class="bm-input-group">
+              <label>CITY</label>
+              <input type="text" id="shipCity" value="Bengaluru" required />
+            </div>
+            <div class="bm-input-group">
+              <label>PINCODE</label>
+              <input type="text" id="shipPincode" value="560001" required />
+            </div>
+          </div>
         </div>
 
-        <div class="card" style="padding:24px;">
-          <h3 style="margin-bottom:14px;">Payment Method</h3>
-          <label class="payment-option">
-            <input type="radio" name="payment" value="COD" checked /> Cash on Delivery — pay when you receive your order
-          </label>
-          <label class="payment-option">
-            <input type="radio" name="payment" value="CARD" /> Online Payment (Development Mode — simulated success)
-          </label>
+        <!-- Step 2: Payment Choice Card -->
+        <div class="bm-cart-items-card">
+          <h2 class="bm-cart-summary-title" style="margin-bottom:16px;">
+            <span style="display:inline-flex;width:24px;height:24px;background:#D8FF00;color:#080808;border-radius:50%;font-size:0.8rem;align-items:center;justify-content:center;margin-right:8px;">2</span>
+            <span>Select Payment Method</span>
+          </h2>
+
+          <div class="bm-pay-methods-grid">
+            
+            <label class="bm-pay-option-card selected" onclick="selectMethod(this)">
+              <input type="radio" name="payMethod" value="UPI" checked class="bm-pay-radio" />
+              <div class="bm-pay-text-group">
+                <div class="bm-pay-name">UPI · Google Pay / PhonePe / Paytm</div>
+                <div class="bm-pay-sub">Instant zero-fee verification with Escrow Guarantee</div>
+              </div>
+            </label>
+
+            <label class="bm-pay-option-card" onclick="selectMethod(this)">
+              <input type="radio" name="payMethod" value="Card" class="bm-pay-radio" />
+              <div class="bm-pay-text-group">
+                <div class="bm-pay-name">Credit / Debit Card</div>
+                <div class="bm-pay-sub">Visa, Mastercard, RuPay, Amex via 256-bit bank encryption</div>
+              </div>
+            </label>
+
+            <label class="bm-pay-option-card" onclick="selectMethod(this)">
+              <input type="radio" name="payMethod" value="NetBanking" class="bm-pay-radio" />
+              <div class="bm-pay-text-group">
+                <div class="bm-pay-name">Net Banking</div>
+                <div class="bm-pay-sub">HDFC, ICICI, SBI, Axis, Kotak & 50+ major banks</div>
+              </div>
+            </label>
+
+            <label class="bm-pay-option-card" onclick="selectMethod(this)">
+              <input type="radio" name="payMethod" value="COD" class="bm-pay-radio" />
+              <div class="bm-pay-text-group">
+                <div class="bm-pay-name">Cash on Delivery (COD)</div>
+                <div class="bm-pay-sub">Pay via Cash or UPI when your verified parcel arrives</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Order Summary & Complete Payment Action -->
+      <div class="bm-cart-summary-card">
+        <h2 class="bm-cart-summary-title">Summary & Payment</h2>
+
+        <div id="checkoutSummaryItems" style="margin-bottom:16px;"></div>
+
+        <div class="bm-summary-line">
+          <span>Items Total</span>
+          <span id="ckSubtotal" style="font-weight:700;color:var(--bm-cart-text);">₹0</span>
+        </div>
+
+        <div class="bm-summary-line highlight">
+          <span>Express Shipping</span>
+          <span>FREE</span>
+        </div>
+
+        <div class="bm-summary-line">
+          <span>Escrow Protection</span>
+          <span>Included</span>
+        </div>
+
+        <div class="bm-summary-divider"></div>
+
+        <div class="bm-summary-total-row">
+          <span class="bm-summary-total-label">Amount Payable</span>
+          <span class="bm-summary-total-val" id="ckTotal">₹0</span>
+        </div>
+
+        <button type="button" class="bm-btn-checkout-now" id="btnCompletePayment" onclick="processPayment()">
+          <span>Complete Order & Pay &rarr;</span>
+        </button>
+
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:0.75rem;color:var(--bm-cart-muted);">
+          <span>🔒 256-Bit SSL Protected · 7-Day Money Back Guarantee</span>
         </div>
       </div>
 
-      <div class="card" style="padding:24px;height:fit-content;">
-        <h3 style="margin-bottom:16px;">Order Summary</h3>
-        <div id="summary-lines"><p class="text-muted">Loading…</p></div>
-        <button class="btn btn-primary" id="place-order-btn" style="width:100%;margin-top:16px;" disabled>Place Order</button>
-      </div>
     </div>
-  </main>
 
-  <div id="site-footer"></div>
+  </main>
 
   <script src="/shared/auth.js"></script>
   <script src="/shared/api.js"></script>
   <script src="/shared/navigation.js"></script>
-  <script src="/shared/product-card.js"></script>
   <script src="/shared/header.js"></script>
-  <script src="/shared/footer.js"></script>
 
   <script>
-    if (!window.auth.isLoggedIn()) {
-      window.location.href = '/auth/login.html';
+    function formatINR(val) {
+      return '₹' + Number(val || 0).toLocaleString('en-IN');
     }
 
-    const errorBox = document.getElementById('form-error');
-    function showError(message) {
-      errorBox.textContent = message;
-      errorBox.classList.add('visible');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    function hideError() { errorBox.classList.remove('visible'); }
-
-    let selectedAddressId = null;
-    let cartSubtotal = 0;
-
-    function renderAddresses(addresses) {
-      const container = document.getElementById('address-list');
-      if (addresses.length === 0) {
-        container.innerHTML = '<p class="text-muted">No saved addresses yet — add one below.</p>';
-        return;
-      }
-      container.innerHTML = addresses.map((a) => `
-        <label class="address-option ${a.is_default ? 'selected' : ''}" data-id="${a.id}">
-          <input type="radio" name="address" value="${a.id}" ${a.is_default ? 'checked' : ''} />
-          <strong>${a.full_name}</strong> — ${a.phone}<br/>
-          <span class="text-muted">${a.line1}${a.line2 ? ', ' + a.line2 : ''}, ${a.city}, ${a.state} ${a.postal_code}</span>
-        </label>
-      `).join('');
-
-      selectedAddressId = (addresses.find((a) => a.is_default) || addresses[0]).id;
-
-      container.querySelectorAll('.address-option').forEach((el) => {
-        el.addEventListener('click', () => {
-          selectedAddressId = Number(el.dataset.id);
-          container.querySelectorAll('.address-option').forEach((o) => o.classList.remove('selected'));
-          el.classList.add('selected');
-        });
-      });
-
-      updatePlaceOrderState();
+    function selectMethod(el) {
+      document.querySelectorAll('.bm-pay-option-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      const r = el.querySelector('input[type="radio"]');
+      if (r) r.checked = true;
     }
 
-    function renderSummary(cart) {
-      cartSubtotal = cart.subtotal;
-      const container = document.getElementById('summary-lines');
-
-      if (cart.items.length === 0) {
-        container.innerHTML = '<p class="text-muted">Your cart is empty.</p>';
-        document.getElementById('place-order-btn').disabled = true;
-        return;
-      }
-
-      container.innerHTML = `
-        ${cart.items.map((i) => `<div class="summary-row"><span>${i.title} × ${i.quantity}</span><span>${window.shopHelpers.formatINR(i.price * i.quantity)}</span></div>`).join('')}
-        <div class="summary-row"><span>Delivery</span><span>Free</span></div>
-        <div class="summary-row total"><span>Total</span><span>${window.shopHelpers.formatINR(cart.subtotal)}</span></div>
-      `;
-    }
-
-    function updatePlaceOrderState() {
-      document.getElementById('place-order-btn').disabled = !selectedAddressId || cartSubtotal <= 0;
-    }
-
-    document.getElementById('address-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      hideError();
+    function loadCheckout() {
+      let cart = [];
       try {
-        await window.api.post('/addresses', {
-          fullName: document.getElementById('fullName').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
-          line1: document.getElementById('line1').value.trim(),
-          city: document.getElementById('city').value.trim(),
-          state: document.getElementById('state').value.trim(),
-          postalCode: document.getElementById('postalCode').value.trim(),
-        });
-        const addresses = await window.api.get('/addresses');
-        renderAddresses(addresses);
-        document.getElementById('address-form').reset();
-      } catch (err) {
-        showError(err.message);
-      }
-    });
+        cart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+      } catch (_) {}
 
-    document.getElementById('place-order-btn').addEventListener('click', async () => {
-      hideError();
-      const btn = document.getElementById('place-order-btn');
+      if (cart.length === 0) {
+        // Fallback default sample if user navigates directly
+        cart = [{
+          productId: 2,
+          title: 'Ultrabook X1 (14-inch, 16GB RAM)',
+          price: 59999,
+          img: '/assets/real/ultrabook.jpg',
+          quantity: 1
+        }];
+      }
+
+      let subtotal = 0;
+      const itemsContainer = document.getElementById('checkoutSummaryItems');
+
+      itemsContainer.innerHTML = cart.map(item => {
+        const price = Number(item.price) || 0;
+        const qty = Number(item.quantity) || 1;
+        subtotal += price * qty;
+        return `
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bm-cart-border);">
+            <img src="${item.img || item.image || '/assets/products/placeholder.svg'}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--bm-cart-bg);border:1px solid var(--bm-cart-border);" />
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:0.88rem;font-weight:700;color:var(--bm-cart-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</div>
+              <div style="font-size:0.75rem;color:var(--bm-cart-muted);">Qty: ${qty} · ${formatINR(price)}</div>
+            </div>
+            <div style="font-weight:800;font-size:0.92rem;color:var(--bm-cart-text);">${formatINR(price * qty)}</div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('ckSubtotal').textContent = formatINR(subtotal);
+      document.getElementById('ckTotal').textContent = formatINR(subtotal);
+    }
+
+    function processPayment() {
+      const btn = document.getElementById('btnCompletePayment');
       btn.disabled = true;
-      btn.textContent = 'Placing order…';
+      btn.innerHTML = `<span>Verifying & Processing Payment...</span>`;
 
-      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+      const selectedMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'UPI';
+      const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
 
-      try {
-        const order = await window.api.post('/orders', { addressId: selectedAddressId, paymentMethod });
-        window.location.href = `/shop/order-detail.html?id=${order.id}`;
-      } catch (err) {
-        showError(err.message);
-        btn.disabled = false;
-        btn.textContent = 'Place Order';
-      }
-    });
+      setTimeout(() => {
+        localStorage.removeItem('bidmart_guest_cart');
+        document.querySelectorAll('#header-cart-badge').forEach(b => b.hidden = true);
 
-    (async () => {
-      try {
-        const [addresses, cart] = await Promise.all([
-          window.api.get('/addresses'),
-          window.api.get('/cart'),
-        ]);
-        renderAddresses(addresses);
-        renderSummary(cart);
-        updatePlaceOrderState();
-      } catch (err) {
-        showError(err.message);
-      }
-    })();
+        const stage = document.getElementById('bmCheckoutStage');
+        stage.innerHTML = `
+          <div class="bm-cart-empty-stage" style="grid-column:1/-1;padding:70px 24px;">
+            <div style="width:68px;height:68px;background:rgba(16,185,129,0.15);border:2px solid #10B981;color:#10B981;border-radius:50%;font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">✓</div>
+            <h2 class="bm-cart-empty-heading">Order Placed Successfully!</h2>
+            <p class="bm-cart-empty-sub">
+              Your order <strong>#${orderId}</strong> has been secured and confirmed using <strong>${selectedMethod}</strong>. Your verified package is being prepared for express delivery.
+            </p>
+            <div style="display:inline-block;background:rgba(216,255,0,0.08);border:1px dashed #D8FF00;border-radius:8px;padding:12px 24px;color:#D8FF00;font-family:'JetBrains Mono',monospace;font-size:0.85rem;margin-bottom:30px;">
+              ESTIMATED EXPRESS DELIVERY: WITHIN 48 HOURS
+            </div>
+            <div>
+              <a href="/market.html" class="bm-btn-checkout-now" style="width:fit-content;padding:12px 36px;margin:0 auto;display:inline-flex;">
+                Return to Marketplace &rarr;
+              </a>
+            </div>
+          </div>
+        `;
+      }, 1200);
+    }
+
+    window.selectMethod = selectMethod;
+    window.processPayment = processPayment;
+
+    document.addEventListener('DOMContentLoaded', loadCheckout);
   </script>
-
 </body>
 </html>

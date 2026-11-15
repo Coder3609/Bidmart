@@ -104,8 +104,13 @@ async function list({
     statuses.forEach((s, i) => { params[`status${i}`] = s; });
   }
   if (categoryId) {
-    conditions.push('p.category_id = :categoryId');
-    params.categoryId = categoryId;
+    if (isNaN(Number(categoryId))) {
+      conditions.push('(c.slug = :categorySlug OR c.name = :categorySlug)');
+      params.categorySlug = categoryId;
+    } else {
+      conditions.push('p.category_id = :categoryId');
+      params.categoryId = Number(categoryId);
+    }
   }
   if (sellerId) {
     conditions.push('p.seller_id = :sellerId');
@@ -155,7 +160,7 @@ async function list({
   );
 
   const [countRows] = await pool.query(
-    `SELECT COUNT(*) AS total FROM products p LEFT JOIN inventory i ON i.product_id = p.id ${whereClause}`,
+    `SELECT COUNT(*) AS total FROM products p JOIN categories c ON c.id = p.category_id LEFT JOIN inventory i ON i.product_id = p.id ${whereClause}`,
     params
   );
 

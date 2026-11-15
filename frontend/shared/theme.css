@@ -5536,3 +5536,121 @@ p {
 
 
 
+
+/* =====================================================================
+   ENTER MARKET BUTTON STYLING (NAVBAR)
+   ===================================================================== */
+.nav-enter-market-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #0FFCBE 0%, #00C6FF 100%);
+  color: #061B33 !important;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(15, 252, 190, 0.35);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  white-space: nowrap;
+}
+.nav-enter-market-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(15, 252, 190, 0.5);
+  color: #000000 !important;
+}
+.nav-enter-market-btn .pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #061B33;
+  border-radius: 50%;
+  box-shadow: 0 0 0 rgba(6, 27, 51, 0.4);
+  animation: pulse-market-dot 1.8s infinite;
+}
+@keyframes pulse-market-dot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 27, 51, 0.6); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(6, 27, 51, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 27, 51, 0); }
+}
+
+/* =====================================================================
+   SOCIAL AUTHENTICATION & GUEST BUTTONS
+   ===================================================================== */
+.social-login-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0;
+}
+.btn-social-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: var(--radius-md, 12px);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #E2E8F0;
+}
+.btn-social-auth.btn-google {
+  background: #FFFFFF;
+  color: #1E293B;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.btn-social-auth.btn-google:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+.btn-social-auth.btn-apple {
+  background: #000000;
+  color: #FFFFFF;
+  border-color: #000000;
+}
+.btn-social-auth.btn-apple:hover {
+  background: #1F2937;
+  transform: translateY(-1px);
+}
+.auth-divider-line {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+  color: #94A3B8;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.auth-divider-line::before,
+.auth-divider-line::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #E2E8F0;
+}
+.auth-divider-line span {
+  padding: 0 12px;
+}
+.btn-guest-flow {
+  background: transparent;
+  color: #64748B !important;
+  border: 1px dashed #CBD5E1;
+  padding: 10px 16px;
+  border-radius: var(--radius-md, 12px);
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+.btn-guest-flow:hover {
+  background: #F1F5F9;
+  color: #0F172A !important;
+  border-color: #94A3B8;
+  transform: translateY(-1px);
+}
+
+

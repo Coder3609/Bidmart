@@ -16,22 +16,13 @@ function renderSellerHeader() {
   const bidderId = user && user.bidder_profile ? user.bidder_profile.bidder_id : (user ? `BM-BID-${String(user.id).padStart(6, '0')}` : '');
 
   mount.innerHTML = `
-    <header class="sc-header" style="background:#061B33;border-bottom:1px solid rgba(15,252,190,0.15);color:#FFFFFF;">
+    <header class="sc-header" style="background:#080B11;border-bottom:1px solid rgba(255,255,255,0.08);color:#F1F5F9;">
       <div class="sc-header__left">
         <button type="button" class="sc-mobile-toggle" id="sc-sidebar-toggle" aria-label="Toggle navigation menu" style="color:#CBD5E1;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
         <a href="${isAuctionContext ? '/auction/auctions.html' : '/dashboards/seller/dashboard.html'}" class="sc-header__brand" style="text-decoration:none;">
-          <span class="sc-brand__mark">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <rect width="28" height="28" rx="8" fill="#106EBE"/>
-              <path d="M7 19L12 9.5l2.8 5.8 2.4-4.5 3.8 8.2" stroke="#0FFCBE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <div class="sc-brand__text">
-            <span class="sc-brand__name" style="color:#FFFFFF;font-weight:800;letter-spacing:-0.3px;">BidMart</span>
-            <span class="sc-brand__sub" style="color:#0FFCBE;font-weight:600;">${isAuctionContext ? 'Auction Center' : 'Seller Center'}</span>
-          </div>
+          <span style="font-family:'Space Grotesk', sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:0.04em;color:#FFFFFF;">BIDMART</span>
         </a>
       </div>
 
@@ -49,7 +40,7 @@ function renderSellerHeader() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3a5 5 0 00-5 5v3.4c0 .5-.2 1-.5 1.4L5 15.5c-.6.8 0 2 1 2h12c1 0 1.6-1.2 1-2l-1.5-2.1c-.3-.4-.5-.9-.5-1.4V8a5 5 0 00-5-5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 20a2 2 0 004 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             <span class="sc-notif-badge" id="sc-notif-badge" hidden></span>
           </button>
-          <div class="sc-notif-dropdown" id="sc-notif-dropdown" hidden style="background:#092648;border:1px solid rgba(15,252,190,0.25);color:#FFFFFF;"></div>
+          <div class="sc-notif-dropdown" id="sc-notif-dropdown" hidden style="background:#0E131F;border:1px solid rgba(255,255,255,0.12);color:#F1F5F9;"></div>
         </div>
 
         <!-- Switch between Shop & Auction (Real working navigation) -->
@@ -170,10 +161,8 @@ function renderSellerHeader() {
   if (guestAuthBtn) {
     guestAuthBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (window.buyerAuth) {
-        window.buyerAuth.open('login', {
-          message: 'Sign in to access your bidder dashboard & verified live auctions.',
-        });
+      if (window.bmExploreModal) {
+        window.bmExploreModal.open();
       } else {
         window.location.href = '/auth/login.html';
       }

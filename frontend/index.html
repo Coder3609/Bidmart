@@ -3,663 +3,346 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BidMart — Shop it. Bid it. Own it.</title>
-  <meta name="description" content="A premium hybrid marketplace and live auction platform. Buy at fixed prices or win exclusive items in online auctions." />
-  <link rel="stylesheet" href="/shared/theme.css" />
-  <link rel="stylesheet" href="/shared/auth-modal.css" />
-  <link rel="stylesheet" href="/shared/seller-auth-modal.css" />
+  <title>BIDMART — PLAY THE TRADE // DUAL-ENGINE COMMERCE</title>
+  <meta name="description" content="Buying is boring. Play the trade. Buy like a normal store or flip your inventory to live auction to sell higher than retail." />
+  <link rel="stylesheet" href="/shared/brutalist-theme.css" />
+  <link rel="stylesheet" href="/shared/simple-concept.css" />
+  <link rel="stylesheet" href="/shared/explore-dialog.css" />
+  <link rel="stylesheet" href="/shared/global-dark.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
 </head>
 <body>
 
-  <!-- ================= GLOBAL HEADER ================= -->
-  <div id="site-header"></div>
-
-  <main class="container">
-
-    <!-- ================= HERO SECTION & TRUST PANEL ================= -->
-    <section class="hero-wrapper">
-      <div class="hero-grid-main">
-        
-        <!-- Main Hero Banner -->
-        <div class="hero-banner-main">
-          <div>
-            <span class="hero-badge-pill">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.4-3 8-7 9-4-1-7-4.6-7-9V6l7-3z" stroke="currentColor" stroke-width="2"/></svg>
-              Hybrid Marketplace
-            </span>
-            <h1 class="hero-title-main">Shop it. Bid it. <br/><span class="text-mint">Own it.</span></h1>
-            <p class="hero-subtitle-main">Discover amazing products at fixed prices or win them through exciting online auctions.</p>
-            <div class="hero-actions-row">
-              <a href="/shop/shop.html" class="btn btn-primary">Explore Shop →</a>
-              <a href="/auction/auctions.html" class="btn btn-ghost" style="border-color:var(--color-primary);color:var(--color-primary);">🔨 Explore Auctions</a>
-            </div>
-          </div>
-
-          <!-- 3D Composite Graphic Stage -->
-          <div class="hero-art-composite">
-            <img src="/assets/hero-3d-marketplace.png" alt="BidMart 3D Hero Marketplace Stage" class="hero-3d-image-full" />
-          </div>
-        </div>
-
-        <!-- Trust Panel Vertical Column -->
-        <aside class="trust-panel-vertical">
-          <div class="trust-card-item">
-            <div class="trust-icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.4-3 8-7 9-4-1-7-4.6-7-9V6l7-3z" stroke="currentColor" stroke-width="2"/></svg>
-            </div>
-            <div class="trust-card-text">
-              <h4>Secure Payments</h4>
-              <p>100% safe transactions</p>
-            </div>
-          </div>
-
-          <div class="trust-card-item">
-            <div class="trust-icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h13M11 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            </div>
-            <div class="trust-card-text">
-              <h4>Fast Delivery</h4>
-              <p>Track your orders</p>
-            </div>
-          </div>
-
-          <div class="trust-card-item">
-            <div class="trust-icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-            </div>
-            <div class="trust-card-text">
-              <h4>24/7 Support</h4>
-              <p>We're here to help</p>
-            </div>
-          </div>
-
-          <div class="trust-card-item">
-            <div class="trust-icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-            </div>
-            <div class="trust-card-text">
-              <h4>Trusted Marketplace</h4>
-              <p>Buy and sell with confidence</p>
-            </div>
-          </div>
-        </aside>
-
-      </div>
-    </section>
-
-    <!-- ================= SHOP BY CATEGORY ================= -->
-    <section class="popular-categories-section" id="shop-by-category-section">
-      <div class="section-title-row">
-        <div>
-          <h2 id="category-section-title">Shop by Category</h2>
-          <span class="section-sub" id="category-section-sub">Find what you need, all in one place</span>
-        </div>
-        <div id="category-section-actions" style="display:flex;align-items:center;gap:12px;">
-          <a href="/shop/shop.html" class="link-view-all" id="category-view-all-link">View All in Shop →</a>
-        </div>
-      </div>
-
-      <div class="popular-categories-row" id="shop-by-category-container">
-        <!-- Rendered dynamically from /api/categories -->
-        <p class="text-muted" style="grid-column:1/-1;">Loading categories…</p>
-      </div>
-    </section>
-
-    <!-- ================= DUAL SECTION: FEATURED PRODUCTS & ENDING SOON AUCTIONS ================= -->
-    <section class="dual-market-section">
+  <div class="term-viewport">
+    
+    <!-- Top Navigation Terminal Header -->
+    <header class="term-nav">
       
-      <!-- Left Column: Featured Products -->
-      <div class="featured-products-container">
-        <div class="section-title-row">
+      <!-- Brand Logo -->
+      <a href="/index.html" class="term-logo-group">
+        <span class="term-logo-text">BIDMART</span>
+      </a>
+
+      <!-- Minimal Center Links -->
+      <nav class="term-nav-links">
+        <a href="/index.html" class="active">HOME</a>
+        <a href="/market.html">MARKET</a>
+        <a href="/shop/shop.html">CATALOG</a>
+        <a href="/auction/auctions.html">AUCTIONS</a>
+        <a href="javascript:void(0)" onclick="openHowItWorksModal()">HOW IT WORKS</a>
+        <a href="/seller/index.html" target="_blank" class="term-seller-nav-link" id="homeBecomeSellerNav" title="Open Seller Portal in New Tab">
+          <span>SELLER HUB ↗</span>
+        </a>
+      </nav>
+
+      <!-- Action Button Group (Removed as requested) -->
+    </header>
+
+    <!-- Main Single Section Brutalist Masterpiece -->
+    <section class="term-master-section">
+      <div class="term-grid">
+        
+        <!-- Left: Cold Precision Statement -->
+        <div>
+          <div class="term-pill-label">
+            <span>● SHOP OR BID</span>
+            <span>//</span>
+            <span>THE BUYER'S CHOICE</span>
+          </div>
+
+          <h1 class="term-headline">
+            EVERY PRICE<br />
+            <span class="term-acid-word">IS NEGOTIABLE.</span>
+          </h1>
+
+          <p class="term-body-lead">
+            Buy instantly at the standard store price &mdash; or wait for the <strong>Live Auction to open</strong>. Score it for less if you're fast, or bid to outplay other buyers for exclusive items.
+          </p>
+
+          <div class="term-actions-row">
+            <button type="button" class="btn-term-primary" id="btnMainMarket" onclick="window.bmExploreModal.open()">
+              <span>EXPLORE THE MARKET &rarr;</span>
+            </button>
+            <button type="button" class="btn-term-guest" id="btnHowItWorks" onclick="openHowItWorksModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>HOW THIS WORKS</span>
+            </button>
+          </div>
+
+          <!-- Real-time Terminal Stream Ribbon -->
+          <div class="term-live-feed">
+            <span class="feed-indicator">
+              <span class="blink-dot" style="background:var(--term-acid);"></span>
+              LIVE_PIT:
+            </span>
+            <div class="feed-stream-text" id="termLiveTicker">
+              <span class="feed-hl">IPHONE 15 PRO TITANIUM</span> &bull; AUCTION OPENS IN 12m &bull; STARTING BID: <strong>₹54,999</strong> (Save up to 30%)
+            </div>
+          </div>
+
+          <!-- Buyer-Centric Metrics Strip -->
+          <div class="term-metrics-strip">
+            <div class="term-metric-block">
+              <span class="term-metric-val">BUY INSTANTLY</span>
+              <span class="term-metric-label">FIXED_MARKET_PRICE</span>
+            </div>
+            <div class="term-metric-block">
+              <span class="term-metric-val green">&darr; UP TO 40% OFF</span>
+              <span class="term-metric-label">EARLY_AUCTION_BIDS</span>
+            </div>
+            <div class="term-metric-block">
+              <span class="term-metric-val">100% SECURE</span>
+              <span class="term-metric-label">WALLET_ESCROW_PROTECTION</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Clean, Customer-Centric Choice Graphic (Buy Retail vs Wait for Auction) -->
+        <div class="term-card-container">
+          <div style="width:100%;max-width:580px;display:flex;flex-direction:column;gap:14px;">
+            <div style="background:#111;border:1px solid #282828;border-radius:12px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.8);">
+              <img 
+                src="/assets/buyer-choice-concept.png" 
+                alt="Buyer Choice: Buy at regular store price or wait for the live auction to score it for less" 
+                style="width:100%;height:auto;display:block;"
+              />
+            </div>
+            
+            <div style="background:#141414;border:1px solid #222;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;font-size:0.88rem;color:#AAA;">
+              <span style="font-size:1.2rem;">💡</span>
+              <div>
+                <strong style="color:#FFF;">The Shopper's Move:</strong> Buy instantly at retail price, or wait for the <span style="color:#D8FF00;font-weight:700;">Live Auction</span> to grab it for <strong style="color:#D8FF00;">lower than market price</strong> before competing bids heat up.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Modal: How This Works (Buyer Guide) - Long Horizontal Rectangle Stage -->
+  <div id="howItWorksModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#0E0E0E;border:1px solid #2A2A2A;border-radius:12px;max-width:1120px;width:100%;padding:32px 36px;box-shadow:0 35px 80px rgba(0,0,0,0.95), 0 0 40px rgba(216,255,0,0.06);position:relative;color:#FFFFFF;max-height:92vh;overflow-y:auto;">
+      
+      <!-- Top Bar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #222;padding-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="background:var(--term-acid);color:#080808;font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:800;padding:3px 8px;border-radius:2px;">SHOPPER_PLAYBOOK</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#888;">EXAMPLE: ROLEX SUBMARINER DATE (LUXURY TIMEPIECE)</span>
+        </div>
+        <button type="button" onclick="closeHowItWorksModal()" style="background:transparent;border:none;color:#888;font-size:1.6rem;cursor:pointer;line-height:1;transition:color 0.2s;" onmouseover="this.style.color='#FFF'" onmouseout="this.style.color='#888'">&times;</button>
+      </div>
+
+      <!-- Main Headline with Watch Badge -->
+      <div style="margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;margin:0 0 6px 0;letter-spacing:-0.03em;">HOW BIDMART WORKS IN 4 STEPS</h3>
+          <p style="color:#A0A0A0;font-size:0.92rem;margin:0;">Take this Luxury Rolex as an example: Buy immediately at retail or play the auction to score it for less.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#181818;border:1px solid #282828;padding:8px 14px;border-radius:8px;">
+          <img src="/assets/luxury-watch-step.png" alt="Luxury Timepiece" style="width:40px;height:40px;border-radius:4px;object-fit:cover;" />
           <div>
-            <h2 id="featured-products-title">Featured Products</h2>
-            <span class="section-sub" id="featured-products-sub">Best picks for you</span>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:700;color:#FFF;">CHRONO CHRONOMETER</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#888;">RETAIL: ₹8,50,000</div>
           </div>
-          <a href="/shop/shop.html" class="link-view-all" id="featured-view-all-link">View All →</a>
-        </div>
-
-        <div class="featured-products-grid" id="featured-products-grid">
-          <p class="text-muted">Loading featured products…</p>
         </div>
       </div>
 
-      <!-- Right Column: Ending Soon Auctions Panel -->
-      <div class="ending-auctions-container">
-        <div class="section-title-row">
+      <!-- 4-Step Horizontal Timeline Grid -->
+      <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;margin-bottom:28px;">
+        
+        <!-- Step 1 -->
+        <div style="background:#151515;border:1px solid #262626;border-radius:8px;padding:18px 16px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--term-acid);font-weight:700;">STEP 01</span>
+            <span style="font-size:0.7rem;color:#666;font-family:'JetBrains Mono',monospace;">DISCOVER</span>
+          </div>
+
+          <div style="background:#0A0A0A;border:1px solid #1E1E1E;border-radius:6px;height:120px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+            <img src="/assets/luxury-watch-step.png" alt="Luxury Timepiece" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+
           <div>
-            <h2>Ending Soon Auctions</h2>
-            <span class="section-sub">Don't miss your chance!</span>
+            <h5 style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;margin:0 0 4px;color:#FFF;">Spot The Watch</h5>
+            <p style="font-size:0.78rem;color:#888;line-height:1.45;margin:0;">The <strong>Swiss Luxury Chronograph</strong> is in the catalog with a fixed store price of <strong>₹8,50,000</strong>.</p>
           </div>
-          <a href="/auction/auctions.html" class="link-view-all">View All →</a>
         </div>
 
-        <div id="ending-auctions-list">
-          <p class="text-muted" style="color:rgba(255,255,255,0.7);">Loading live auctions…</p>
+        <!-- Step 2 -->
+        <div style="background:#151515;border:1px solid #262626;border-radius:8px;padding:18px 16px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#00D4FF;font-weight:700;">STEP 02</span>
+            <span style="font-size:0.7rem;color:#666;font-family:'JetBrains Mono',monospace;">CHOICE A</span>
+          </div>
+
+          <div style="background:#0A0A0A;border:1px solid #1E1E1E;border-radius:6px;height:120px;overflow:hidden;position:relative;">
+            <img src="/assets/luxury-watch-step.png" alt="Luxury Timepiece" style="width:100%;height:100%;object-fit:cover;opacity:0.35;filter:grayscale(1);" />
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+              <div style="background:rgba(0,212,255,0.2);border:1px solid #00D4FF;padding:6px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:700;color:#00D4FF;display:flex;align-items:center;gap:6px;">
+                <span>🛒</span> <span>₹8,50,000</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h5 style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;margin:0 0 4px;color:#00D4FF;">Option A: Buy Directly</h5>
+            <p style="font-size:0.78rem;color:#888;line-height:1.45;margin:0;">Don't want to risk waiting? Click <strong>Add to Cart</strong> and checkout at ₹8,50,000 for instant, guaranteed ownership.</p>
+          </div>
         </div>
+
+        <!-- Step 3 -->
+        <div style="background:#171C0A;border:1px solid #D8FF00;border-radius:8px;padding:18px 16px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--term-acid);font-weight:800;">STEP 03</span>
+            <span style="font-size:0.7rem;color:#A3BA6B;font-family:'JetBrains Mono',monospace;">CHOICE B</span>
+          </div>
+
+          <div style="background:#0D1204;border:1px solid #28360D;border-radius:6px;height:120px;overflow:hidden;position:relative;">
+            <img src="/assets/luxury-watch-step.png" alt="Luxury Timepiece" style="width:100%;height:100%;object-fit:cover;filter:brightness(1.1) contrast(1.1);" />
+            <div style="position:absolute;bottom:8px;left:8px;right:8px;text-align:center;background:rgba(36,51,10,0.9);border:1px solid #D8FF00;padding:4px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.68rem;font-weight:800;color:#D8FF00;">
+              BID FROM ₹5,50,000 (-35%)
+            </div>
+          </div>
+
+          <div>
+            <h5 style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;margin:0 0 4px;color:var(--term-acid);">Option B: Wait For Auction</h5>
+            <p style="font-size:0.78rem;color:#A3BA6B;line-height:1.45;margin:0;">The auction opens at <strong>₹5,50,000 (35% below retail)</strong>. Place an early bid to grab the watch for far less!</p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div style="background:#151515;border:1px solid #262626;border-radius:8px;padding:18px 16px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#00FFA3;font-weight:700;">STEP 04</span>
+            <span style="font-size:0.7rem;color:#666;font-family:'JetBrains Mono',monospace;">SETTLEMENT</span>
+          </div>
+
+          <div style="background:#0A0A0A;border:1px solid #1E1E1E;border-radius:6px;height:120px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;">
+            <span style="font-size:1.8rem;">🏆</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#00FFA3;font-weight:700;">WINNER ALLOCATED</span>
+          </div>
+
+          <div>
+            <h5 style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;margin:0 0 4px;color:#00FFA3;">You Win Or It Reverts</h5>
+            <p style="font-size:0.78rem;color:#888;line-height:1.45;margin:0;">Highest bidder wins! If the reserve price is not met, the watch safely reverts back to the store at standard price.</p>
+          </div>
+        </div>
+
       </div>
 
-    </section>
-
-    <!-- ================= WHY BIDMART ================= -->
-    <section style="margin-bottom:40px;">
-      <div class="section-title-row text-center" style="display:block;margin-bottom:28px;">
-        <h2>Why Choose BidMart</h2>
-        <span class="section-sub">The ultimate marketplace combining shop speed with auction value</span>
-      </div>
-
-      <div class="why-bidmart-grid">
-        <div class="why-card">
-          <div class="why-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.4-3 8-7 9-4-1-7-4.6-7-9V6l7-3z" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
-          <h4>Secure Payments</h4>
-          <p>Protected transactions with multiple payment options and SSL encryption.</p>
-        </div>
-
-        <div class="why-card">
-          <div class="why-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12h13M11 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          </div>
-          <h4>Fast Delivery</h4>
-          <p>Quick doorstep shipping with real-time order tracking.</p>
-        </div>
-
-        <div class="why-card">
-          <div class="why-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="2"/><path d="M4 10h16M10 4v16" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
-          <h4>Easy Returns</h4>
-          <p>Hassle-free buyer protection with simple return and refund requests.</p>
-        </div>
-
-        <div class="why-card">
-          <div class="why-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
-          <h4>Verified Sellers</h4>
-          <p>Authentic products listed by trusted, authenticated merchants.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= HOW IT WORKS ================= -->
-    <section style="margin-bottom:40px;">
-      <div class="section-title-row text-center" style="display:block;margin-bottom:28px;">
-        <h2>How BidMart Works</h2>
-        <span class="section-sub">Simple steps to get started shopping or bidding</span>
-      </div>
-
-      <div class="how-it-works-tabs">
-        <div class="how-works-box">
-          <h3>🛒 Shop Mode</h3>
-          <div class="steps-list-horizontal">
-            <div class="step-item-mini">
-              <span class="step-num-badge">1</span>
-              <h5>Find Product</h5>
-              <p>Browse 200+ shop items</p>
-            </div>
-            <div class="step-item-mini">
-              <span class="step-num-badge">2</span>
-              <h5>Add to Cart</h5>
-              <p>Select quantity</p>
-            </div>
-            <div class="step-item-mini">
-              <span class="step-num-badge">3</span>
-              <h5>Checkout</h5>
-              <p>Secure payment</p>
-            </div>
-            <div class="step-item-mini">
-              <span class="step-num-badge">4</span>
-              <h5>Delivered</h5>
-              <p>Track your shipment</p>
-            </div>
-          </div>
-          <div style="margin-top:20px;text-align:center;">
-            <a href="/shop/shop.html" class="btn btn-primary btn-sm">Explore Shop</a>
+      <!-- Bottom Visual & Action Bar -->
+      <div style="background:#141414;border:1px solid #262626;border-radius:8px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:1.3rem;">🛡️</span>
+          <div>
+            <strong style="font-size:0.88rem;color:#FFF;">100% Escrow Protected:</strong>
+            <span style="font-size:0.82rem;color:#888;margin-left:6px;">Your money is held in escrow until you receive and verify the item.</span>
           </div>
         </div>
 
-        <div class="how-works-box">
-          <h3>🔨 Auction Mode</h3>
-          <div class="steps-list-horizontal">
-            <div class="step-item-mini">
-              <span class="step-num-badge">1</span>
-              <h5>Find Auction</h5>
-              <p>Browse live listings</p>
-            </div>
-            <div class="step-item-mini">
-              <span class="step-num-badge">2</span>
-              <h5>Place Bid</h5>
-              <p>Enter higher amount</p>
-            </div>
-            <div class="step-item-mini">
-              <span class="step-num-badge">3</span>
-              <h5>Win Auction</h5>
-              <p>Top bid at closing</p>
-            </div>
-            <div class="step-item-mini">
-              <span class="step-num-badge">4</span>
-              <h5>Pay & Own</h5>
-              <p>Complete checkout</p>
-            </div>
-          </div>
-          <div style="margin-top:20px;text-align:center;">
-            <a href="/auction/auctions.html" class="btn btn-mint btn-sm">Explore Auctions</a>
-          </div>
-        </div>
+        <button type="button" onclick="closeHowItWorksModal();window.location.href='/shop/shop.html'" style="background:var(--term-acid);color:#080808;border:none;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:0.85rem;padding:12px 24px;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+          <span>START EXPLORING MARKET</span>
+          <span>&rarr;</span>
+        </button>
       </div>
-    </section>
 
-    <!-- ================= SELLER CTA BANNER ================= -->
-    <section class="seller-cta-banner">
-      <div class="seller-cta-text">
-        <h3>Have something to sell?</h3>
-        <p>Turn your products into opportunities. Reach thousands of buyers in Shop and Auction mode.</p>
-      </div>
-      <div style="display:flex;gap:12px;flex-shrink:0;">
-        <a href="javascript:void(0)" class="btn btn-mint" id="btn-become-seller" onclick="if(window.sellerAuth)window.sellerAuth.open('signup');">Start Selling</a>
-        <a href="javascript:void(0)" class="btn btn-outline" onclick="if(window.sellerAuth)window.sellerAuth.open('login');">Seller Login</a>
-      </div>
-    </section>
+    </div>
+  </div>
 
-  </main>
-
-  <!-- ================= GLOBAL FOOTER ================= -->
-  <div id="site-footer"></div>
-
-  <!-- Shared Scripts -->
+  <!-- Shared Auth Scripts -->
   <script src="/shared/auth.js"></script>
   <script src="/shared/api.js"></script>
-  <script src="/shared/auth-modal.js"></script>
-  <script src="/shared/seller-auth-modal.js"></script>
-  <script src="/shared/product-card.js"></script>
-  <script src="/shared/auction-card.js"></script>
-  <script src="/shared/header.js"></script>
-  <script src="/shared/footer.js"></script>
 
-  <!-- Homepage Dynamic Integration Script -->
   <script>
-    // Categories state
-    let categoriesList = [];
-    let selectedCategoryId = null;
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Deep link support for category query (?categoryId=...)
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlCat = urlParams.get('categoryId');
-      if (urlCat) {
-        selectedCategoryId = isNaN(urlCat) ? urlCat : Number(urlCat);
-      }
-
-      await loadShopByCategory();
-      await loadFeaturedProducts();
-      loadEndingSoonAuctions();
+    function openHowItWorksModal() {
+      const modal = document.getElementById('howItWorksModal');
+      if (modal) modal.style.display = 'flex';
+    }
+    function closeHowItWorksModal() {
+      const modal = document.getElementById('howItWorksModal');
+      if (modal) modal.style.display = 'none';
+    }
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('howItWorksModal');
+      if (e.target === modal) closeHowItWorksModal();
     });
+    // Mode Switcher Logic
+    function setTermMode(mode) {
+      const tabStore = document.getElementById('tabStore');
+      const tabAuction = document.getElementById('tabAuction');
+      const badge = document.getElementById('termStatusBadge');
+      const price = document.getElementById('termPrice');
+      const priceLabel = document.getElementById('termPriceLabel');
+      const sub = document.getElementById('termSub');
 
-    const fallbackCategories = [
-      { id: 1, name: 'Electronics', slug: 'electronics', icon: '⚡' },
-      { id: 2, name: 'Computers', slug: 'computers-laptops', icon: '💻' },
-      { id: 3, name: 'Mobiles', slug: 'mobiles-accessories', icon: '📱' },
-      { id: 4, name: 'Audio', slug: 'audio', icon: '🎧' },
-      { id: 5, name: 'Fashion', slug: 'fashion', icon: '👕' },
-      { id: 6, name: 'Shoes', slug: 'shoes', icon: '👟' },
-      { id: 7, name: 'Home & Kitchen', slug: 'home-kitchen', icon: '🍳' },
-      { id: 8, name: 'Furniture', slug: 'furniture', icon: '🪑' },
-      { id: 9, name: 'Beauty', slug: 'beauty-personal-care', icon: '✨' },
-      { id: 10, name: 'Sports', slug: 'sports-fitness', icon: '⚽' },
-      { id: 11, name: 'Books', slug: 'books', icon: '📚' },
-      { id: 12, name: 'Gaming', slug: 'gaming', icon: '🎮' },
-      { id: 13, name: 'Toys', slug: 'toys-kids', icon: '🧸' },
-      { id: 14, name: 'Bags', slug: 'bags-accessories', icon: '🎒' },
-      { id: 15, name: 'Automotive', slug: 'automotive', icon: '🚗' },
-      { id: 16, name: 'Smart Home', slug: 'smart-home', icon: '💡' }
-    ];
-
-    // 1. Single Shop by Category Logic
-    async function loadShopByCategory() {
-      try {
-        const categories = await window.api.get('/categories');
-        categoriesList = (categories && categories.length) ? categories.slice(0, 16) : fallbackCategories;
-      } catch (err) {
-        categoriesList = fallbackCategories;
-      }
-      renderCategorySection();
-    }
-
-    function renderCategorySection() {
-      const container = document.getElementById('shop-by-category-container');
-      const titleSub = document.getElementById('category-section-sub');
-      const actionContainer = document.getElementById('category-section-actions');
-      if (!container) return;
-
-      const selectedCategory = selectedCategoryId != null
-        ? categoriesList.find(c => String(c.id) === String(selectedCategoryId) || c.slug === String(selectedCategoryId))
-        : null;
-
-      if (selectedCategory) {
-        // ONLY the selected category is present
-        if (titleSub) {
-          titleSub.innerHTML = `Filtered by category: <strong>${selectedCategory.name}</strong>`;
-        }
-        if (actionContainer) {
-          actionContainer.innerHTML = `
-            <button type="button" class="btn btn-ghost btn-sm" onclick="selectCategory(null)" style="font-size:12px;padding:5px 12px;border:1px solid #D1D5DB;">
-              ✕ Show All Categories
-            </button>
-            <a href="/shop/shop.html?categoryId=${selectedCategory.id || ''}" class="link-view-all">View in Shop →</a>
-          `;
-        }
-
-        container.style.display = 'block';
-        container.innerHTML = `
-          <div class="selected-category-view-box">
-            <div class="selected-category-left">
-              <div class="category-circle-icon active-circle-icon">
-                <span style="font-size:26px;">${getCategoryEmoji(selectedCategory.slug || selectedCategory.name)}</span>
-              </div>
-              <div class="selected-category-details">
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <span class="selected-category-name">${selectedCategory.name}</span>
-                  <span class="badge badge-primary-soft">Selected Category</span>
-                </div>
-                <p class="selected-category-hint">
-                  Only <strong>${selectedCategory.name}</strong> is currently shown. Featured products below are filtered for this category.
-                </p>
-              </div>
-            </div>
-            <div class="selected-category-actions">
-              <button type="button" class="btn btn-ghost btn-sm" onclick="selectCategory(null)" title="Clear filter and view all categories">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                Show All Categories
-              </button>
-              <a href="/shop/shop.html?categoryId=${selectedCategory.id || ''}" class="btn btn-primary btn-sm">
-                Explore Full Shop →
-              </a>
-            </div>
-          </div>
-        `;
+      if (mode === 'auction') {
+        tabStore.className = 'term-mode-tab';
+        tabAuction.className = 'term-mode-tab active-auction';
+        badge.innerText = '14_ACTIVE_BIDS';
+        badge.style.borderColor = 'var(--term-acid)';
+        badge.style.color = 'var(--term-acid)';
+        price.innerText = '₹86,500';
+        price.style.color = 'var(--term-acid)';
+        priceLabel.innerText = '▲ +8.1% OVER RETAIL';
+        priceLabel.style.color = 'var(--term-acid)';
+        sub.innerText = 'SHIFTED TO PIT // CLOSES IN 01H 45M';
       } else {
-        // ALL categories are present
-        if (titleSub) {
-          titleSub.textContent = 'Find what you need, all in one place';
-        }
-        if (actionContainer) {
-          actionContainer.innerHTML = `
-            <a href="/shop/shop.html" class="link-view-all" id="category-view-all-link">View All in Shop →</a>
-          `;
-        }
-
-        container.style.display = 'grid';
-        container.innerHTML = categoriesList.map(c => `
-          <button type="button" class="category-circle-card-btn" onclick="selectCategory('${c.id != null ? c.id : c.slug}')" aria-label="Select category ${c.name}">
-            <div class="category-circle-icon">
-              <span style="font-size:22px;">${getCategoryEmoji(c.slug || c.name)}</span>
-            </div>
-            <span class="category-circle-label">${c.name}</span>
-          </button>
-        `).join('');
+        tabStore.className = 'term-mode-tab active-store';
+        tabAuction.className = 'term-mode-tab';
+        badge.innerText = 'INSTANT_BUY';
+        badge.style.borderColor = 'var(--term-border)';
+        badge.style.color = 'var(--term-gray-light)';
+        price.innerText = '₹79,999';
+        price.style.color = 'var(--term-white)';
+        priceLabel.innerText = 'FIXED_STORE_PRICE';
+        priceLabel.style.color = 'var(--term-gray)';
+        sub.innerText = 'STANDARD RETAIL INVENTORY';
       }
     }
 
-    function selectCategory(catId) {
-      if (catId === null || String(selectedCategoryId) === String(catId)) {
-        selectedCategoryId = null;
-      } else {
-        selectedCategoryId = catId;
-      }
-
-      // Update URL query string without reloading page
-      const url = new URL(window.location);
-      if (selectedCategoryId != null) {
-        url.searchParams.set('categoryId', selectedCategoryId);
-      } else {
-        url.searchParams.delete('categoryId');
-      }
-      window.history.replaceState({}, '', url);
-
-      renderCategorySection();
-      loadFeaturedProducts();
-    }
-
-    // 2. Featured Products (Grid, dynamically filtered by selected category)
-    async function loadFeaturedProducts() {
-      const grid = document.getElementById('featured-products-grid');
-      const titleEl = document.getElementById('featured-products-title');
-      const subEl = document.getElementById('featured-products-sub');
-      const viewAllLink = document.getElementById('featured-view-all-link');
-      if (!grid) return;
-
-      const selectedCat = selectedCategoryId != null
-        ? categoriesList.find(c => String(c.id) === String(selectedCategoryId) || c.slug === String(selectedCategoryId))
-        : null;
-
-      if (selectedCat) {
-        if (titleEl) titleEl.textContent = `Featured in ${selectedCat.name}`;
-        if (subEl) subEl.textContent = `Showing items in ${selectedCat.name}`;
-        if (viewAllLink) viewAllLink.href = `/shop/shop.html?categoryId=${selectedCat.id || ''}`;
-      } else {
-        if (titleEl) titleEl.textContent = 'Featured Products';
-        if (subEl) subEl.textContent = 'Best picks for you';
-        if (viewAllLink) viewAllLink.href = '/shop/shop.html';
-      }
-
-      grid.innerHTML = '<p class="text-muted">Loading featured products…</p>';
-
-      try {
-        const query = selectedCategoryId != null
-          ? `/products?status=ACTIVE_SHOP&categoryId=${encodeURIComponent(selectedCategoryId)}&limit=6`
-          : '/products?status=ACTIVE_SHOP&limit=6';
-
-        const { items } = await window.api.get(query);
-        if (!items || items.length === 0) {
-          grid.innerHTML = `
-            <div style="grid-column:1/-1;text-align:center;padding:36px 16px;background:#F9FAFB;border-radius:12px;border:1px dashed #E5E7EB;">
-              <p class="text-muted" style="margin-bottom:12px;">No products found in ${selectedCat ? selectedCat.name : 'this category'} right now.</p>
-              ${selectedCat ? `<button type="button" class="btn btn-ghost btn-sm" onclick="selectCategory(null)">Clear filter & view all products</button>` : ''}
-            </div>
-          `;
-          return;
-        }
-
-        const badges = ['SALE', 'BESTSELLER', 'NEW', 'SALE', 'POPULAR', 'NEW'];
-
-        grid.innerHTML = items.map((p, idx) => {
-          const img = window.shopHelpers.firstImage(p) || '/assets/products/placeholder.svg';
-          const discount = Math.floor(Math.random() * 15) + 10;
-          const origPrice = Math.floor(p.price * (1 + discount / 100));
-          const rating = (3.9 + (idx % 10) * 0.1).toFixed(1);
-          const reviews = Math.floor(Math.random() * 500) + 40;
-          const badgeType = badges[idx % badges.length];
-
-          return `
-            <div class="product-card-enhanced">
-              <div class="card-top-badges">
-                <span class="${badgeType === 'SALE' ? 'badge-tag-red' : badgeType === 'BESTSELLER' ? 'badge-tag-blue' : 'badge-tag-green'}">${badgeType}</span>
-              </div>
-              <button type="button" class="wishlist-heart-btn" onclick="addToWishlist(${p.id}, this)" aria-label="Add to wishlist">♡</button>
-              
-              <a href="/shop/product.html?id=${p.id}" class="product-card-img-wrap">
-                <img src="${img}" alt="${p.title}" loading="lazy" onerror="this.onerror=null;this.src='/assets/products/placeholder.svg';" />
-              </a>
-
-              <a href="/shop/product.html?id=${p.id}" class="product-card-title">${p.title}</a>
-              <p class="product-card-brand">${p.brand || p.category_name || 'Generic'}</p>
-              
-              <div class="product-card-rating">
-                ★ ${rating} <span class="review-count">(${reviews})</span>
-              </div>
-
-              <div class="product-card-price-row">
-                <span class="price-current">${window.shopHelpers.formatINR(p.price)}</span>
-                <span class="price-original">${window.shopHelpers.formatINR(origPrice)}</span>
-                <span class="price-discount-tag">${discount}% OFF</span>
-              </div>
-
-              <button class="btn btn-primary btn-sm" style="width:100%;margin-top:4px;" onclick="addToCartDirect(${p.id}, event)">Add to Cart</button>
-            </div>
-          `;
-        }).join('');
-      } catch (err) {
-        grid.innerHTML = `<p class="text-muted">Unable to load featured products: ${err.message}</p>`;
-      }
-    }
-
-    // 3. Ending Soon Auctions
-    async function loadEndingSoonAuctions() {
-      const container = document.getElementById('ending-auctions-list');
-      if (!container) return;
-
-      try {
-        const { items } = await window.api.get('/auctions?limit=3');
-        if (!items || items.length === 0) {
-          container.innerHTML = `
-            <div style="padding:28px 16px;text-align:center;">
-              <p style="color:rgba(255,255,255,0.7);margin-bottom:14px;">No live auctions right now.</p>
-              <a href="/shop/shop.html" class="btn btn-mint btn-sm">Explore Shop</a>
-            </div>
-          `;
-          return;
-        }
-
-        container.innerHTML = items.map(a => {
-          const img = window.shopHelpers.firstImage(a) || '/assets/products/placeholder.svg';
-          const countdown = formatCountdown(a.ends_at);
-
-          return `
-            <div class="auction-dark-card">
-              <div class="auction-card-thumb">
-                <img src="${img}" alt="${a.title}" onerror="this.onerror=null;this.src='/assets/products/placeholder.svg';" />
-                <div class="timer-capsule-bar" data-ends-at="${a.ends_at}">${countdown}</div>
-              </div>
-
-              <div class="auction-card-details">
-                <div>
-                  <span class="badge badge-live" style="margin-bottom:4px;font-size:10px;">LIVE</span>
-                  <a href="/auction/auction-detail.html?productId=${a.product_id || a.id}" class="auction-title">${a.title}</a>
-                  <p class="auction-brand">${a.brand || 'Featured Auction'}</p>
-                </div>
-
-                <div class="auction-bid-meta">
-                  <div>
-                    <span class="bid-label-small">Current Bid</span>
-                    <div class="bid-val-bold">${window.shopHelpers.formatINR(a.current_price || a.price)}</div>
-                  </div>
-                  <div style="text-align:right;">
-                    <span class="bid-count-badge">${a.bid_count || 12} bids</span>
-                    <a href="/auction/auction-detail.html?productId=${a.product_id || a.id}" class="btn btn-mint btn-sm" style="padding:5px 12px;font-size:12px;margin-top:4px;display:inline-block;">View Auction</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        startAuctionTimers();
-      } catch (err) {
-        container.innerHTML = `<p style="color:rgba(255,255,255,0.7);">Unable to load live auctions: ${err.message}</p>`;
-      }
-    }
-
-    // Helper: Category Emoji Mapping
-    function getCategoryEmoji(slugOrName) {
-      const s = (slugOrName || '').toLowerCase();
-      if (s.includes('elect')) return '💻';
-      if (s.includes('comp') || s.includes('laptop')) return '🖥️';
-      if (s.includes('mobil') || s.includes('phone')) return '📱';
-      if (s.includes('audio') || s.includes('sound')) return '🎧';
-      if (s.includes('cam')) return '📷';
-      if (s.includes('fashion') || s.includes('shirt')) return '👕';
-      if (s.includes('men')) return '👔';
-      if (s.includes('women')) return '👗';
-      if (s.includes('shoe')) return '👟';
-      if (s.includes('bag')) return '🎒';
-      if (s.includes('home') || s.includes('kitchen')) return '🍳';
-      if (s.includes('furnit')) return '🪑';
-      if (s.includes('beauty')) return '✨';
-      if (s.includes('sport') || s.includes('fit')) return '⚽';
-      if (s.includes('book')) return '📚';
-      if (s.includes('game') || s.includes('gaming')) return '🎮';
-      if (s.includes('toy') || s.includes('kid')) return '🧸';
-      if (s.includes('auto')) return '🚗';
-      if (s.includes('smart')) return '💡';
-      if (s.includes('office') || s.includes('stationery')) return '💼';
-      return '🛍️';
-    }
-
-    // Helper: Countdown Timer Formatting
-    function formatCountdown(endsAt) {
-      if (!endsAt) return '02d : 14h : 32m';
-      const diffMs = new Date(endsAt).getTime() - Date.now();
-      if (diffMs <= 0) return 'Ended';
-
-      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-
-      const pad = (n) => String(n).padStart(2, '0');
-      return `${pad(days)}d : ${pad(hours)}h : ${pad(mins)}m`;
-    }
-
-    function startAuctionTimers() {
+    // Live Stream Feed Updates (Buyer-Facing)
+    (function() {
+      const stream = document.getElementById('termLiveTicker');
+      if (!stream) return;
+      const msgs = [
+        `<span class="feed-hl">IPHONE 15 PRO TITANIUM</span> &bull; AUCTION OPENS IN 12m &bull; STARTING BID: <strong>₹54,999</strong> (Save 30%)`,
+        `<span class="feed-hl">SONY WH-1000XM5</span> &bull; RETAIL: ₹26,990 &bull; CURRENT AUCTION BID: <strong>₹19,500</strong> (Hot Deal!)`,
+        `<span class="feed-hl">MACBOOK AIR M2</span> &bull; WON AT AUCTION FOR <strong>₹81,200</strong> &bull; Buyer saved ₹18,700 off store price!`,
+        `<span class="feed-hl">CANON EOS 1500D</span> &bull; BUY NOW AT ₹41,990 OR BID FROM <strong>₹28,000</strong>`
+      ];
+      let i = 0;
       setInterval(() => {
-        document.querySelectorAll('[data-ends-at]').forEach(el => {
-          el.textContent = formatCountdown(el.dataset.endsAt);
-        });
-      }, 30000);
-    }
+        i = (i + 1) % msgs.length;
+        stream.innerHTML = msgs[i];
+      }, 3500);
+    })();
 
-    // Global Actions
-    async function addToCartDirect(productId, event) {
-      if (event) event.preventDefault();
-      
-      if (!window.auth || !window.auth.isLoggedIn()) {
-        if (window.buyerAuth) {
-          window.buyerAuth.requireBuyerAuth(() => addToCartDirect(productId), 'Sign in to your BidMart buyer account to add items to cart.');
-        } else {
-          window.location.href = '/auth/login.html';
-        }
-        return;
+    // User Session Check & Modal Deep Linking
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('open') === 'how-it-works' || window.location.hash === '#how-it-works') {
+        openHowItWorksModal();
       }
 
-      try {
-        await window.api.post('/cart', { productId, quantity: 1 });
-        if (window.buyerAuth) {
-          window.buyerAuth.showToast('Product added to your cart!', 'success');
-        }
-        if (typeof updateCartBadge === 'function') updateCartBadge();
-      } catch (err) {
-        if (window.buyerAuth) {
-          window.buyerAuth.showToast(err.message || 'Could not add to cart', 'error');
-        }
-      }
-    }
+      if (window.auth && window.auth.isLoggedIn()) {
+        const user = window.auth.getUser();
+        const lbl = document.getElementById('navUserLabel');
+        if (lbl && user) lbl.innerText = (user.name || 'USER').split(' ')[0].toUpperCase();
 
-    async function addToWishlist(productId, btn) {
-      if (!window.auth || !window.auth.isLoggedIn()) {
-        if (window.buyerAuth) {
-          window.buyerAuth.requireBuyerAuth(() => addToWishlist(productId, btn), 'Sign in to save items to your wishlist.');
-        } else {
-          window.location.href = '/auth/login.html';
-        }
-        return;
-      }
-
-      try {
-        await window.api.post('/wishlist', { productId });
-        if (btn) {
-          btn.textContent = '♥';
-          btn.style.color = '#EF4444';
-        }
-        if (window.buyerAuth) {
-          window.buyerAuth.showToast('Item saved to your wishlist!', 'success');
-        }
-      } catch (err) {
-        if (window.buyerAuth) {
-          window.buyerAuth.showToast(err.message || 'Could not add to wishlist', 'error');
+        if (user && (user.role === 'SELLER' || user.store_name)) {
+          const sellerBtn = document.getElementById('homeBecomeSellerNav');
+          if (sellerBtn) {
+            sellerBtn.href = '/seller/index.html';
+            sellerBtn.target = '_blank';
+            sellerBtn.innerHTML = '<span>SELLER HUB ↗</span>';
+          }
         }
       }
-    }
+    });
   </script>
-
+  <script src="/shared/explore-dialog.js"></script>
 </body>
 </html>

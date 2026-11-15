@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 760" width="100%" height="100%">
+  <defs>
+    <!-- Dark Tech Canvas Gradients -->
+    <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141414"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </linearGradient>
+
+    <!-- Acid Neon Stream -->
+    <linearGradient id="acidStream" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#333333"/>
+      <stop offset="50%" stop-color="#D8FF00"/>
+      <stop offset="100%" stop-color="#00FFA3"/>
+    </linearGradient>
+
+    <!-- Card Backgrounds -->
+    <linearGradient id="cardStoreBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1A1A"/>
+      <stop offset="100%" stop-color="#0F0F0F"/>
+    </linearGradient>
+
+    <linearGradient id="cardAuctionBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1F2412"/>
+      <stop offset="100%" stop-color="#0E1205"/>
+    </linearGradient>
+
+    <!-- Shadow & Glow Filters -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.85"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Surface -->
+  <rect width="960" height="760" rx="20" fill="url(#bgGlow)" stroke="#222222" stroke-width="2"/>
+
+  <!-- Technical Background Grid -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 80 H960 M0 160 H960 M0 240 H960 M0 320 H960 M0 400 H960 M0 480 H960 M0 560 H960 M0 640 H960"/>
+    <path d="M80 0 V760 M160 0 V760 M240 0 V760 M320 0 V760 M400 0 V760 M480 0 V760 M560 0 V760 M640 0 V760 M720 0 V760 M800 0 V760 M880 0 V760"/>
+  </g>
+
+  <!-- ================= TOP HEADER HUD ================= -->
+  <g transform="translate(50, 45)">
+    <circle cx="6" cy="6" r="4" fill="#D8FF00" filter="url(#neonGlow)"/>
+    <text x="22" y="10" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#888888" letter-spacing="2">DUAL_CORE ENGINE // LIFECYCLE TOPOLOGY</text>
+    <text x="860" y="10" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="11" fill="#555555">REV.2026</text>
+  </g>
+
+  <!-- ================= THE DYNAMIC BRIDGE / FLOW ARROWS ================= -->
+  <!-- Upper Shift Wave: Store -> Auction -->
+  <path d="M370 270 C 440 210, 520 210, 590 270" fill="none" stroke="url(#acidStream)" stroke-width="3" stroke-dasharray="6,4" filter="url(#neonGlow)"/>
+  
+  <!-- Shift Pill Label (Top) -->
+  <g transform="translate(480, 205)">
+    <rect x="-105" y="-18" width="210" height="36" rx="6" fill="#111111" stroke="#D8FF00" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <text x="0" y="4" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#D8FF00" letter-spacing="1">
+      ⚡ SHIFT TO AUCTION &rarr;
+    </text>
+  </g>
+
+  <!-- Lower Return Wave: Auction -> Store (If Unsold) -->
+  <path d="M590 490 C 520 550, 440 550, 370 490" fill="none" stroke="#333333" stroke-width="2" stroke-dasharray="4,4"/>
+  
+  <!-- Revert Pill Label (Bottom) -->
+  <g transform="translate(480, 555)">
+    <rect x="-90" y="-14" width="180" height="28" rx="4" fill="#111111" stroke="#333333" stroke-width="1"/>
+    <text x="0" y="4" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#777777" letter-spacing="1">
+      &larr; REVERTS IF UNSOLD
+    </text>
+  </g>
+
+  <!-- ================= LEFT PILLAR: STANDARD RETAIL STORE ================= -->
+  <g transform="translate(60, 120)">
+    <!-- Main Card Body -->
+    <rect width="320" height="520" rx="14" fill="url(#cardStoreBg)" stroke="#262626" stroke-width="1.5" filter="url(#cardShadow)"/>
+    
+    <!-- State Header -->
+    <g transform="translate(24, 30)">
+      <rect width="90" height="22" rx="4" fill="#1E1E1E" stroke="#333333"/>
+      <text x="45" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#888888">PHASE 01</text>
+      <text x="272" y="16" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="10" fill="#555555">#RETAIL</text>
+    </g>
+
+    <!-- Title & Desc -->
+    <text x="24" y="90" font-family="'Syne', 'Space Grotesk', sans-serif" font-size="24" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">STANDARD STORE</text>
+    <text x="24" y="112" font-family="'Space Grotesk', sans-serif" font-size="13" fill="#888888">Regular retail purchase with instant cart checkout.</text>
+
+    <!-- Item Visual Box -->
+    <g transform="translate(24, 140)">
+      <rect width="272" height="200" rx="10" fill="#0D0D0D" stroke="#222222"/>
+      
+      <!-- Shopping Bag Vector Icon -->
+      <g transform="translate(136, 85)">
+        <circle cx="0" cy="0" r="45" fill="#161616"/>
+        <path d="M-18 -10 H18 V20 C18 24, 14 28, 10 28 H-10 C-14 28, -18 24, -18 20 Z" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+        <path d="M-9 -10 C-9 -20, 9 -20, 9 -10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="0" cy="8" r="3" fill="#888888"/>
+      </g>
+
+      <!-- Badge -->
+      <rect x="182" y="16" width="76" height="22" rx="4" fill="#1C1C1C" stroke="#333333"/>
+      <text x="220" y="31" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" fill="#AAAAAA">FIXED_PRICE</text>
+    </g>
+
+    <!-- Price Section -->
+    <g transform="translate(24, 380)">
+      <text x="0" y="0" font-family="'JetBrains Mono', monospace" font-size="11" fill="#777777">BASE RETAIL VALUATION</text>
+      <text x="0" y="34" font-family="'JetBrains Mono', monospace" font-size="32" font-weight="800" fill="#FFFFFF">₹79,999</text>
+      <text x="0" y="54" font-family="'JetBrains Mono', monospace" font-size="11" fill="#555555">MARKET CAP CEILING</text>
+    </g>
+
+    <!-- Bottom Feature Tag -->
+    <g transform="translate(24, 465)">
+      <rect width="272" height="34" rx="4" fill="#141414" stroke="#262626"/>
+      <text x="136" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#888888">
+        ✓ 1-CLICK INSTANT BUY
+      </text>
+    </g>
+  </g>
+
+  <!-- ================= RIGHT PILLAR: LIVE AUCTION PIT ================= -->
+  <g transform="translate(580, 120)">
+    <!-- Main Card Body -->
+    <rect width="320" height="520" rx="14" fill="url(#cardAuctionBg)" stroke="#D8FF00" stroke-width="1.8" filter="url(#cardShadow)"/>
+    
+    <!-- State Header -->
+    <g transform="translate(24, 30)">
+      <rect width="90" height="22" rx="4" fill="#242B12" stroke="#D8FF00"/>
+      <text x="45" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="800" fill="#D8FF00">PHASE 02</text>
+      <text x="272" y="16" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#D8FF00">LIVE PIT ●</text>
+    </g>
+
+    <!-- Title & Desc -->
+    <text x="24" y="90" font-family="'Syne', 'Space Grotesk', sans-serif" font-size="24" font-weight="800" fill="#D8FF00" letter-spacing="-0.5">THE AUCTION PIT</text>
+    <text x="24" y="112" font-family="'Space Grotesk', sans-serif" font-size="13" fill="#A3BA6B">Fierce competition pushes bids beyond retail value.</text>
+
+    <!-- Item Visual Box with Gavel -->
+    <g transform="translate(24, 140)">
+      <rect width="272" height="200" rx="10" fill="#0B0F04" stroke="#2A3515"/>
+      
+      <!-- Bidding Gavel Vector Icon -->
+      <g transform="translate(136, 85)">
+        <circle cx="0" cy="0" r="45" fill="#18210A" stroke="#D8FF00" stroke-width="1.5" filter="url(#neonGlow)"/>
+        <!-- Gavel -->
+        <path d="M-12 -6 L6 -24 L18 -12 L0 6 Z" fill="#D8FF00"/>
+        <path d="M-6 0 L-22 16 L-16 22 L0 6 Z" fill="#FFFFFF"/>
+        <path d="M-18 20 L-28 30" stroke="#D8FF00" stroke-width="3" stroke-linecap="round"/>
+        <!-- Soundblock -->
+        <rect x="-24" y="24" width="48" height="6" rx="2" fill="#444444"/>
+      </g>
+
+      <!-- Badge -->
+      <rect x="176" y="16" width="82" height="22" rx="4" fill="#253010" stroke="#D8FF00"/>
+      <text x="217" y="31" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="800" fill="#D8FF00">🔥 14 BIDS</text>
+    </g>
+
+    <!-- Price Section with Huge Markup -->
+    <g transform="translate(24, 380)">
+      <text x="0" y="0" font-family="'JetBrains Mono', monospace" font-size="11" fill="#A3BA6B">CURRENT WINNING BID</text>
+      <text x="0" y="34" font-family="'JetBrains Mono', monospace" font-size="34" font-weight="900" fill="#D8FF00" filter="url(#neonGlow)">₹89,500</text>
+      <text x="0" y="54" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800" fill="#00FFA3">▲ +₹9,501 (+11.9% PROFIT)</text>
+    </g>
+
+    <!-- Bottom Feature Tag -->
+    <g transform="translate(24, 465)">
+      <rect width="272" height="34" rx="4" fill="#1C240D" stroke="#D8FF00"/>
+      <text x="136" y="21" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="800" fill="#D8FF00">
+        ⚡ SELL HIGHER THAN MARKET
+      </text>
+    </g>
+  </g>
+
+  <!-- ================= BOTTOM GLOSSARY ================= -->
+  <g transform="translate(50, 715)">
+    <text x="0" y="0" font-family="'JetBrains Mono', monospace" font-size="11" fill="#666666">BIDMART HYBRID COMMERCE INFRASTRUCTURE &bull; SELLERS MAXIMIZE VALUE &bull; BUYERS SECURE EXCLUSIVE ALLOCATIONS</text>
+  </g>
+</svg>
+

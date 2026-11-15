@@ -3,980 +3,1127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seller Center / Products & Inventory — BidMart</title>
+  <title>Seller Center — BidMart Merchant Studio</title>
+  <meta name="description" content="Manage your e-commerce store, add products across categories, control inventory, and trigger live auction modes on demand." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/global-dark.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
+
   <style>
-    .product-modal-scroll {
-      max-height: calc(88vh - 80px);
-      overflow-y: auto;
-      padding-right: 6px;
+    :root {
+      --sc-bg: #0B0E14;
+      --sc-sidebar: #0F131C;
+      --sc-surface: #141923;
+      --sc-card: #18202D;
+      --sc-border: rgba(255, 255, 255, 0.08);
+      --sc-mint: #10B981;
+      --sc-mint-glow: rgba(16, 185, 129, 0.25);
+      --sc-orange: #FF7A00;
+      --sc-orange-glow: rgba(255, 122, 0, 0.35);
+      --sc-acid: #D8FF00;
+      --sc-text: #F8FAFC;
+      --sc-muted: #94A3B8;
+      --sc-blue: #38BDF8;
     }
-    .product-modal-scroll::-webkit-scrollbar {
-      width: 6px;
+
+    [data-theme="light"] {
+      --sc-bg: #F8FAFC;
+      --sc-sidebar: #FFFFFF;
+      --sc-surface: #FFFFFF;
+      --sc-card: #F1F5F9;
+      --sc-border: #E2E8F0;
+      --sc-mint: #059669;
+      --sc-mint-glow: rgba(5, 150, 105, 0.15);
+      --sc-orange: #EA580C;
+      --sc-orange-glow: rgba(234, 88, 12, 0.2);
+      --sc-acid: #0F172A;
+      --sc-text: #0F172A;
+      --sc-muted: #64748B;
+      --sc-blue: #0284C7;
     }
-    .product-modal-scroll::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--sc-bg);
+      color: var(--sc-text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Overall Layout: Sidebar + Main Content */
+    .sc-layout {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* Left Sidebar */
+    .sc-sidebar {
+      width: 260px;
+      background: var(--sc-sidebar);
+      border-right: 1px solid var(--sc-border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .sc-sidebar {
+        display: none;
+      }
+    }
+
+    .sc-store-header {
+      padding: 0 12px 20px;
+      border-bottom: 1px solid var(--sc-border);
+      margin-bottom: 20px;
+    }
+
+    .sc-store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--sc-mint);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 3px 8px;
       border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .sc-store-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sc-nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .sc-nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--sc-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .sc-nav-item a:hover {
+      background: var(--sc-surface);
+      color: var(--sc-text);
+    }
+
+    .sc-nav-item.active a {
+      background: var(--sc-mint);
+      color: #042416;
+      font-weight: 700;
+    }
+
+    /* Main Work Area */
+    .sc-main {
+      flex: 1;
+      padding: 32px 36px 80px;
+      max-width: 1300px;
+      box-sizing: border-box;
+    }
+
+    /* Top Command Header */
+    .sc-command-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .sc-title-group h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .sc-title-group p {
+      color: var(--sc-muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .sc-action-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-add-product-main {
+      background: var(--sc-mint);
+      color: #042416;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px var(--sc-mint-glow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-add-product-main:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    /* Category Pill Selector */
+    .category-pills-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+    }
+
+    .cat-pill {
+      background: var(--sc-surface);
+      border: 1px solid var(--sc-border);
+      color: var(--sc-muted);
+      border-radius: 20px;
+      padding: 7px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .cat-pill:hover {
+      color: var(--sc-text);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .cat-pill.active {
+      background: var(--sc-text);
+      color: var(--sc-bg);
+      border-color: var(--sc-text);
+      font-weight: 700;
+    }
+
+    /* Product Grid / Table Cards */
+    .products-seller-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 22px;
+      margin-bottom: 40px;
+    }
+
+    .seller-item-card {
+      background: var(--sc-surface);
+      border: 1px solid var(--sc-border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .seller-item-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+    }
+
+    .seller-item-card.is-auction {
+      border-color: rgba(255, 122, 0, 0.45);
+      background: linear-gradient(180deg, rgba(255, 122, 0, 0.04) 0%, var(--sc-surface) 100%);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      height: 190px;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .seller-item-card:hover .card-img-wrap img {
+      transform: scale(1.04);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-badge.shop {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--sc-border);
+      color: #38BDF8;
+    }
+
+    .card-badge.auction {
+      background: rgba(255, 122, 0, 0.9);
+      color: #000;
+      box-shadow: 0 2px 10px var(--sc-orange-glow);
+    }
+
+    .card-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-cat {
+      font-size: 0.72rem;
+      color: var(--sc-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin: 0 0 12px;
+      color: var(--sc-text);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-pricing-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--sc-border);
+      margin-bottom: 14px;
+    }
+
+    .price-col span {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--sc-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .price-col strong {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--sc-text);
+    }
+
+    .stock-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--sc-mint);
+    }
+
+    /* Card Action Buttons */
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-card-swap {
+      flex: 1;
+      background: rgba(255, 122, 0, 0.12);
+      border: 1px solid rgba(255, 122, 0, 0.4);
+      color: var(--sc-orange);
+      padding: 9px;
+      border-radius: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-card-swap:hover {
+      background: var(--sc-orange);
+      color: #000;
+    }
+
+    .btn-card-view {
+      background: transparent;
+      border: 1px solid var(--sc-border);
+      color: var(--sc-muted);
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-card-view:hover {
+      background: var(--sc-card);
+      color: var(--sc-text);
+    }
+
+    /* Floating Auction Mode Switch Button */
+    .floating-auction-pill {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #0E131E;
+      border: 2px solid var(--sc-orange);
+      border-radius: 999px;
+      padding: 12px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 25px var(--sc-orange-glow);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      z-index: 999;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .floating-auction-pill:hover {
+      transform: translateY(-4px) scale(1.02);
+      background: #141B2B;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 122, 0, 0.5);
+    }
+
+    .floating-pulse-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--sc-orange);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 0 0 rgba(255, 122, 0, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 122, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 122, 0, 0); }
+    }
+
+    .floating-text-wrap {
+      text-align: left;
+    }
+
+    .floating-text-wrap strong {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .floating-text-wrap span {
+      font-size: 0.74rem;
+      color: var(--sc-orange);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    /* Modal Styling */
+    .sc-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .sc-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sc-modal-card {
+      background: var(--sc-surface);
+      border: 1px solid var(--sc-border);
+      border-radius: 20px;
+      max-width: 620px;
+      width: 100%;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+      transform: translateY(14px) scale(0.98);
+      transition: all 0.2s ease;
+    }
+
+    .sc-modal-overlay.active .sc-modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .sc-modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--sc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sc-modal-body {
+      padding: 24px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--sc-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-group input.form-input,
+    .form-group select.form-input,
+    .form-group textarea.form-input,
+    .form-input {
+      width: 100% !important;
+      background: #141923 !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+      border-radius: 10px !important;
+      padding: 13px 16px !important;
+      font-family: inherit !important;
+      font-size: 0.95rem !important;
+      color: #FFFFFF !important;
+      -webkit-text-fill-color: #FFFFFF !important;
+      caret-color: #10B981 !important;
+      outline: none !important;
+      box-sizing: border-box !important;
+      transition: all 0.15s ease !important;
+      pointer-events: auto !important;
+      cursor: text !important;
+    }
+
+    .form-group select.form-input {
+      cursor: pointer !important;
+    }
+
+    .form-group input.form-input::placeholder,
+    .form-group textarea.form-input::placeholder,
+    .form-input::placeholder {
+      color: #64748B !important;
+      -webkit-text-fill-color: #64748B !important;
+      opacity: 0.8 !important;
+    }
+
+    .form-group input.form-input:focus,
+    .form-group select.form-input:focus,
+    .form-group textarea.form-input:focus,
+    .form-input:focus {
+      border-color: #10B981 !important;
+      background: #18202D !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25) !important;
+    }
+
+    #swapAuctionModal .form-group input.form-input:focus,
+    #swapAuctionModal .form-group select.form-input:focus {
+      border-color: #FF7A00 !important;
+      box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25) !important;
+      caret-color: #FF7A00 !important;
+    }
+
+    .btn-submit-green {
+      width: 100%;
+      background: var(--sc-mint);
+      color: #042416;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
   </style>
 </head>
-<body class="sc-app-body" style="background-color:var(--sc-bg);margin:0;">
+<body>
 
-  <div id="seller-header"></div>
+  <!-- Universal Header with Mode Synchronizer -->
+  <div id="site-header"></div>
 
-  <div class="sc-app">
-    <div id="seller-sidebar"></div>
+  <div class="sc-layout">
+    
+    <!-- Left Navigation Sidebar -->
+    <aside class="sc-sidebar">
+      <div class="sc-store-header">
+        <span class="sc-store-badge">● ACTIVE STORE</span>
+        <h3 class="sc-store-name" id="sideStoreName">Apex Luxury Electronics</h3>
+      </div>
 
-    <main class="sc-main-content">
-      <!-- Standardized Page Header with Back Button & Breadcrumbs -->
-      <div class="bm-page-header-wrap">
-        <div class="bm-page-header-top">
-          <button type="button" class="bm-back-btn" onclick="window.nav.goBackOrFallback('/dashboards/seller/dashboard.html')" aria-label="Go back to Seller Dashboard">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            <span>Back to Seller Dashboard</span>
+      <ul class="sc-nav-list">
+        <li class="sc-nav-item active">
+          <a href="/seller/products.html">
+            <span>📦</span>
+            <span>Product Catalog</span>
+          </a>
+        </li>
+        <li class="sc-nav-item">
+          <a href="javascript:void(0)" onclick="openAddProductModal()">
+            <span>➕</span>
+            <span>Add New Product</span>
+          </a>
+        </li>
+        <li class="sc-nav-item">
+          <a href="/seller/auctions.html">
+            <span>⚡</span>
+            <span>Auction Arena</span>
+          </a>
+        </li>
+        <li class="sc-nav-item">
+          <a href="/seller/profile.html">
+            <span>🏢</span>
+            <span>Store Profile &amp; KYC</span>
+          </a>
+        </li>
+        <li class="sc-nav-item">
+          <a href="/market.html" target="_blank">
+            <span>🛒</span>
+            <span>Customer Storefront</span>
+          </a>
+        </li>
+        <li class="sc-nav-item" style="margin-top:auto;border-top:1px solid var(--sc-border);padding-top:12px;">
+          <a href="/seller/index.html">
+            <span>ℹ️</span>
+            <span>Merchant Overview</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Seller Workspace -->
+    <main class="sc-main">
+      
+      <!-- Top Command Header -->
+      <div class="sc-command-header">
+        <div class="sc-title-group">
+          <h1>Merchant Product Studio</h1>
+          <p>Add fixed-price items across categories, monitor inventory stock, or swap items to timed auction drops.</p>
+        </div>
+
+        <div class="sc-action-group">
+          <button type="button" class="btn-add-product-main" onclick="openAddProductModal()">
+            <span>+ Add New Product</span>
           </button>
-          <nav class="bm-breadcrumbs" aria-label="Breadcrumb">
-            <a href="/dashboards/seller/dashboard.html" class="bm-breadcrumb-item">Seller Center</a>
-            <span class="bm-breadcrumb-sep">/</span>
-            <span class="bm-breadcrumb-item active" aria-current="page">Products & Inventory</span>
-          </nav>
-        </div>
-
-        <div class="bm-page-header-main">
-          <div class="bm-page-header-titles">
-            <h1 class="bm-page-title">Products Management</h1>
-            <p class="bm-page-subtitle">Manage catalog, upload product galleries, update pricing & stock levels, or launch live auctions.</p>
-          </div>
-          <div class="bm-page-header-actions">
-            <button type="button" class="sc-btn-primary" id="open-create-modal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-              <span>+ Add New Product</span>
-            </button>
-          </div>
         </div>
       </div>
 
-      <div class="form-error" id="form-error" role="alert" style="margin-bottom:16px;"></div>
-
-      <!-- Filter / Search Toolbar -->
-      <div class="sc-card" style="padding:16px 20px;margin-bottom:20px;">
-        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
-          <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:280px;">
-            <div class="sc-search-bar" style="max-width:340px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="sc-search-icon"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              <input type="search" id="product-search-input" placeholder="Search by title, brand, SKU..." />
-            </div>
-            <select class="sc-period-select" id="status-filter">
-              <option value="">All Statuses</option>
-              <option value="ACTIVE_SHOP">Active in Shop</option>
-              <option value="DRAFT">Drafts</option>
-              <option value="OUT_OF_STOCK">Out of Stock</option>
-              <option value="ACTIVE_AUCTION">Active Auction</option>
-              <option value="AUCTION_UNSOLD">Unsold Auction</option>
-            </select>
-            <select class="sc-period-select" id="category-filter">
-              <option value="">All Categories</option>
-            </select>
-          </div>
-          <div>
-            <span class="text-muted" style="font-size:0.82rem;font-weight:600;" id="product-count-label">Loading products…</span>
-          </div>
-        </div>
+      <!-- Category Filter Pills Bar -->
+      <div class="category-pills-bar" id="categoryPillsBar">
+        <button type="button" class="cat-pill active" onclick="filterByCategory('ALL')">All Categories (20)</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('mobiles-accessories')">Mobiles &amp; Gadgets</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('computers-laptops')">Computers &amp; Laptops</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('audio')">Acoustics &amp; Audio</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('cameras')">DSLRs &amp; Cameras</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('gaming')">Gaming &amp; Consoles</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('bags-accessories')">Watches &amp; Luxury</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('electronics')">4K Displays &amp; TVs</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('mens-fashion')">Men's Fashion</button>
+        <button type="button" class="cat-pill" onclick="filterByCategory('womens-fashion')">Women's Fashion</button>
       </div>
 
-      <!-- Products Table Card -->
-      <div class="sc-card" style="padding:0;overflow:hidden;">
-        <div style="overflow-x:auto;">
-          <table class="sc-table">
-            <thead>
-              <tr>
-                <th style="padding-left:20px;">Product & Gallery</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="products-tbody">
-              <tr><td colspan="6" class="text-muted" style="text-align:center;padding:32px;">Loading products…</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <!-- Seller Product Catalog Grid -->
+      <div class="products-seller-grid" id="sellerCatalogGrid">
+        <!-- Rendered dynamically -->
       </div>
 
     </main>
+
   </div>
 
-  <!-- Modal: Add New Product -->
-  <div class="modal-overlay" id="create-modal" hidden>
-    <div class="modal" style="max-width:680px;">
-      <button class="modal-close" id="create-modal-close" aria-label="Close modal">&times;</button>
-      <h3 style="margin-top:0;font-size:1.3rem;font-weight:800;color:#172033;">Add New Product</h3>
-      <p class="text-muted" style="font-size:0.85rem;margin-bottom:18px;">Upload product photos and enter catalog specifications. Listings start in <strong>Draft</strong> mode.</p>
-
-      <form id="create-product-form" class="product-modal-scroll">
-        
-        <!-- PRODUCT IMAGES SECTION -->
-        <div class="bm-image-upload-section">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
-            <label style="font-weight:700;font-size:0.88rem;color:#172033;">Product Images *</label>
-            <span style="font-size:0.75rem;color:#64748B;" id="create-image-counter">0 / 8 images</span>
-          </div>
-          <p class="text-muted" style="font-size:0.78rem;margin:0 0 10px;">Upload clear images of your product. The first image will be used as the primary product image.</p>
-          
-          <div class="bm-upload-dropzone" id="create-dropzone" tabindex="0" role="button" aria-label="Upload Product Images. Drag and drop images here or browse files.">
-            <input type="file" id="create-file-input" multiple accept="image/jpeg,image/png,image/webp" style="display:none;" />
-            <div class="bm-upload-icon">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <polyline points="21 15 16 10 5 21"/>
-              </svg>
-            </div>
-            <div class="bm-upload-title">Upload Product Images</div>
-            <div class="bm-upload-subtitle">Drag & drop images here or <span style="color:#106EBE;font-weight:700;text-decoration:underline;">Browse Files</span></div>
-            <div class="bm-upload-btn-fake">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-              <span>Browse Files</span>
-            </div>
-            <div class="bm-upload-meta">JPG, JPEG, PNG, WEBP • Max 10 MB each • Up to 8 images</div>
-          </div>
-
-          <div id="create-image-error" style="color:#DC2626;font-size:0.78rem;font-weight:600;margin-top:6px;display:none;"></div>
-
-          <!-- Thumbnails Preview Grid -->
-          <div class="bm-thumbs-grid" id="create-thumbs-grid"></div>
-        </div>
-
-        <!-- PRODUCT DETAILS -->
-        <div class="form-group" style="margin-bottom:14px;">
-          <label for="p-title" style="font-weight:700;font-size:0.85rem;">Product Title *</label>
-          <input type="text" id="p-title" required minlength="3" maxlength="190" placeholder="e.g. Sony WH-1000XM5 Wireless Noise-Cancelling Headphones" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-          <div class="form-group">
-            <label for="p-category" style="font-weight:700;font-size:0.85rem;">Category *</label>
-            <select id="p-category" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;"></select>
-          </div>
-          <div class="form-group">
-            <label for="p-condition" style="font-weight:700;font-size:0.85rem;">Condition *</label>
-            <select id="p-condition" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;">
-              <option value="NEW">New (Unopened)</option>
-              <option value="LIKE_NEW">Like New (Mint)</option>
-              <option value="USED">Used (Good)</option>
-              <option value="REFURBISHED">Refurbished</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
-          <div class="form-group">
-            <label for="p-price" style="font-weight:700;font-size:0.85rem;">Price (₹) *</label>
-            <input type="number" id="p-price" min="1" step="0.01" required placeholder="4999" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-          </div>
-          <div class="form-group">
-            <label for="p-qty" style="font-weight:700;font-size:0.85rem;">Initial Stock *</label>
-            <input type="number" id="p-qty" min="0" step="1" value="10" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-          </div>
-          <div class="form-group">
-            <label for="p-brand" style="font-weight:700;font-size:0.85rem;">Brand</label>
-            <input type="text" id="p-brand" placeholder="e.g. Sony" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom:14px;">
-          <label for="p-sku" style="font-weight:700;font-size:0.85rem;">SKU Code (Optional)</label>
-          <input type="text" id="p-sku" placeholder="e.g. SNY-WH1000-BLK" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-        </div>
-
-        <div class="form-group" style="margin-bottom:18px;">
-          <label for="p-desc" style="font-weight:700;font-size:0.85rem;">Description</label>
-          <textarea id="p-desc" rows="3" placeholder="Detailed product specifications, warranty info, key features..." style="width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;font-family:inherit;"></textarea>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:20px;position:sticky;bottom:0;background:#FFFFFF;padding-top:12px;border-top:1px solid #E2E8F0;">
-          <button type="button" class="sc-btn-sm" id="cancel-create-btn" style="flex:1;padding:12px;font-size:0.9rem;">Cancel</button>
-          <button type="submit" class="sc-btn-primary" id="save-product-btn" style="flex:2;justify-content:center;padding:12px;font-size:0.95rem;">Create Product</button>
-        </div>
-      </form>
+  <!-- Floating "Enter Auction Mode" Pill Button -->
+  <div class="floating-auction-pill" onclick="openFloatingAuctionModal()" title="Switch items to Live Bidding Drops">
+    <div class="floating-pulse-icon">⚡</div>
+    <div class="floating-text-wrap">
+      <strong>ENTER AUCTION MODE</strong>
+      <span>SWAP PRODUCTS TO LIVE BIDS &rarr;</span>
     </div>
   </div>
 
-  <!-- Modal: Edit Product & Image Gallery Manager -->
-  <div class="modal-overlay" id="edit-modal" hidden>
-    <div class="modal" style="max-width:680px;">
-      <button class="modal-close" id="edit-modal-close" aria-label="Close modal">&times;</button>
-      <h3 style="margin-top:0;font-size:1.3rem;font-weight:800;color:#172033;">Edit Product</h3>
-      <p class="text-muted" style="font-size:0.85rem;margin-bottom:16px;" id="edit-modal-subtitle">Update catalog details and product photo gallery.</p>
+  <!-- Add Product Modal Dialog -->
+  <div class="sc-modal-overlay" id="addProductModal" onclick="if(event.target===this)closeAddProductModal()">
+    <div class="sc-modal-card">
+      <div class="sc-modal-header">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.2rem;">
+          Add Product to Catalog
+        </div>
+        <button type="button" style="background:transparent;border:none;color:var(--sc-muted);font-size:1.6rem;cursor:pointer;" onclick="closeAddProductModal()">&times;</button>
+      </div>
 
-      <form id="edit-product-form" class="product-modal-scroll">
-        <input type="hidden" id="edit-product-id" />
+      <div class="sc-modal-body">
+        <div id="addProdFeedback" style="display:none;padding:12px;border-radius:8px;margin-bottom:16px;font-size:0.88rem;"></div>
 
-        <!-- EDIT IMAGES SECTION -->
-        <div class="bm-image-upload-section">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
-            <label style="font-weight:700;font-size:0.88rem;color:#172033;">Product Images *</label>
-            <span style="font-size:0.75rem;color:#64748B;" id="edit-image-counter">0 / 8 images</span>
+        <form onsubmit="event.preventDefault(); submitNewProduct();">
+          <div class="form-group">
+            <label class="form-label">Product Name / Title *</label>
+            <input type="text" id="npTitle" class="form-input" placeholder="e.g. Sony Bravia 43-inch 4K LED TV" required />
           </div>
 
-          <div class="bm-upload-dropzone" id="edit-dropzone" tabindex="0" role="button" aria-label="Upload New Product Images" style="padding:16px;">
-            <input type="file" id="edit-file-input" multiple accept="image/jpeg,image/png,image/webp" style="display:none;" />
-            <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
-              <span style="font-size:1.4rem;">📷</span>
-              <span style="font-size:0.85rem;font-weight:700;color:#106EBE;">+ Add More Photos (Drag & drop or Click)</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="npCategory" class="form-input" required>
+                <option value="1">Electronics (Displays &amp; TVs)</option>
+                <option value="2">Computers &amp; Laptops</option>
+                <option value="3">Mobiles &amp; Accessories</option>
+                <option value="4">Audio &amp; Acoustics</option>
+                <option value="5">Cameras &amp; Photography</option>
+                <option value="6">Fashion &amp; Apparel</option>
+                <option value="10">Bags &amp; Luxury Watches</option>
+                <option value="16">Gaming &amp; Consoles</option>
+                <option value="11">Home &amp; Kitchen</option>
+                <option value="13">Beauty &amp; Personal Care</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Selling Retail Price (₹) *</label>
+              <input type="number" id="npPrice" class="form-input" placeholder="42990" required />
             </div>
           </div>
 
-          <div id="edit-image-error" style="color:#DC2626;font-size:0.78rem;font-weight:600;margin-top:6px;display:none;"></div>
-          <div class="bm-thumbs-grid" id="edit-thumbs-grid"></div>
-        </div>
-
-        <div class="form-group" style="margin-bottom:14px;">
-          <label for="edit-title" style="font-weight:700;font-size:0.85rem;">Product Title *</label>
-          <input type="text" id="edit-title" required minlength="3" maxlength="190" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-          <div class="form-group">
-            <label for="edit-category" style="font-weight:700;font-size:0.85rem;">Category *</label>
-            <select id="edit-category" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;"></select>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label">Wholesale Cost (₹)</label>
+              <input type="number" id="npCost" class="form-input" placeholder="e.g. 32000" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stock Quantity (Units) *</label>
+              <input type="number" id="npQty" class="form-input" placeholder="e.g. 5" required />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="edit-condition" style="font-weight:700;font-size:0.85rem;">Condition *</label>
-            <select id="edit-condition" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;">
-              <option value="NEW">New (Unopened)</option>
-              <option value="LIKE_NEW">Like New (Mint)</option>
-              <option value="USED">Used (Good)</option>
-              <option value="REFURBISHED">Refurbished</option>
-            </select>
-          </div>
-        </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
           <div class="form-group">
-            <label for="edit-price" style="font-weight:700;font-size:0.85rem;">Shop Price (₹) *</label>
-            <input type="number" id="edit-price" min="1" step="0.01" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+            <label class="form-label">Product Image URL / Asset</label>
+            <input type="text" id="npImage" class="form-input" placeholder="e.g. /assets/real/sony_tv.jpg or https://..." />
           </div>
+
           <div class="form-group">
-            <label for="edit-stock" style="font-weight:700;font-size:0.85rem;">Available Stock *</label>
-            <input type="number" id="edit-stock" min="0" step="1" required style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
+            <label class="form-label">Product Description</label>
+            <textarea id="npDesc" class="form-input" rows="2" placeholder="Describe the item condition, box contents, warranty..."></textarea>
           </div>
-          <div class="form-group">
-            <label for="edit-brand" style="font-weight:700;font-size:0.85rem;">Brand</label>
-            <input type="text" id="edit-brand" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-          </div>
-        </div>
 
-        <div class="form-group" style="margin-bottom:14px;">
-          <label for="edit-sku" style="font-weight:700;font-size:0.85rem;">SKU Code (Optional)</label>
-          <input type="text" id="edit-sku" style="width:100%;height:40px;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;" />
-        </div>
-
-        <div class="form-group" style="margin-bottom:18px;">
-          <label for="edit-desc" style="font-weight:700;font-size:0.85rem;">Description</label>
-          <textarea id="edit-desc" rows="3" style="width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:8px;box-sizing:border-box;font-family:inherit;"></textarea>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:20px;position:sticky;bottom:0;background:#FFFFFF;padding-top:12px;border-top:1px solid #E2E8F0;">
-          <button type="button" class="sc-btn-sm" id="cancel-edit-btn" style="flex:1;padding:12px;font-size:0.9rem;">Cancel</button>
-          <button type="submit" class="sc-btn-primary" id="save-edit-btn" style="flex:2;justify-content:center;padding:12px;font-size:0.95rem;">Save Changes</button>
-        </div>
-      </form>
+          <button type="submit" class="btn-submit-green" id="btnAddProdSubmit">
+            <span>Publish to Store Inventory &rarr;</span>
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 
-  <!-- Shared Scripts -->
+  <!-- Swap to Auction Modal Dialog -->
+  <div class="sc-modal-overlay" id="swapAuctionModal" onclick="if(event.target===this)closeSwapModal()">
+    <div class="sc-modal-card">
+      <div class="sc-modal-header">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:8px;">
+          <span>⚡</span>
+          <span>Launch Timed Auction Drop</span>
+        </div>
+        <button type="button" style="background:transparent;border:none;color:var(--sc-muted);font-size:1.6rem;cursor:pointer;" onclick="closeSwapModal()">&times;</button>
+      </div>
+
+      <div class="sc-modal-body">
+        <div id="swapFeedback" style="display:none;padding:12px;border-radius:8px;margin-bottom:16px;font-size:0.88rem;"></div>
+
+        <div style="background:rgba(255, 122, 0, 0.08);border:1px solid rgba(255, 122, 0, 0.25);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <h4 id="swapProdTitle" style="margin:0 0 2px;font-family:'Space Grotesk',sans-serif;font-size:1.05rem;color:#FFF;">Product Title</h4>
+            <span style="font-size:0.8rem;color:var(--sc-muted);">Fixed Retail Price: <strong id="swapProdPrice" style="color:#FFF;">₹0</strong></span>
+          </div>
+          <span style="background:#FF7A00;color:#000;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:800;padding:3px 8px;border-radius:4px;">LIVE PIT</span>
+        </div>
+
+        <form onsubmit="event.preventDefault(); executeAuctionSwap();">
+          <input type="hidden" id="swapProductId" />
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label">Auction Starting Bid (₹) *</label>
+              <input type="number" id="swapStartingPrice" class="form-input" required />
+              <span style="font-size:0.72rem;color:var(--sc-muted);">Start price to invite early competitive bids.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Reserve Floor Price (₹)</label>
+              <input type="number" id="swapReservePrice" class="form-input" placeholder="Minimum selling price" />
+              <span style="font-size:0.72rem;color:var(--sc-muted);">Won't sell below this amount.</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label">Bid Increment Step (₹) *</label>
+              <input type="number" id="swapIncrement" class="form-input" value="1000" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Auction Duration *</label>
+              <select id="swapDurationHours" class="form-input" required>
+                <option value="24">24 Hours (Blitz Drop)</option>
+                <option value="48" selected>48 Hours (Standard Competitive)</option>
+                <option value="72">72 Hours (Weekend Drop)</option>
+                <option value="96">96 Hours (Showcase Drop)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit-green" style="background:#FF7A00;color:#000;" id="btnExecuteSwap">
+            <span>Launch Live Auction Drop on Consumer Pit &rarr;</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script src="/shared/auth.js"></script>
   <script src="/shared/api.js"></script>
-  <script src="/shared/navigation.js"></script>
-  <script src="/shared/seller-header.js"></script>
-  <script src="/shared/seller-sidebar.js"></script>
+  <script src="/shared/header.js"></script>
 
   <script>
-    window.auth.requireRole('SELLER');
-
     let allProducts = [];
-    let categoriesList = [];
-    const errorBox = document.getElementById('form-error');
+    let currentCategoryFilter = 'ALL';
+    let activeSwapProd = null;
 
-    // State for Add Product Images
-    let createImages = []; // Array of { file?: File, url: string, isPrimary: boolean }
-    // State for Edit Product Images
-    let editImages = []; // Array of { id?: number, file?: File, url: string, isPrimary: boolean }
-
-    function showError(msg) {
-      errorBox.textContent = msg;
-      errorBox.classList.add('visible');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    function hideError() { errorBox.classList.remove('visible'); }
-
-    function formatINR(num) {
-      return '₹' + Number(num || 0).toLocaleString('en-IN');
+    function formatCurrency(amount) {
+      return '₹' + Number(amount || 0).toLocaleString('en-IN');
     }
 
-    // =========================================================================
-    // IMAGE UPLOAD & PREVIEW ENGINE
-    // =========================================================================
-    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
-    const MAX_COUNT = 8;
+    async function loadCatalog() {
+      const container = document.getElementById('sellerCatalogGrid');
+      container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--sc-muted);">Loading merchant catalog items…</div>`;
 
-    function validateAndAddFiles(files, targetArray, errorEl, updateCallback) {
-      errorEl.style.display = 'none';
-      errorEl.textContent = '';
+      try {
+        const res = await window.api.get('/products?limit=50');
+        allProducts = res.items || res.products || (Array.isArray(res) ? res : []);
+        renderCatalog();
+      } catch (err) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:#EF4444;">Failed to load catalog: ${err.message}</div>`;
+      }
+    }
 
-      if (!files || files.length === 0) return;
+    function filterByCategory(cat) {
+      currentCategoryFilter = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${cat}'`));
+      });
+      renderCatalog();
+    }
 
-      if (targetArray.length + files.length > MAX_COUNT) {
-        errorEl.textContent = `You can upload a maximum of ${MAX_COUNT} images.`;
-        errorEl.style.display = 'block';
+    function renderCatalog() {
+      const container = document.getElementById('sellerCatalogGrid');
+      
+      let items = allProducts;
+      if (currentCategoryFilter !== 'ALL') {
+        items = allProducts.filter(p => (p.category_slug === currentCategoryFilter || (p.category_name && p.category_name.toLowerCase().includes(currentCategoryFilter))));
+      }
+
+      if (items.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--sc-muted);">No products found in this category. Click "+ Add New Product" to list one.</div>`;
         return;
       }
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const ext = file.name.split('.').pop().toLowerCase();
-        const validExt = ['jpg', 'jpeg', 'png', 'webp'].includes(ext);
-        const validMime = ALLOWED_TYPES.includes(file.type.toLowerCase());
+      container.innerHTML = items.map(p => {
+        const isAuction = p.status === 'ACTIVE_AUCTION' || p.status === 'SHIFTING_TO_AUCTION';
+        const img = (Array.isArray(p.images) && p.images.length > 0) ? p.images[0] : (typeof p.images === 'string' && p.images.startsWith('[') ? JSON.parse(p.images)[0] : (p.images || '/assets/real/ps5.jpg'));
 
-        if (!validExt || !validMime) {
-          errorEl.textContent = 'Only JPG, JPEG, PNG and WEBP images are allowed.';
-          errorEl.style.display = 'block';
-          return;
-        }
-
-        if (file.size > MAX_SIZE_BYTES) {
-          errorEl.textContent = `"${file.name}" is larger than 10 MB. Image size must be 10 MB or smaller.`;
-          errorEl.style.display = 'block';
-          return;
-        }
-
-        const previewUrl = URL.createObjectURL(file);
-        const isPrimary = targetArray.length === 0;
-
-        targetArray.push({
-          file,
-          url: previewUrl,
-          isPrimary,
-          isNew: true,
-        });
-      }
-
-      // Ensure primary exists
-      if (targetArray.length > 0 && !targetArray.some(x => x.isPrimary)) {
-        targetArray[0].isPrimary = true;
-      }
-
-      updateCallback();
-    }
-
-    function renderThumbs(targetArray, gridEl, counterEl, onRemove, onSetPrimary, onMove) {
-      counterEl.textContent = `${targetArray.length} / ${MAX_COUNT} images`;
-
-      if (targetArray.length === 0) {
-        gridEl.innerHTML = '';
-        return;
-      }
-
-      gridEl.innerHTML = targetArray.map((img, idx) => {
-        const isPrimary = Boolean(img.isPrimary);
         return `
-          <div class="bm-thumb-card ${isPrimary ? 'is-primary' : ''}">
-            <div class="bm-thumb-preview-wrap">
-              <img src="${img.url}" alt="Product Photo ${idx + 1}" class="bm-thumb-img" />
-              <span class="bm-thumb-index-badge">#${idx + 1}</span>
-              ${isPrimary ? '<span class="bm-thumb-primary-tag">PRIMARY</span>' : ''}
-              <button type="button" class="bm-thumb-del-btn" data-idx="${idx}" title="Remove image" aria-label="Remove image">✕</button>
+          <div class="seller-item-card ${isAuction ? 'is-auction' : ''}">
+            <div class="card-img-wrap">
+              <img src="${img}" alt="${p.title}" onerror="this.src='/assets/real/ps5.jpg'" />
+              ${isAuction ? `
+                <span class="card-badge auction">⚡ LIVE AUCTION</span>
+              ` : `
+                <span class="card-badge shop">🛒 STORE RETAIL</span>
+              `}
             </div>
-            <div class="bm-thumb-actions">
-              ${isPrimary
-                ? '<button type="button" class="bm-thumb-action-btn primary-btn" disabled>Primary</button>'
-                : `<button type="button" class="bm-thumb-action-btn" data-set-primary="${idx}">Set Primary</button>`
-              }
-              <div class="bm-thumb-nav-row">
-                <button type="button" class="bm-thumb-move-btn" data-move-left="${idx}" ${idx === 0 ? 'disabled' : ''} title="Move Left">◀</button>
-                <button type="button" class="bm-thumb-move-btn" data-move-right="${idx}" ${idx === targetArray.length - 1 ? 'disabled' : ''} title="Move Right">▶</button>
+
+            <div class="card-body">
+              <span class="card-cat">${p.category_name || 'Retail Category'}</span>
+              <h3 class="card-title" title="${p.title}">${p.title}</h3>
+
+              <div class="card-pricing-row">
+                <div class="price-col">
+                  <span>${isAuction ? 'Current High' : 'Fixed Price'}</span>
+                  <strong>${formatCurrency(p.price)}</strong>
+                </div>
+                <div style="text-align:right;">
+                  <span class="stock-tag">${p.available_qty || 5} in stock</span>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                ${isAuction ? `
+                  <a href="/seller/auctions.html" class="btn-card-swap" style="background:rgba(255,122,0,0.15);color:#FF7A00;border-color:rgba(255,122,0,0.4);">
+                    <span>⚡ Manage Live Drop ⚙️</span>
+                  </a>
+                ` : `
+                  <button type="button" class="btn-card-swap" onclick="openSwapModal(${p.id})">
+                    <span>⚡ Swap to Live Auction &rarr;</span>
+                  </button>
+                `}
+                <a href="/shop/product.html?id=${p.id}" class="btn-card-view" target="_blank" title="View customer product page">
+                  <span>↗</span>
+                </a>
               </div>
             </div>
           </div>
         `;
       }).join('');
-
-      // Wire remove buttons
-      gridEl.querySelectorAll('.bm-thumb-del-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          onRemove(Number(btn.dataset.idx));
-        });
-      });
-
-      // Wire set primary buttons
-      gridEl.querySelectorAll('[data-set-primary]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          onSetPrimary(Number(btn.dataset.setPrimary));
-        });
-      });
-
-      // Wire move buttons
-      gridEl.querySelectorAll('[data-move-left]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          onMove(Number(btn.dataset.moveLeft), -1);
-        });
-      });
-      gridEl.querySelectorAll('[data-move-right]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          onMove(Number(btn.dataset.moveRight), 1);
-        });
-      });
     }
 
-    // Setup Create Modal Dropzone
-    const createDropzone = document.getElementById('create-dropzone');
-    const createFileInput = document.getElementById('create-file-input');
-    const createError = document.getElementById('create-image-error');
-    const createThumbsGrid = document.getElementById('create-thumbs-grid');
-    const createCounter = document.getElementById('create-image-counter');
-
-    createDropzone.addEventListener('click', () => createFileInput.click());
-    createDropzone.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        createFileInput.click();
-      }
-    });
-
-    createFileInput.addEventListener('change', () => {
-      validateAndAddFiles(createFileInput.files, createImages, createError, updateCreateThumbs);
-      createFileInput.value = '';
-    });
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-      createDropzone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        createDropzone.classList.add('dragover');
-      });
-    });
-    ['dragleave', 'drop'].forEach(eventName => {
-      createDropzone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        createDropzone.classList.remove('dragover');
-      });
-    });
-    createDropzone.addEventListener('drop', (e) => {
-      if (e.dataTransfer && e.dataTransfer.files) {
-        validateAndAddFiles(e.dataTransfer.files, createImages, createError, updateCreateThumbs);
-      }
-    });
-
-    function updateCreateThumbs() {
-      renderThumbs(
-        createImages,
-        createThumbsGrid,
-        createCounter,
-        (removeIdx) => {
-          createImages.splice(removeIdx, 1);
-          if (createImages.length > 0 && !createImages.some(x => x.isPrimary)) {
-            createImages[0].isPrimary = true;
-          }
-          updateCreateThumbs();
-        },
-        (primaryIdx) => {
-          createImages.forEach((img, i) => { img.isPrimary = (i === primaryIdx); });
-          updateCreateThumbs();
-        },
-        (idx, offset) => {
-          const target = idx + offset;
-          if (target >= 0 && target < createImages.length) {
-            const temp = createImages[idx];
-            createImages[idx] = createImages[target];
-            createImages[target] = temp;
-            updateCreateThumbs();
-          }
+    function openAddProductModal() {
+      document.getElementById('addProductModal').classList.add('active');
+      document.getElementById('addProdFeedback').style.display = 'none';
+      setTimeout(() => {
+        const titleInput = document.getElementById('npTitle');
+        if (titleInput) {
+          titleInput.focus();
         }
-      );
+      }, 50);
     }
 
-    // Setup Edit Modal Dropzone
-    const editDropzone = document.getElementById('edit-dropzone');
-    const editFileInput = document.getElementById('edit-file-input');
-    const editError = document.getElementById('edit-image-error');
-    const editThumbsGrid = document.getElementById('edit-thumbs-grid');
-    const editCounter = document.getElementById('edit-image-counter');
-
-    editDropzone.addEventListener('click', () => editFileInput.click());
-    editFileInput.addEventListener('change', () => {
-      validateAndAddFiles(editFileInput.files, editImages, editError, updateEditThumbs);
-      editFileInput.value = '';
-    });
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-      editDropzone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        editDropzone.classList.add('dragover');
-      });
-    });
-    ['dragleave', 'drop'].forEach(eventName => {
-      editDropzone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        editDropzone.classList.remove('dragover');
-      });
-    });
-    editDropzone.addEventListener('drop', (e) => {
-      if (e.dataTransfer && e.dataTransfer.files) {
-        validateAndAddFiles(e.dataTransfer.files, editImages, editError, updateEditThumbs);
-      }
-    });
-
-    function updateEditThumbs() {
-      renderThumbs(
-        editImages,
-        editThumbsGrid,
-        editCounter,
-        (removeIdx) => {
-          if (editImages.length <= 1) {
-            editError.textContent = 'A product must have at least one image.';
-            editError.style.display = 'block';
-            return;
-          }
-          editImages.splice(removeIdx, 1);
-          if (editImages.length > 0 && !editImages.some(x => x.isPrimary)) {
-            editImages[0].isPrimary = true;
-          }
-          updateEditThumbs();
-        },
-        (primaryIdx) => {
-          editImages.forEach((img, i) => { img.isPrimary = (i === primaryIdx); });
-          updateEditThumbs();
-        },
-        (idx, offset) => {
-          const target = idx + offset;
-          if (target >= 0 && target < editImages.length) {
-            const temp = editImages[idx];
-            editImages[idx] = editImages[target];
-            editImages[target] = temp;
-            updateEditThumbs();
-          }
-        }
-      );
+    function closeAddProductModal() {
+      document.getElementById('addProductModal').classList.remove('active');
     }
 
-    // =========================================================================
-    // UNSAVED CHANGES GUARD
-    // =========================================================================
-    function isCreateFormDirty() {
-      return createImages.length > 0 ||
-        Boolean(document.getElementById('p-title').value.trim()) ||
-        Boolean(document.getElementById('p-price').value.trim()) ||
-        Boolean(document.getElementById('p-brand').value.trim()) ||
-        Boolean(document.getElementById('p-desc').value.trim());
-    }
+    async function submitNewProduct() {
+      const title = document.getElementById('npTitle').value.trim();
+      const categoryId = Number(document.getElementById('npCategory').value);
+      const price = Number(document.getElementById('npPrice').value);
+      const stock = Number(document.getElementById('npQty').value);
+      const image = document.getElementById('npImage').value.trim();
+      const description = document.getElementById('npDesc').value.trim();
 
-    const { confirmDiscard } = window.nav.setupUnsavedChangesGuard({
-      isDirtyCheck: isCreateFormDirty,
-      onDiscard: () => {
-        createImages = [];
-        updateCreateThumbs();
-        document.getElementById('create-product-form').reset();
-      }
-    });
+      const fb = document.getElementById('addProdFeedback');
+      const submitBtn = document.getElementById('btnAddProdSubmit');
 
-    // =========================================================================
-    // CATEGORY & PRODUCT DATA LOADING
-    // =========================================================================
-    async function loadCategories() {
-      categoriesList = await window.api.get('/categories');
-      const select = document.getElementById('p-category');
-      const editSelect = document.getElementById('edit-category');
-      const filterSelect = document.getElementById('category-filter');
-      const options = categoriesList
-        .filter(c => c.parent_id === null)
-        .map(c => `<option value="${c.id}">${c.name}</option>`)
-        .join('');
-
-      select.innerHTML = options;
-      editSelect.innerHTML = options;
-      filterSelect.innerHTML = '<option value="">All Categories</option>' + options;
-    }
-
-    async function loadProducts() {
-      hideError();
-      try {
-        const { items } = await window.api.get('/products/my');
-        allProducts = items || [];
-        renderProductsTable();
-      } catch (err) {
-        showError('Could not load products: ' + err.message);
-      }
-    }
-
-    function renderProductsTable() {
-      const tbody = document.getElementById('products-tbody');
-      const searchQ = document.getElementById('product-search-input').value.toLowerCase().trim();
-      const statusFilter = document.getElementById('status-filter').value;
-      const categoryFilter = document.getElementById('category-filter').value;
-
-      let filtered = allProducts.filter(p => {
-        if (statusFilter && p.status !== statusFilter) return false;
-        if (categoryFilter && String(p.category_id) !== String(categoryFilter)) return false;
-        if (searchQ) {
-          const matchTitle = (p.title || '').toLowerCase().includes(searchQ);
-          const matchBrand = (p.brand || '').toLowerCase().includes(searchQ);
-          const matchSku = (p.sku || '').toLowerCase().includes(searchQ);
-          if (!matchTitle && !matchBrand && !matchSku) return false;
-        }
-        return true;
-      });
-
-      document.getElementById('product-count-label').textContent = `Showing ${filtered.length} of ${allProducts.length} products`;
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" style="text-align:center;padding:48px 20px;">
-              <div style="font-size:1.1rem;font-weight:700;color:#172033;margin-bottom:6px;">No products found</div>
-              <p class="text-muted" style="margin-bottom:16px;">Click the button below to add your first product with photos to BidMart.</p>
-              <button type="button" class="sc-btn-primary" onclick="document.getElementById('open-create-modal').click()">+ Add Your First Product</button>
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      tbody.innerHTML = filtered.map(p => {
-        const fallbackImg = '/assets/placeholder-product.svg';
-        let imgUrl = fallbackImg;
-        let imgCount = 0;
-
-        if (Array.isArray(p.images) && p.images.length > 0) {
-          imgUrl = typeof p.images[0] === 'string' ? p.images[0] : (p.images[0].url || p.images[0].image_url || fallbackImg);
-          imgCount = p.images.length;
-        } else if (typeof p.images === 'string') {
-          try {
-            const arr = JSON.parse(p.images);
-            if (Array.isArray(arr) && arr.length > 0) {
-              imgUrl = typeof arr[0] === 'string' ? arr[0] : (arr[0].url || fallbackImg);
-              imgCount = arr.length;
-            }
-          } catch {}
-        }
-
-        const statusClass = (p.status || '').toLowerCase();
-        const isDraft = p.status === 'DRAFT';
-        const isShop = p.status === 'ACTIVE_SHOP';
-        const isUnsold = p.status === 'AUCTION_UNSOLD';
-
-        let actionButtons = '';
-        if (isDraft) {
-          actionButtons += `<button class="sc-btn-sm" data-action="publish" data-id="${p.id}" style="color:#059669;border-color:#059669;font-weight:700;">Publish</button> `;
-          actionButtons += `<button class="sc-btn-sm" data-action="edit" data-id="${p.id}">Edit</button> `;
-          actionButtons += `<button class="sc-btn-sm" data-action="delete" data-id="${p.id}" style="color:#DC2626;">Delete</button> `;
-        } else if (isShop) {
-          actionButtons += `<button class="sc-btn-sm" data-action="edit" data-id="${p.id}">Edit / Photos</button> `;
-          actionButtons += `<a href="/seller/auctions.html" class="sc-btn-sm" style="color:var(--sc-primary);text-decoration:none;">Move to Auction</a> `;
-        } else if (isUnsold) {
-          actionButtons += `<a href="/seller/auctions.html" class="sc-btn-sm" style="color:#059669;text-decoration:none;">Relist Auction</a> `;
-        } else {
-          actionButtons += `<button class="sc-btn-sm" data-action="edit" data-id="${p.id}">Edit</button> `;
-        }
-
-        return `
-          <tr>
-            <td style="padding-left:20px;">
-              <div class="sc-product-cell" style="display:flex;align-items:center;gap:12px;">
-                <div style="position:relative;width:52px;height:52px;border-radius:10px;background:#F1F5F9;overflow:hidden;flex-shrink:0;border:1px solid #E2E8F0;">
-                  <img src="${imgUrl}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='${fallbackImg}'" />
-                  ${imgCount > 1 ? `<span style="position:absolute;bottom:2px;right:2px;background:rgba(15,23,42,0.8);color:#fff;font-size:0.6rem;font-weight:800;padding:1px 4px;border-radius:3px;">${imgCount}</span>` : ''}
-                </div>
-                <div>
-                  <div style="font-weight:700;color:#172033;font-size:0.92rem;">${p.title}</div>
-                  <div class="text-muted" style="font-size:0.75rem;">SKU: ${p.sku || 'N/A'} · Brand: ${p.brand || 'Generic'}</div>
-                </div>
-              </div>
-            </td>
-            <td><span class="text-muted" style="font-weight:600;font-size:0.85rem;">${p.category_name || 'General'}</span></td>
-            <td><strong style="font-size:0.95rem;">${formatINR(p.price)}</strong></td>
-            <td>
-              <span style="font-weight:700;font-size:0.88rem;${(p.available_qty ?? 0) <= 5 ? 'color:#DC2626;' : 'color:#059669;'}">
-                ${p.available_qty ?? 0} units
-              </span>
-            </td>
-            <td><span class="sc-status-pill ${statusClass}">${(p.status || '').replace('_', ' ')}</span></td>
-            <td><div style="display:flex;gap:6px;flex-wrap:wrap;">${actionButtons}</div></td>
-          </tr>
-        `;
-      }).join('');
-
-      // Wire Publish action
-      tbody.querySelectorAll('[data-action="publish"]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          btn.disabled = true;
-          try {
-            await window.api.patch(`/products/${btn.dataset.id}/status`, { status: 'ACTIVE_SHOP' });
-            await loadProducts();
-          } catch (err) {
-            showError(err.message);
-            btn.disabled = false;
-          }
-        });
-      });
-
-      // Wire Delete action
-      tbody.querySelectorAll('[data-action="delete"]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!confirm('Are you sure you want to delete this draft product and its images?')) return;
-          try {
-            await window.api.delete(`/products/${btn.dataset.id}`);
-            await loadProducts();
-          } catch (err) {
-            showError(err.message);
-          }
-        });
-      });
-
-      // Wire Edit action
-      tbody.querySelectorAll('[data-action="edit"]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const prodId = btn.dataset.id;
-          try {
-            const prod = await window.api.get(`/products/${prodId}`);
-            openEditModal(prod);
-          } catch (err) {
-            showError(err.message);
-          }
-        });
-      });
-    }
-
-    // =========================================================================
-    // MODAL HANDLERS
-    // =========================================================================
-    const createModal = document.getElementById('create-modal');
-    const editModal = document.getElementById('edit-modal');
-
-    document.getElementById('open-create-modal').addEventListener('click', () => {
-      createImages = [];
-      updateCreateThumbs();
-      document.getElementById('create-product-form').reset();
-      createError.style.display = 'none';
-      createModal.hidden = false;
-    });
-
-    document.getElementById('create-modal-close').addEventListener('click', () => {
-      confirmDiscard(() => { createModal.hidden = true; });
-    });
-    document.getElementById('cancel-create-btn').addEventListener('click', () => {
-      confirmDiscard(() => { createModal.hidden = true; });
-    });
-
-    document.getElementById('edit-modal-close').addEventListener('click', () => { editModal.hidden = true; });
-    document.getElementById('cancel-edit-btn').addEventListener('click', () => { editModal.hidden = true; });
-
-    function openEditModal(prod) {
-      document.getElementById('edit-product-id').value = prod.id;
-      document.getElementById('edit-modal-subtitle').textContent = prod.title;
-      document.getElementById('edit-title').value = prod.title;
-      document.getElementById('edit-category').value = prod.category_id;
-      document.getElementById('edit-condition').value = prod.condition || 'NEW';
-      document.getElementById('edit-price').value = prod.price;
-      document.getElementById('edit-stock').value = prod.available_qty ?? 0;
-      document.getElementById('edit-brand').value = prod.brand || '';
-      document.getElementById('edit-sku').value = prod.sku || '';
-      document.getElementById('edit-desc').value = prod.description || '';
-
-      editImages = [];
-      if (prod.image_records && prod.image_records.length > 0) {
-        editImages = prod.image_records.map(rec => ({
-          id: rec.id,
-          url: rec.image_url,
-          isPrimary: Boolean(rec.is_primary),
-          isNew: false,
-        }));
-      } else if (Array.isArray(prod.images)) {
-        editImages = prod.images.map((url, i) => ({
-          url,
-          isPrimary: i === 0,
-          isNew: false,
-        }));
-      }
-
-      updateEditThumbs();
-      editError.style.display = 'none';
-      editModal.hidden = false;
-    }
-
-    // =========================================================================
-    // SUBMIT CREATE PRODUCT (MULTIPART / IMAGES)
-    // =========================================================================
-    document.getElementById('create-product-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideError();
-      createError.style.display = 'none';
-
-      if (createImages.length === 0) {
-        createError.textContent = 'Add at least one product image.';
-        createError.style.display = 'block';
-        return;
-      }
-
-      const saveBtn = document.getElementById('save-product-btn');
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Creating Product & Uploading Photos…';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Publishing to Catalog…';
 
       try {
-        const formData = new FormData();
-        formData.append('title', document.getElementById('p-title').value.trim());
-        formData.append('categoryId', Number(document.getElementById('p-category').value));
-        formData.append('condition', document.getElementById('p-condition').value);
-        formData.append('price', Number(document.getElementById('p-price').value));
-        formData.append('initialQty', Number(document.getElementById('p-qty').value));
-        if (document.getElementById('p-brand').value.trim()) {
-          formData.append('brand', document.getElementById('p-brand').value.trim());
-        }
-        if (document.getElementById('p-sku').value.trim()) {
-          formData.append('sku', document.getElementById('p-sku').value.trim());
-        }
-        if (document.getElementById('p-desc').value.trim()) {
-          formData.append('description', document.getElementById('p-desc').value.trim());
-        }
+        const payload = {
+          title,
+          categoryId,
+          price,
+          initialQty: stock,
+          images: [image],
+          description
+        };
 
-        // Find primary index among ordered createImages
-        let primaryIdx = createImages.findIndex(x => x.isPrimary);
-        if (primaryIdx < 0) primaryIdx = 0;
-        formData.append('primaryIndex', primaryIdx);
+        await window.api.post('/products', payload);
+        
+        fb.style.background = 'rgba(16, 185, 129, 0.15)';
+        fb.style.color = '#10B981';
+        fb.textContent = `🎉 Product "${title}" added to your store!`;
+        fb.style.display = 'block';
 
-        // Append files
-        createImages.forEach(img => {
-          if (img.file) {
-            formData.append('images', img.file);
-          }
-        });
+        setTimeout(() => {
+          closeAddProductModal();
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Publish to Store Inventory →';
+          loadCatalog();
+        }, 1200);
 
-        // Send multipart request via API
-        const token = window.auth.getToken();
-        const res = await fetch('/api/products', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: formData,
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.message || 'Failed to create product.');
-        }
-
-        createModal.hidden = true;
-        createImages = [];
-        document.getElementById('create-product-form').reset();
-        await loadProducts();
       } catch (err) {
-        showError(err.message);
-      } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = 'Create Product';
+        fb.style.background = 'rgba(239, 68, 68, 0.15)';
+        fb.style.color = '#EF4444';
+        fb.textContent = err.message || 'Failed to add product.';
+        fb.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Publish to Store Inventory →';
       }
-    });
+    }
 
-    // =========================================================================
-    // SUBMIT EDIT PRODUCT (UPDATES DETAILS & IMAGES)
-    // =========================================================================
-    document.getElementById('edit-product-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideError();
-      editError.style.display = 'none';
+    function openSwapModal(productId) {
+      const prod = allProducts.find(p => p.id === productId);
+      if (!prod) return;
 
-      if (editImages.length === 0) {
-        editError.textContent = 'Add at least one product image.';
-        editError.style.display = 'block';
-        return;
+      activeSwapProd = prod;
+      document.getElementById('swapProductId').value = prod.id;
+      document.getElementById('swapProdTitle').textContent = prod.title;
+      document.getElementById('swapProdPrice').textContent = formatCurrency(prod.price);
+      
+      const suggestedStarting = Math.round(Number(prod.price) * 0.7);
+      const startingInput = document.getElementById('swapStartingPrice');
+      const reserveInput = document.getElementById('swapReservePrice');
+      const incInput = document.getElementById('swapIncrement');
+
+      startingInput.value = suggestedStarting;
+      startingInput.placeholder = `e.g. ${suggestedStarting}`;
+
+      reserveInput.value = prod.price;
+      reserveInput.placeholder = `e.g. ${prod.price}`;
+
+      incInput.value = prod.price > 50000 ? 1000 : 500;
+      incInput.placeholder = `e.g. ${incInput.value}`;
+
+      document.getElementById('swapFeedback').style.display = 'none';
+      document.getElementById('swapAuctionModal').classList.add('active');
+
+      setTimeout(() => {
+        startingInput.focus();
+        startingInput.select();
+      }, 50);
+    }
+
+    function closeSwapModal() {
+      document.getElementById('swapAuctionModal').classList.remove('active');
+      activeSwapProd = null;
+    }
+
+    function openFloatingAuctionModal() {
+      // Find the first fixed-price store item and open swap modal for it
+      const storeItem = allProducts.find(p => p.status === 'ACTIVE_SHOP') || allProducts[0];
+      if (storeItem) {
+        openSwapModal(storeItem.id);
+      } else {
+        alert('All products are already in auction mode! Add a new product to list more.');
       }
+    }
 
-      const saveBtn = document.getElementById('save-edit-btn');
-      const prodId = document.getElementById('edit-product-id').value;
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving Changes…';
+    async function executeAuctionSwap() {
+      if (!activeSwapProd) return;
+
+      const productId = activeSwapProd.id;
+      const startingPrice = Number(document.getElementById('swapStartingPrice').value);
+      const reservePrice = Number(document.getElementById('swapReservePrice').value) || startingPrice;
+      const bidIncrement = Number(document.getElementById('swapIncrement').value);
+      const durationHours = Number(document.getElementById('swapDurationHours').value);
+
+      const startsAt = new Date().toISOString();
+      const endsAt = new Date(Date.now() + durationHours * 3600 * 1000).toISOString();
+
+      const fb = document.getElementById('swapFeedback');
+      const submitBtn = document.getElementById('btnExecuteSwap');
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Launching Live Drop…';
 
       try {
-        const formData = new FormData();
-        formData.append('title', document.getElementById('edit-title').value.trim());
-        formData.append('category_id', Number(document.getElementById('edit-category').value));
-        formData.append('condition', document.getElementById('edit-condition').value);
-        formData.append('price', Number(document.getElementById('edit-price').value));
-        formData.append('available_qty', Number(document.getElementById('edit-stock').value));
-        formData.append('brand', document.getElementById('edit-brand').value.trim());
-        formData.append('sku', document.getElementById('edit-sku').value.trim());
-        formData.append('description', document.getElementById('edit-desc').value.trim());
-
-        // Separate existing image records vs new files
-        const existingUrls = [];
-        let newFileCount = 0;
-
-        editImages.forEach((img, idx) => {
-          if (img.file) {
-            formData.append('images', img.file);
-            newFileCount++;
-          } else {
-            existingUrls.push({
-              url: img.url,
-              imageUrl: img.url,
-              isPrimary: Boolean(img.isPrimary),
-              sortOrder: idx,
-            });
-          }
+        await window.api.post('/auctions', {
+          productId,
+          startingPrice,
+          reservePrice,
+          bidIncrement,
+          startsAt,
+          endsAt
         });
 
-        formData.append('existingImages', JSON.stringify(existingUrls));
+        fb.style.background = 'rgba(16, 185, 129, 0.15)';
+        fb.style.color = '#10B981';
+        fb.innerHTML = `🔥 <strong>Auction Live!</strong> "${activeSwapProd.title}" is now open for bids on the customer Live Pit!`;
+        fb.style.display = 'block';
 
-        const token = window.auth.getToken();
-        const res = await fetch(`/api/products/${prodId}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: formData,
-        });
+        setTimeout(() => {
+          closeSwapModal();
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Launch Live Auction Drop on Consumer Pit →';
+          loadCatalog();
+        }, 1500);
 
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.message || 'Failed to update product.');
-        }
-
-        editModal.hidden = true;
-        await loadProducts();
       } catch (err) {
-        showError(err.message);
-      } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = 'Save Changes';
+        fb.style.background = 'rgba(239, 68, 68, 0.15)';
+        fb.style.color = '#EF4444';
+        fb.textContent = err.message || 'Auction launch failed.';
+        fb.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Launch Live Auction Drop on Consumer Pit →';
       }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHeader();
+      
+      const user = window.auth ? window.auth.getUser() : null;
+      if (user && (user.store_name || user.name)) {
+        document.getElementById('sideStoreName').textContent = user.store_name || user.name;
+      }
+
+      loadCatalog();
     });
-
-    // Filter listeners
-    document.getElementById('product-search-input').addEventListener('input', renderProductsTable);
-    document.getElementById('status-filter').addEventListener('change', renderProductsTable);
-    document.getElementById('category-filter').addEventListener('change', renderProductsTable);
-
-    // Initial load
-    (async () => {
-      await loadCategories();
-      await loadProducts();
-      if (window.location.hash === '#add') {
-        document.getElementById('open-create-modal').click();
-      }
-    })();
   </script>
 </body>
 </html>
+

@@ -20,6 +20,9 @@ router.post('/', authenticate, authorize('SELLER', 'ADMIN'), authorizeSellerAppr
 // POST /api/auctions/relist - start a new auction round for an AUCTION_UNSOLD product.
 router.post('/relist', authenticate, authorize('SELLER', 'ADMIN'), authorizeSellerApproved, auctionController.relist);
 
+// PATCH /api/auctions/:id/settings - seller updates live auction parameters (reservePrice, bidIncrement, endsAt)
+router.patch('/:id/settings', authenticate, authorize('SELLER', 'ADMIN'), authorizeSellerApproved, auctionController.updateSettings);
+
 // POST /api/auctions/return-to-shop - send an AUCTION_UNSOLD product back to the Shop.
 router.post('/return-to-shop', authenticate, authorize('SELLER', 'ADMIN'), authorizeSellerApproved, auctionController.returnToShop);
 

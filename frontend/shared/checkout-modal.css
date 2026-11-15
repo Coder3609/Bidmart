@@ -1,0 +1,379 @@
+/* =====================================================================
+   BIDMART REFINED CHECKOUT & PAYMENT MODAL STYLING
+   Precision Grid & Aspect-Ratio Alignment (No overflow/cutoffs)
+   ===================================================================== */
+
+.bm-checkout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 13, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
+  box-sizing: border-box;
+}
+
+.bm-checkout-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bm-checkout-card {
+  width: 100%;
+  max-width: 1020px;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+  background: #0D121D;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.95), 0 0 40px rgba(216, 255, 0, 0.06);
+  position: relative;
+  transform: translateY(16px) scale(0.985);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #FFFFFF;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.bm-checkout-overlay.active .bm-checkout-card {
+  transform: translateY(0) scale(1);
+}
+
+.bm-checkout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0B0F19;
+  flex-shrink: 0;
+}
+
+.bm-checkout-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.bm-checkout-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.bm-checkout-scroll-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 24px 28px 32px;
+  box-sizing: border-box;
+}
+
+/* Two-column layout: 1.3fr Left (Forms) | 1fr Right (Summary & Pay) */
+.bm-checkout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.95fr);
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .bm-checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bm-checkout-step-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.3px;
+}
+
+.bm-checkout-step-num {
+  background: #D8FF00;
+  color: #080808;
+  font-size: 0.72rem;
+  font-weight: 800;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Shipping Form */
+.bm-shipping-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.bm-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.bm-form-row-3 {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 0.8fr;
+  gap: 12px;
+}
+
+.bm-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bm-form-group label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #94A3B8;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+
+.bm-form-group input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  outline: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.bm-form-group input:focus {
+  border-color: #D8FF00;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* Payment Selector */
+.bm-payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bm-pay-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid rgba(255, 255, 255, 0.09);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.bm-pay-option:hover, .bm-pay-option.selected {
+  border-color: #D8FF00;
+  background: rgba(216, 255, 0, 0.05);
+}
+
+.bm-pay-option input[type="radio"] {
+  accent-color: #D8FF00;
+  margin-top: 3px;
+}
+
+.bm-pay-option-content {
+  flex: 1;
+}
+
+.bm-pay-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  margin-bottom: 2px;
+  color: #FFFFFF;
+}
+
+.bm-pay-desc {
+  font-size: 0.74rem;
+  color: #94A3B8;
+  line-height: 1.35;
+}
+
+/* Right Summary Card */
+.bm-order-summary-box {
+  background: #111726;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.bm-summary-cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 18px;
+  padding-right: 4px;
+}
+
+.bm-cart-item-row {
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bm-cart-item-thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #000000;
+  display: block;
+}
+
+.bm-cart-item-info {
+  min-width: 0;
+}
+
+.bm-cart-item-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #FFFFFF;
+  line-height: 1.25;
+  margin-bottom: 2px;
+}
+
+.bm-cart-item-sub {
+  font-size: 0.72rem;
+  color: #94A3B8;
+}
+
+.bm-cart-item-price-col {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.bm-cart-item-price {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #D8FF00;
+}
+
+.bm-btn-item-remove {
+  background: none;
+  border: none;
+  color: #FF3B69;
+  font-size: 0.72rem;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 3px;
+  display: block;
+  text-align: right;
+  width: 100%;
+}
+
+.bm-btn-item-remove:hover {
+  text-decoration: underline;
+}
+
+/* Price Lines */
+.bm-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #94A3B8;
+  margin-bottom: 8px;
+}
+
+.bm-price-row.total {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 14px;
+  margin-top: 6px;
+}
+
+.bm-price-row.total .amount {
+  color: #D8FF00;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.bm-btn-pay-complete {
+  margin-top: 18px;
+  background: #D8FF00;
+  color: #080808;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 13px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 18px rgba(216, 255, 0, 0.35);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bm-btn-pay-complete:hover {
+  background: #EBFF4D;
+  transform: translateY(-1px);
+}
+
+.bm-order-success-stage {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.bm-success-icon-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(216, 255, 0, 0.12);
+  border: 2px solid #D8FF00;
+  color: #D8FF00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 18px;
+}

@@ -1,0 +1,1346 @@
+/* =====================================================================
+   BIDMART HYBRID MARKETPLACE - SIGNATURE DESIGN SYSTEM
+   Editorial Square-Box Architecture with High-Impact Contrast
+   Full Light & Dark Mode
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+:root {
+  /* DARK THEME (DEFAULT SIGNATURE) */
+  --bm-bg: #0B0E14;
+  --bm-bg-subtle: #111622;
+  --bm-card: #151C28;
+  --bm-card-hover: #1A2433;
+  --bm-tile-bg: #0D121B;
+  
+  --bm-border: #222C3C;
+  --bm-border-strong: #33425A;
+  
+  --bm-text-head: #FFFFFF;
+  --bm-text-body: #C5D0E0;
+  --bm-text-muted: #7E8DA4;
+  
+  --bm-accent: #D8FF00;              /* Acid Lime */
+  --bm-accent-btn-bg: #D8FF00;
+  --bm-accent-btn-text: #080808;
+  --bm-accent-glow: rgba(216, 255, 0, 0.25);
+  
+  --bm-cyan: #00F0FF;
+  --bm-red: #FF3B69;
+  --bm-orange: #FF7A00;
+  
+  --bm-auction-gold: #D8FF00;
+  --bm-auction-border: #D8FF00;
+  --bm-auction-bg: linear-gradient(170deg, var(--bm-card) 0%, rgba(216, 255, 0, 0.05) 100%);
+  --bm-auction-accent-line: linear-gradient(90deg, #D8FF00, #00F0FF);
+  
+  --bm-price-color: #D8FF00;
+  --bm-link-color: #D8FF00;
+  
+  --bm-hero-bg: linear-gradient(135deg, var(--bm-card) 0%, var(--bm-bg-subtle) 100%);
+  --bm-hero-badge-bg: rgba(216, 255, 0, 0.1);
+  --bm-hero-badge-text: #D8FF00;
+  --bm-hero-badge-border: #D8FF00;
+  --bm-hero-glow: radial-gradient(circle, rgba(216, 255, 0, 0.22) 0%, transparent 70%);
+  
+  --bm-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --bm-shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.65);
+  --bm-radius: 12px;
+}
+
+[data-theme="light"] {
+  /* LIGHT THEME (LUXURY CONTEMPORARY E-COMMERCE) */
+  --bm-bg: #F5F7FA;
+  --bm-bg-subtle: #FFFFFF;
+  --bm-card: #FFFFFF;
+  --bm-card-hover: #FFFFFF;
+  --bm-tile-bg: #F8FAFC;
+  
+  --bm-border: #E2E8F0;
+  --bm-border-strong: #CBD5E1;
+  
+  --bm-text-head: #0F172A;
+  --bm-text-body: #334155;
+  --bm-text-muted: #64748B;
+  
+  --bm-accent: #0F172A;              /* Sleek Luxury Obsidian */
+  --bm-accent-btn-bg: #0F172A;
+  --bm-accent-btn-text: #FFFFFF;
+  --bm-accent-glow: rgba(15, 23, 42, 0.12);
+  
+  --bm-cyan: #0284C7;
+  --bm-red: #E11D48;
+  --bm-orange: #D97706;
+  
+  --bm-auction-gold: #B45309;       /* Rich Warm Auction Amber */
+  --bm-auction-border: #F59E0B;
+  --bm-auction-bg: linear-gradient(170deg, #FFFFFF 0%, #FFFBEB 100%);
+  --bm-auction-accent-line: linear-gradient(90deg, #F59E0B, #E11D48);
+  
+  --bm-price-color: #0F172A;
+  --bm-link-color: #2563EB;
+  
+  --bm-hero-bg: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
+  --bm-hero-badge-bg: #FEF3C7;
+  --bm-hero-badge-text: #92400E;
+  --bm-hero-badge-border: #FCD34D;
+  --bm-hero-glow: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+  
+  --bm-shadow: 0 2px 8px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+  --bm-shadow-hover: 0 12px 28px rgba(15, 23, 42, 0.08), 0 4px 8px rgba(15, 23, 42, 0.03);
+  --bm-radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.bm-market-body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bm-bg);
+  color: var(--bm-text-body);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color 0.22s ease, color 0.22s ease;
+  overflow-x: hidden;
+}
+
+/* =====================================================================
+   1. SIGNATURE HEADER & FLOATING OMNIBAR
+   ===================================================================== */
+.bm-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bm-bg-subtle);
+  border-bottom: 1px solid var(--bm-border);
+  backdrop-filter: blur(16px);
+}
+
+.bm-main-nav {
+  max-width: 1520px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bm-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.bm-brand-name {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--bm-text-head);
+}
+.bm-brand-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--bm-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* BidMart Omnibar */
+.bm-omnibar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background: var(--bm-card);
+  border: 1px solid var(--bm-border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+.bm-omnibar:focus-within {
+  border-color: var(--bm-accent);
+  box-shadow: 0 0 0 3px var(--bm-accent-glow);
+}
+.bm-dept-selector {
+  background: var(--bm-tile-bg);
+  border: none;
+  border-right: 1px solid var(--bm-border);
+  color: var(--bm-text-body);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 12px;
+  height: 100%;
+  outline: none;
+  cursor: pointer;
+}
+.bm-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--bm-text-head);
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 0 14px;
+  outline: none;
+}
+.bm-search-input::placeholder {
+  color: var(--bm-text-muted);
+}
+.bm-search-submit {
+  background: var(--bm-text-head);
+  border: none;
+  height: 100%;
+  padding: 0 16px;
+  color: var(--bm-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease;
+}
+.bm-search-submit:hover {
+  opacity: 0.88;
+}
+
+/* Nav Actions */
+.bm-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.bm-theme-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: var(--bm-tile-bg);
+  border: 1px solid var(--bm-border);
+  border-radius: 8px;
+  color: var(--bm-text-head);
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.bm-theme-switch:hover {
+  border-color: var(--bm-border-strong);
+  background: var(--bm-card);
+}
+
+.bm-action-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 7px 12px;
+  color: var(--bm-text-head);
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.bm-action-pill:hover {
+  background: var(--bm-card);
+  border-color: var(--bm-border);
+}
+
+.bm-action-pill.bm-btn-live-pit {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #F59E0B;
+}
+[data-theme="light"] .bm-action-pill.bm-btn-live-pit {
+  background: #FFFBEB;
+  border-color: rgba(217, 119, 6, 0.35);
+  color: #D97706;
+}
+.bm-action-pill.bm-btn-live-pit:hover {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.bm-action-pill.bm-btn-signin {
+  background: var(--bm-text-head);
+  color: var(--bm-bg);
+  padding: 7px 16px;
+}
+.bm-action-pill.bm-btn-signin:hover {
+  opacity: 0.9;
+  border-color: transparent;
+}
+
+.bm-cart-count-badge {
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 2px;
+}
+
+/* Category Quick Rail */
+.bm-sub-rail {
+  background: var(--bm-bg);
+  border-bottom: 1px solid var(--bm-border);
+  padding: 7px 24px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bm-sub-rail::-webkit-scrollbar { display: none; }
+.bm-rail-item {
+  color: var(--bm-text-muted);
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+.bm-rail-item:hover, .bm-rail-item.active {
+  color: var(--bm-text-head);
+  font-weight: 600;
+}
+
+/* =====================================================================
+   2. REFINED EDITORIAL HERO STRIP
+   ==================================================================== */
+.bm-hero-strip {
+  max-width: 1520px;
+  margin: 24px auto 0;
+  padding: 0 24px;
+}
+
+.bm-hero-card {
+  background: var(--bm-card);
+  border: 1px solid var(--bm-border);
+  border-radius: var(--bm-radius);
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--bm-shadow);
+}
+
+.bm-hero-info {
+  max-width: 650px;
+  z-index: 2;
+}
+
+.bm-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bm-hero-badge-bg);
+  color: var(--bm-hero-badge-text);
+  border: 1px solid var(--bm-hero-badge-border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.bm-hero-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(24px, 2.5vw, 34px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--bm-text-head);
+  margin: 0 0 10px;
+  letter-spacing: -0.015em;
+}
+
+.bm-hero-sub {
+  font-size: 15px;
+  color: var(--bm-text-muted);
+  margin: 0 0 22px;
+  line-height: 1.5;
+  max-width: 540px;
+}
+
+.bm-hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.bm-btn-primary {
+  background: var(--bm-accent-btn-bg);
+  color: var(--bm-accent-btn-text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.bm-btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.bm-btn-ghost {
+  background: transparent;
+  color: var(--bm-text-head);
+  border: 1px solid var(--bm-border-strong);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.bm-btn-ghost:hover {
+  border-color: var(--bm-accent);
+  color: var(--bm-accent);
+}
+
+.bm-hero-art {
+  z-index: 2;
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bm-hero-art img {
+  max-height: 220px;
+  max-width: 320px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.12));
+}
+
+[data-theme="dark"] .bm-hero-art img {
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.5));
+}
+
+/* =====================================================================
+   3. THE SIGNATURE SQUARE BOXES ARCHITECTURE
+   ===================================================================== */
+.bm-boxes-section {
+  max-width: 1520px;
+  margin: 28px auto 40px;
+  padding: 0 24px;
+}
+
+.bm-boxes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+/* =====================================================================
+   FESTIVE PROMO BANNER (BIG TRAVEL SALE ULTRA-WIDE BANNER)
+   ===================================================================== */
+.bm-travel-poster-link {
+  grid-column: 1 / -1;
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  line-height: 0;
+}
+
+[data-theme="light"] .bm-travel-poster-link {
+  border-color: #E2E8F0;
+  box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.08);
+}
+
+.bm-travel-poster-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.45);
+}
+
+.bm-travel-poster-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+@media (max-width: 992px) {
+  .bm-festive-hero-strip {
+    flex-direction: column;
+  }
+  .bm-festive-visual-stage {
+    height: 240px;
+    width: 100%;
+  }
+}
+
+/* =====================================================================
+   FESTIVE BANK & PAYMENT STRIP (BELOW BOXES, ABOVE SHELF)
+   ===================================================================== */
+.bm-bank-offers-strip {
+  max-width: 1520px;
+  margin: 0 auto 36px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.bm-bank-offer-card {
+  background: var(--bm-card);
+  border: 1px solid var(--bm-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.18s ease;
+  box-shadow: var(--bm-shadow);
+}
+
+.bm-bank-offer-card:hover {
+  border-color: var(--bm-accent);
+  transform: translateY(-2px);
+}
+
+.bm-bank-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--bm-tile-bg);
+  border: 1px solid var(--bm-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.bm-bank-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.bm-bank-heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bm-text-head);
+  line-height: 1.25;
+  margin-bottom: 2px;
+}
+
+.bm-bank-desc {
+  font-size: 11px;
+  color: var(--bm-text-muted);
+  line-height: 1.3;
+}
+
+@media (max-width: 1100px) {
+  .bm-bank-offers-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bm-festive-hero-strip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bm-festive-right {
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .bm-bank-offers-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Individual Signature Box (Ultra Glassmorphism Architecture) */
+.bm-square-box {
+  background: rgba(18, 24, 38, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  position: relative;
+}
+
+[data-theme="light"] .bm-square-box {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 14px 32px -6px rgba(15, 23, 42, 0.07), inset 0 1px 0 #FFFFFF;
+}
+
+.bm-square-box:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 22px 50px -12px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="light"] .bm-square-box:hover {
+  border-color: rgba(203, 213, 225, 0.95);
+  box-shadow: 0 20px 40px -8px rgba(15, 23, 42, 0.12);
+}
+
+.bm-box-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.bm-box-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--bm-text-head);
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+.bm-box-tag {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  color: var(--bm-text-muted);
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+[data-theme="light"] .bm-box-tag {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.08);
+  color: #64748B;
+}
+
+/* =====================================================================
+   BOX 1: SPECIAL AUCTION ADVERTISEMENT BOX (GLASSMORPHIC)
+   ===================================================================== */
+.bm-auction-feature-box {
+  background: linear-gradient(145deg, rgba(32, 25, 14, 0.72) 0%, rgba(18, 24, 38, 0.65) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-top: 1px solid rgba(251, 191, 36, 0.55);
+  box-shadow: 0 16px 36px -8px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(251, 191, 36, 0.2);
+}
+
+[data-theme="light"] .bm-auction-feature-box {
+  background: linear-gradient(145deg, rgba(255, 251, 235, 0.85) 0%, rgba(255, 255, 255, 0.75) 100%);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-top: 1px solid rgba(251, 191, 36, 0.65);
+  box-shadow: 0 14px 30px -8px rgba(217, 119, 6, 0.12), inset 0 1px 0 #FFFFFF;
+}
+
+.bm-auction-feature-box:hover {
+  border-color: rgba(245, 158, 11, 0.65);
+  box-shadow: 0 20px 44px -8px rgba(245, 158, 11, 0.28);
+}
+
+.bm-live-beacon {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #EF4444;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  letter-spacing: 0.02em;
+}
+.bm-beacon-dot {
+  width: 6px;
+  height: 6px;
+  background: #EF4444;
+  border-radius: 50%;
+  animation: beacon-ping 1.2s infinite alternate;
+}
+@keyframes beacon-ping {
+  from { opacity: 0.4; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.15); }
+}
+
+.bm-auction-stage-hero {
+  background: rgba(10, 15, 24, 0.55);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+[data-theme="light"] .bm-auction-stage-hero {
+  background: rgba(248, 250, 252, 0.7);
+  border-color: rgba(226, 232, 240, 0.8);
+}
+
+.bm-auction-stage-hero:hover .bm-auction-img-cover img {
+  transform: scale(1.05);
+}
+.bm-auction-img-cover {
+  width: 100%;
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+  background: var(--bm-card);
+}
+.bm-auction-stage-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.bm-auction-badge-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #FBBF24;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.bm-auction-stage-meta {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bm-auction-stage-name {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--bm-text-head);
+  line-height: 1.35;
+}
+.bm-auction-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.bm-auction-bid-tag {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #D97706;
+}
+[data-theme="dark"] .bm-auction-bid-tag {
+  color: #F59E0B;
+}
+.bm-auction-retail-cross {
+  font-size: 12px;
+  color: var(--bm-text-muted);
+  text-decoration: line-through;
+}
+
+.bm-auction-box-copy {
+  font-size: 12.5px;
+  color: var(--bm-text-muted);
+  line-height: 1.45;
+  margin: 0 0 14px;
+}
+
+.bm-btn-box-auction {
+  background: var(--bm-text-head);
+  color: var(--bm-bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 11px;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  transition: all 0.15s ease;
+}
+.bm-btn-box-auction:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* =====================================================================
+   4-TILES QUAD GRID INSIDE A SQUARE BOX (GLASS TILES)
+   ===================================================================== */
+.bm-quad-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+  margin-bottom: 16px;
+}
+
+.bm-quad-tile {
+  background: rgba(13, 18, 27, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-theme="light"] .bm-quad-tile {
+  background: rgba(248, 250, 252, 0.7);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.95);
+}
+
+.bm-quad-tile:hover {
+  background: rgba(24, 34, 52, 0.65);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px -4px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .bm-quad-tile:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(203, 213, 225, 0.9);
+  box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.09);
+}
+
+.bm-quad-img-wrap {
+  height: 105px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .bm-quad-img-wrap {
+  background: #F1F5F9;
+  border-color: rgba(226, 232, 240, 0.6);
+}
+
+.bm-quad-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+.bm-quad-tile:hover .bm-quad-img-wrap img {
+  transform: scale(1.08);
+}
+
+.bm-quad-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bm-text-head);
+  text-align: center;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 4px;
+  width: 100%;
+}
+.bm-quad-price {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #10B981;
+}
+[data-theme="light"] .bm-quad-price {
+  color: #059669;
+}
+
+.bm-quad-cart-btn {
+  margin-top: 6px;
+  background: rgba(216, 255, 0, 0.12);
+  border: 1px solid rgba(216, 255, 0, 0.35);
+  color: #D8FF00;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.18s ease;
+  width: 100%;
+  justify-content: center;
+}
+.bm-quad-cart-btn:hover {
+  background: #D8FF00;
+  color: #080808;
+  box-shadow: 0 4px 12px rgba(216, 255, 0, 0.3);
+}
+[data-theme="light"] .bm-quad-cart-btn {
+  background: #0F172A;
+  color: #FFFFFF;
+  border: none;
+}
+[data-theme="light"] .bm-quad-cart-btn:hover {
+  background: #2563EB;
+}
+
+.bm-box-cta-link {
+  margin-top: auto;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #38BDF8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 4px;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+[data-theme="light"] .bm-box-cta-link {
+  color: #0284C7;
+}
+.bm-box-cta-link:hover {
+  color: #7DD3FC;
+  transform: translateX(3px);
+}
+[data-theme="light"] .bm-box-cta-link:hover {
+  color: #0369A1;
+}
+
+/* =====================================================================
+   4. HORIZONTAL PRODUCT STRIPS (LIVE AUCTIONS & TRENDING STORE DEALS)
+   ===================================================================== */
+.bm-shelf-section {
+  max-width: 1520px;
+  margin: 0 auto 36px;
+  padding: 0 24px;
+}
+
+.bm-shelf-card {
+  background: var(--bm-card);
+  border: 1px solid var(--bm-border);
+  border-radius: var(--bm-radius);
+  padding: 24px;
+  box-shadow: var(--bm-shadow);
+}
+
+.bm-shelf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.bm-shelf-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bm-shelf-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--bm-text-head);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.bm-shelf-tag {
+  background: var(--bm-tile-bg);
+  border: 1px solid var(--bm-border);
+  color: var(--bm-text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.bm-shelf-link {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bm-link-color);
+  text-decoration: none;
+}
+.bm-shelf-link:hover {
+  text-decoration: underline;
+}
+
+.bm-shelf-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* Product Card Inside Shelf */
+.bm-product-item {
+  background: var(--bm-tile-bg);
+  border: 1px solid var(--bm-border);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.18s ease;
+}
+.bm-product-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--bm-border-strong);
+  box-shadow: var(--bm-shadow);
+}
+
+.bm-prod-img-stage {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bm-card);
+  border: 1px solid var(--bm-border);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.bm-prod-img-stage img {
+  max-height: 120px;
+  max-width: 80%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+.bm-product-item:hover .bm-prod-img-stage img {
+  transform: scale(1.06);
+}
+
+.bm-prod-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.bm-badge-deal {
+  background: var(--bm-red);
+  color: #FFFFFF;
+}
+.bm-badge-auction {
+  background: var(--bm-accent);
+  color: #080808;
+}
+
+.bm-prod-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--bm-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.bm-prod-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bm-text-head);
+  line-height: 1.35;
+  margin: 0 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 35px;
+}
+
+.bm-prod-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.bm-prod-price-now {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--bm-text-head);
+}
+.bm-prod-price-orig {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--bm-text-muted);
+  text-decoration: line-through;
+}
+
+.bm-btn-cart-sm {
+  background: var(--bm-accent-btn-bg);
+  color: var(--bm-accent-btn-text);
+  border: none;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: auto;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+.bm-btn-cart-sm:hover {
+  filter: brightness(1.1);
+}
+
+/* =====================================================================
+   5. ALWAYS FLOATING AUCTION MODE SWITCH BUTTON
+   ===================================================================== */
+.bm-floating-switch {
+  position: fixed;
+  bottom: 26px;
+  right: 26px;
+  z-index: 9999;
+  background: #0F172A;
+  border: 2px solid var(--bm-auction-border);
+  color: #FFFFFF;
+  padding: 12px 22px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(245, 158, 11, 0.25);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
+  text-decoration: none;
+}
+.bm-floating-switch:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.5), 0 0 30px var(--bm-auction-border);
+}
+.bm-switch-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--bm-auction-border);
+  border-radius: 50%;
+  animation: dot-pulse 1.2s infinite alternate;
+}
+@keyframes dot-pulse {
+  from { opacity: 0.4; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1.2); }
+}
+.bm-switch-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+.bm-switch-counter {
+  background: var(--bm-auction-border);
+  color: #080808;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Auction Mode Active Transformation */
+body.bm-auction-arena-mode {
+  --bm-bg: #060908;
+  --bm-card: #0D1412;
+  --bm-border: #1C3026;
+}
+body.bm-auction-arena-mode .bm-floating-switch {
+  background: var(--bm-auction-border);
+  border-color: #080808;
+}
+body.bm-auction-arena-mode .bm-floating-switch .bm-switch-text {
+  color: #080808;
+}
+body.bm-auction-arena-mode .bm-floating-switch .bm-switch-dot {
+  background: #080808;
+}
+body.bm-auction-arena-mode .bm-floating-switch .bm-switch-counter {
+  background: #080808;
+  color: var(--bm-auction-border);
+}
+
+/* Toast */
+.bm-toast {
+  position: fixed;
+  bottom: 26px;
+  left: 26px;
+  background: var(--bm-card);
+  color: var(--bm-text-head);
+  border: 1px solid var(--bm-accent);
+  border-left: 4px solid var(--bm-accent);
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  z-index: 10000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.22s ease;
+}
+.bm-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* =====================================================================
+   6. SIGNATURE FOOTER
+   ===================================================================== */
+.bm-footer {
+  background: var(--bm-bg-subtle);
+  border-top: 1px solid var(--bm-border);
+  padding: 40px 24px 30px;
+  color: var(--bm-text-muted);
+}
+.bm-footer-inner {
+  max-width: 1520px;
+  margin: 0 auto;
+}
+.bm-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin-bottom: 30px;
+}
+.bm-footer-col h5 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bm-text-head);
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.bm-footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bm-footer-col a {
+  color: var(--bm-text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.15s ease;
+}
+.bm-footer-col a:hover {
+  color: var(--bm-accent);
+}
+.bm-footer-bottom {
+  border-top: 1px solid var(--bm-border);
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .bm-boxes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .bm-main-nav {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .bm-omnibar {
+    order: 3;
+    width: 100%;
+    flex: none;
+  }
+  .bm-boxes-grid {
+    grid-template-columns: 1fr;
+  }
+  .bm-hero-card {
+    padding: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bm-hero-art {
+    display: none;
+  }
+}

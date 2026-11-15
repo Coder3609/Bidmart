@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account & Bidder Profile — BidMart</title>
+  <meta name="description" content="View your BidMart buyer profile, active auction bids, order receipts, escrow wallet balance, and shipping addresses." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/shared/theme.css" />
+  <link rel="stylesheet" href="/shared/navbar-obsidian.css" />
+  <link rel="stylesheet" href="/shared/checkout-modal.css" />
+
+  <style>
+    :root {
+      --bp-bg: #080B11;
+      --bp-surface: #0F1420;
+      --bp-card: #141B2B;
+      --bp-border: rgba(255, 255, 255, 0.08);
+      --bp-accent: #D8FF00;
+      --bp-text: #FFFFFF;
+      --bp-muted: #94A3B8;
+      --bp-mint: #10B981;
+      --bp-orange: #FF7A00;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bp-bg);
+      color: var(--bp-text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bp-container {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Hero Profile Badge */
+    .bp-hero-card {
+      background: linear-gradient(135deg, #101626 0%, #0D121F 100%);
+      border: 1px solid var(--bp-border);
+      border-radius: 20px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .bp-user-flex {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .bp-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--bp-accent) 0%, #10B981 100%);
+      color: #080808;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 25px rgba(216, 255, 0, 0.35);
+    }
+
+    .bp-user-info h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin: 0 0 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .bp-user-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--bp-muted);
+    }
+
+    .bp-badge-verified {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--bp-mint);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .bp-badge-role {
+      background: rgba(216, 255, 0, 0.12);
+      color: var(--bp-accent);
+      border: 1px solid rgba(216, 255, 0, 0.3);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    /* Wallet quick summary */
+    .bp-wallet-pill {
+      background: var(--bp-card);
+      border: 1px solid var(--bp-border);
+      border-radius: 14px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .bp-wallet-label {
+      font-size: 0.75rem;
+      color: var(--bp-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .bp-wallet-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--bp-accent);
+    }
+
+    /* Tabs Bar */
+    .bp-tabs-bar {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--bp-border);
+      padding-bottom: 14px;
+      margin-bottom: 28px;
+      overflow-x: auto;
+    }
+
+    .bp-tab-btn {
+      background: transparent;
+      border: 1px solid var(--bp-border);
+      color: var(--bp-muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .bp-tab-btn:hover {
+      color: #FFF;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .bp-tab-btn.active {
+      background: var(--bp-accent);
+      color: #080808;
+      border-color: var(--bp-accent);
+      box-shadow: 0 2px 14px rgba(216, 255, 0, 0.3);
+    }
+
+    /* Tab Content Grids */
+    .bp-tab-pane {
+      display: none;
+    }
+
+    .bp-tab-pane.active {
+      display: block;
+    }
+
+    .bp-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .bp-item-card {
+      background: var(--bp-surface);
+      border: 1px solid var(--bp-border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color 0.15s ease;
+    }
+
+    .bp-item-card:hover {
+      border-color: rgba(216, 255, 0, 0.35);
+    }
+
+    .bp-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bp-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FFF;
+      margin: 0;
+    }
+
+    .bp-card-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bp-card);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .bp-btn-action {
+      background: transparent;
+      border: 1px solid var(--bp-border);
+      color: #FFF;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .bp-btn-action:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .bp-empty-box {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bp-surface);
+      border: 1px dashed var(--bp-border);
+      border-radius: 16px;
+      color: var(--bp-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Universal Header -->
+  <div id="site-header"></div>
+
+  <main class="bp-container">
+    
+    <!-- Hero Profile Bar -->
+    <div class="bp-hero-card">
+      <div class="bp-user-flex">
+        <div class="bp-avatar" id="profAvatar">R</div>
+        <div class="bp-user-info">
+          <h1 id="profName">Rahul Sharma</h1>
+          <div class="bp-user-meta">
+            <span id="profEmail">rahul@bidmart.test</span>
+            <span>&bull;</span>
+            <span class="bp-badge-verified">✓ KYC VERIFIED BUYER</span>
+            <span class="bp-badge-role">VERIFIED BIDDER</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bp-wallet-pill">
+        <div>
+          <div class="bp-wallet-label">Escrow Wallet Balance</div>
+          <div class="bp-wallet-val" id="profWallet">₹25,00,000</div>
+        </div>
+        <button type="button" class="bp-btn-action" style="background:var(--bp-accent);color:#000;border:none;font-weight:800;" onclick="window.location.href='/auction/auctions.html'">
+          <span>+ Live Arena</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="bp-tabs-bar">
+      <button type="button" class="bp-tab-btn active" onclick="switchTab('bids')">
+        <span>⚡ My Live Bids</span>
+      </button>
+      <button type="button" class="bp-tab-btn" onclick="switchTab('orders')">
+        <span>📦 Store Orders &amp; Receipts</span>
+      </button>
+      <button type="button" class="bp-tab-btn" onclick="switchTab('settings')">
+        <span>⚙️ Account &amp; Shipping</span>
+      </button>
+    </div>
+
+    <!-- Pane 1: Active Bids -->
+    <div class="bp-tab-pane active" id="pane-bids">
+      <div class="bp-cards-grid" id="profBidsGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Pane 2: Store Orders -->
+    <div class="bp-tab-pane" id="pane-orders">
+      <div class="bp-cards-grid" id="profOrdersGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Pane 3: Account & Addresses -->
+    <div class="bp-tab-pane" id="pane-settings">
+      <div style="background:var(--bp-surface);border:1px solid var(--bp-border);border-radius:16px;padding:28px;max-width:640px;">
+        <h3 style="margin:0 0 16px;font-family:'Space Grotesk',sans-serif;font-size:1.2rem;">Verified Shipping Address</h3>
+        <div style="background:var(--bp-card);border:1px solid var(--bp-border);border-radius:10px;padding:16px;margin-bottom:20px;">
+          <div style="font-weight:700;margin-bottom:4px;" id="shipName">Rahul Sharma</div>
+          <div style="font-size:0.85rem;color:var(--bp-muted);line-height:1.5;">
+            Flat 402, Signature Towers, Indiranagar<br>
+            Bengaluru, Karnataka - 560038<br>
+            Phone: +91 98765 43210
+          </div>
+        </div>
+
+        <h3 style="margin:0 0 16px;font-family:'Space Grotesk',sans-serif;font-size:1.2rem;">Bidder Identification</h3>
+        <div style="font-size:0.88rem;color:var(--bp-muted);line-height:1.6;">
+          <div>KYC Status: <strong style="color:var(--bp-mint);">Approved & Verified</strong></div>
+          <div>Age Verification: <strong style="color:#FFF;">18+ Eligible for Timed Drops</strong></div>
+          <div>Escrow Standing: <strong style="color:var(--bp-accent);">100% Guaranteed Payout</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/shared/auth.js"></script>
+  <script src="/shared/api.js"></script>
+  <script src="/shared/header.js"></script>
+  <script src="/shared/checkout-modal.js"></script>
+
+  <script>
+    function formatINR(val) {
+      return '₹' + Number(val || 0).toLocaleString('en-IN');
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.bp-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.bp-tab-pane').forEach(p => p.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById('pane-' + tabId).classList.add('active');
+    }
+    window.switchTab = switchTab;
+
+    async function loadCustomerProfile() {
+      const user = window.auth ? window.auth.getUser() : null;
+      if (user) {
+        document.getElementById('profName').textContent = user.name || 'Rahul Sharma';
+        document.getElementById('profEmail').textContent = user.email || 'customer@bidmart.test';
+        document.getElementById('profAvatar').textContent = (user.name || 'R').charAt(0).toUpperCase();
+        document.getElementById('shipName').textContent = user.name || 'Rahul Sharma';
+      }
+
+      // 1. Load Bids
+      try {
+        const bidsRes = await window.api.get('/auctions/my-bids?limit=20');
+        const bids = (bidsRes && (bidsRes.items || bidsRes.bids)) || [];
+        renderBids(bids);
+      } catch (err) {
+        renderBids([]);
+      }
+
+      // 2. Load Orders
+      try {
+        const ordersRes = await window.api.get('/orders/my?limit=20');
+        const orders = (ordersRes && ordersRes.items) || [];
+        renderOrders(orders);
+      } catch (err) {
+        renderOrders([]);
+      }
+    }
+
+    function renderBids(bids) {
+      const container = document.getElementById('profBidsGrid');
+      if (!bids.length) {
+        container.innerHTML = `
+          <div class="bp-empty-box" style="grid-column:1/-1;">
+            <div style="font-size:2rem;margin-bottom:8px;">⚡</div>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;margin:0 0 6px;color:#FFF;">No Active Bids</h3>
+            <p style="margin:0 0 16px;">You haven't placed any bids on live drops yet.</p>
+            <a href="/auction/auctions.html" class="bp-btn-action" style="background:var(--bp-accent);color:#000;border:none;font-weight:800;">
+              Enter Live Auction Floor &rarr;
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = bids.map(b => `
+        <div class="bp-item-card">
+          <div class="bp-card-top">
+            <h3 class="bp-card-title">${b.product_title || b.title || 'Auction Lot'}</h3>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--bp-accent);font-weight:700;">${b.status || 'ACTIVE'}</span>
+          </div>
+          <div class="bp-card-stat-row">
+            <span style="color:var(--bp-muted);">Your Placed Bid:</span>
+            <strong style="color:var(--bp-accent);font-family:'JetBrains Mono',monospace;font-size:1.1rem;">${formatINR(b.amount)}</strong>
+          </div>
+          <a href="/auction/auction-detail.html?id=${b.auction_id}" class="bp-btn-action" style="margin-top:auto;">
+            <span>View Live Lot &rarr;</span>
+          </a>
+        </div>
+      `).join('');
+    }
+
+    function renderOrders(orders) {
+      const container = document.getElementById('profOrdersGrid');
+      if (!orders.length) {
+        container.innerHTML = `
+          <div class="bp-empty-box" style="grid-column:1/-1;">
+            <div style="font-size:2rem;margin-bottom:8px;">📦</div>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;margin:0 0 6px;color:#FFF;">No Orders Placed Yet</h3>
+            <p style="margin:0 0 16px;">Orders purchased with instant checkout will appear here with tracking receipts.</p>
+            <a href="/shop/shop.html" class="bp-btn-action" style="background:var(--bp-mint);color:#000;border:none;font-weight:800;">
+              Explore Market Catalog &rarr;
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(o => `
+        <div class="bp-item-card">
+          <div class="bp-card-top">
+            <h3 class="bp-card-title">Order #${o.id}</h3>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--bp-mint);font-weight:700;">${o.status || 'CONFIRMED'}</span>
+          </div>
+          <div class="bp-card-stat-row">
+            <span style="color:var(--bp-muted);">Total Paid:</span>
+            <strong style="color:#FFF;font-family:'JetBrains Mono',monospace;">${formatINR(o.total || o.subtotal)}</strong>
+          </div>
+          <div style="font-size:0.78rem;color:var(--bp-muted);">
+            Escrow Protected &bull; Express Delivery 48h
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderHeader === 'function') renderHeader();
+      loadCustomerProfile();
+    });
+  </script>
+</body>
+</html>
+

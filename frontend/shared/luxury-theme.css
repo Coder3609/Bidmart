@@ -1,0 +1,520 @@
+/* =====================================================================
+   BIDMART LUXURY GOLDEN & CREAM FULL-PAGE REDESIGN
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --lux-cream-light: #FDFBF7;
+  --lux-cream: #F7F3EA;
+  --lux-cream-dark: #ECE5D8;
+  --lux-cream-card: #FFFFFF;
+
+  --lux-gold-light: #F9E7B9;
+  --lux-gold: #D4AF37;
+  --lux-gold-rich: #C59B27;
+  --lux-gold-dark: #8C6D1F;
+  --lux-gold-gradient: linear-gradient(135deg, #ECC880 0%, #D4AF37 50%, #997424 100%);
+  --lux-gold-glow: rgba(212, 175, 55, 0.35);
+
+  --lux-charcoal: #181614;
+  --lux-bronze-dark: #2B261F;
+  --lux-muted: #7E7569;
+  --lux-border: rgba(212, 175, 55, 0.25);
+  --lux-border-solid: #E3D9C8;
+}
+
+body {
+  background-color: var(--lux-cream) !important;
+  color: var(--lux-charcoal) !important;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Luxury Single Page Canvas */
+.luxury-single-page {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.14) 0%, transparent 45%),
+    linear-gradient(180deg, #FDFBF7 0%, #F5F0E4 100%);
+}
+
+/* Sophisticated Top Bar */
+.lux-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 5%;
+  border-bottom: 1px solid var(--lux-border-solid);
+  background: rgba(253, 251, 247, 0.85);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.lux-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.lux-brand-emblem {
+  width: 44px;
+  height: 44px;
+  background: var(--lux-gold-gradient);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  color: #1A160F;
+  font-weight: 900;
+  font-size: 1.25rem;
+  font-family: 'Cinzel', serif;
+}
+.lux-brand-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--lux-charcoal);
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.lux-brand-tagline {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lux-gold-rich);
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.lux-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.lux-nav-links a {
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--lux-charcoal);
+  position: relative;
+  transition: color 0.2s ease;
+}
+.lux-nav-links a:hover {
+  color: var(--lux-gold-dark);
+}
+
+.lux-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-lux-market {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 24px;
+  background: var(--lux-gold-gradient);
+  color: #1A160F !important;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 4px 18px var(--lux-gold-glow);
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
+}
+.btn-lux-market:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(212, 175, 55, 0.5);
+  color: #000000 !important;
+}
+.pulse-gold-dot {
+  width: 7px;
+  height: 7px;
+  background: #1A160F;
+  border-radius: 50%;
+  animation: pulse-gold 1.8s infinite;
+}
+@keyframes pulse-gold {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(26, 22, 15, 0.6); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(26, 22, 15, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(26, 22, 15, 0); }
+}
+
+.btn-lux-auth {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #FFFFFF;
+  border: 1px solid var(--lux-border-solid);
+  color: var(--lux-charcoal) !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.btn-lux-auth:hover {
+  background: var(--lux-cream-light);
+  border-color: var(--lux-gold);
+  transform: translateY(-1px);
+}
+
+/* =====================================================================
+   MAIN SINGLE-SECTION MASTERPIECE
+   ===================================================================== */
+.lux-master-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 40px 5% 60px;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.lux-master-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 50px;
+  align-items: center;
+  width: 100%;
+}
+
+/* Left Hero Typography */
+.lux-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 999px;
+  color: var(--lux-gold-dark);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 22px;
+}
+
+.lux-headline {
+  font-family: 'Cinzel', serif;
+  font-size: 3.8rem;
+  font-weight: 900;
+  line-height: 1.08;
+  color: var(--lux-charcoal);
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+.lux-gold-text {
+  background: var(--lux-gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.lux-subtext {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--lux-muted);
+  max-width: 580px;
+  margin-bottom: 34px;
+}
+.lux-subtext strong {
+  color: var(--lux-charcoal);
+  font-weight: 700;
+}
+
+.lux-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.btn-lux-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 36px;
+  background: var(--lux-gold-gradient);
+  color: #1A160F !important;
+  font-weight: 800;
+  font-size: 1.05rem;
+  border-radius: 16px;
+  text-decoration: none;
+  box-shadow: 0 10px 30px var(--lux-gold-glow);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  letter-spacing: 0.02em;
+}
+.btn-lux-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(212, 175, 55, 0.5);
+  color: #000000 !important;
+}
+
+.btn-lux-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  background: #FFFFFF;
+  border: 1px solid var(--lux-border-solid);
+  color: var(--lux-charcoal) !important;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 16px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+.btn-lux-secondary:hover {
+  background: var(--lux-cream-light);
+  border-color: var(--lux-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15);
+}
+
+/* Feature Highlights Strip */
+.lux-trust-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 45px;
+  padding-top: 30px;
+  border-top: 1px solid var(--lux-border-solid);
+}
+.lux-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.lux-trust-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: var(--lux-gold-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lux-trust-item h5 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--lux-charcoal);
+}
+.lux-trust-item p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--lux-muted);
+}
+
+/* =====================================================================
+   RIGHT COLUMN: 3D GOLDEN TRADING PODIUM
+   ===================================================================== */
+.lux-podium-wrap {
+  position: relative;
+  perspective: 1200px;
+  display: flex;
+  justify-content: center;
+}
+
+.lux-card-3d {
+  width: 100%;
+  max-width: 460px;
+  background: linear-gradient(145deg, #FFFFFF 0%, #FAF6EE 100%);
+  border: 1px solid var(--lux-gold-light);
+  border-radius: 32px;
+  padding: 30px;
+  box-shadow: 
+    0 35px 70px -15px rgba(140, 109, 31, 0.18),
+    0 10px 25px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Elegant Switcher */
+.lux-trade-switch {
+  display: flex;
+  background: var(--lux-cream-dark);
+  padding: 5px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+.lux-switch-btn {
+  flex: 1;
+  text-align: center;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 12px;
+  color: var(--lux-muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.lux-switch-btn.active-store {
+  background: #FFFFFF;
+  color: var(--lux-charcoal);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+.lux-switch-btn.active-auction {
+  background: var(--lux-gold-gradient);
+  color: #1A160F;
+  box-shadow: 0 4px 18px var(--lux-gold-glow);
+}
+
+/* Showcase Podium Graphic */
+.lux-graphic-stage {
+  position: relative;
+  background: radial-gradient(circle at center, #FFFFFF 0%, #F5EFE3 100%);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 24px;
+  padding: 32px 20px;
+  text-align: center;
+  margin-bottom: 22px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(212, 175, 55, 0.08);
+}
+
+.lux-gold-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--lux-gold);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--lux-gold-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+  transform: translateZ(25px);
+}
+
+.lux-product-art {
+  width: 170px;
+  height: 170px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lux-product-art svg {
+  filter: drop-shadow(0 15px 25px rgba(140, 109, 31, 0.25));
+  transition: transform 0.3s ease;
+}
+.lux-card-3d:hover .lux-product-art svg {
+  transform: scale(1.08) rotate(-2deg);
+}
+
+/* Card Bottom Info */
+.lux-card-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.lux-card-info h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  color: var(--lux-charcoal);
+}
+.lux-card-info p {
+  font-size: 0.82rem;
+  color: var(--lux-muted);
+  margin: 0;
+}
+
+.lux-price-tag {
+  text-align: right;
+}
+.lux-price-num {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--lux-gold-dark);
+  display: block;
+}
+.lux-price-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--lux-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Live Golden Trade Ticker */
+.lux-trade-ticker {
+  margin-top: 24px;
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--lux-border-solid);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+.lux-ticker-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--lux-gold-gradient);
+  color: #1A160F;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.lux-ticker-text {
+  font-size: 0.85rem;
+  color: var(--lux-charcoal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lux-ticker-highlight {
+  color: var(--lux-gold-dark);
+  font-weight: 700;
+}
+
+@media (max-width: 992px) {
+  .lux-master-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .lux-headline {
+    font-size: 2.75rem;
+  }
+  .lux-trust-strip {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -1,0 +1,732 @@
+/* =====================================================================
+   BIDMART MODERN DUAL-MODE (DARK / LIGHT) SHOP CATALOG STYLES
+   Minimalist Swiss-Editorial Brutalist Theme with Acid-Lime Accents
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Syne:wght@700;800&display=swap');
+
+/* =====================================================================
+   CSS VARIABLES FOR THEME SWITCHING (DARK / LIGHT)
+   ===================================================================== */
+:root {
+  /* DARK THEME (DEFAULT) */
+  --bg-primary: #080808;
+  --bg-secondary: #121212;
+  --bg-card: #161616;
+  --bg-card-hover: #1C1C1C;
+  --bg-input: #0D0D0D;
+  
+  --border-subtle: #242424;
+  --border-strong: #383838;
+  
+  --text-primary: #FFFFFF;
+  --text-secondary: #999999;
+  --text-muted: #666666;
+  
+  --accent-lime: #D8FF00;
+  --accent-lime-bg: rgba(216, 255, 0, 0.12);
+  --accent-lime-glow: rgba(216, 255, 0, 0.25);
+  --accent-cyan: #00D4FF;
+  
+  --badge-live-bg: #22290D;
+  --badge-live-color: #D8FF00;
+  
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --shadow-float: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+
+/* LIGHT THEME OVERRIDES */
+[data-theme="light"] {
+  --bg-primary: #F8F9FA;
+  --bg-secondary: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F2F4F7;
+  --bg-input: #FFFFFF;
+  
+  --border-subtle: #E4E7EC;
+  --border-strong: #CBD5E1;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --accent-lime: #7BA800;
+  --accent-lime-bg: rgba(123, 168, 0, 0.12);
+  --accent-lime-glow: rgba(123, 168, 0, 0.2);
+  --accent-cyan: #0284C7;
+  
+  --badge-live-bg: #ECFCCB;
+  --badge-live-color: #3F6212;
+  
+  --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.05);
+  --shadow-float: 0 16px 40px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.shop-page-body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif !important;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
+}
+
+/* Top Master Navigation Bar (Unified Brand Bar) */
+.shop-master-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.shop-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+.brand-pill-badge {
+  background: var(--accent-lime);
+  color: #080808;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+.brand-logo-text {
+  font-family: 'Syne', 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.shop-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.shop-nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: color 0.15s ease;
+  text-transform: uppercase;
+}
+.shop-nav-links a:hover,
+.shop-nav-links a.active {
+  color: var(--text-primary);
+}
+.shop-nav-links a.active {
+  color: var(--accent-lime);
+}
+
+.shop-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Modern Segmented Dark/Light Switcher */
+.theme-segmented-switch {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 3px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+.theme-seg-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.theme-seg-option.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border: 1px solid var(--border-strong);
+}
+
+/* Nav Cart Button */
+.btn-nav-cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+.btn-nav-cart:hover {
+  border-color: var(--accent-lime);
+  color: var(--accent-lime);
+}
+.cart-badge-count {
+  background: var(--accent-lime);
+  color: #080808;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+/* Filter Mode Tabs Bar */
+.filter-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.filter-mode-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+.filter-mode-tab:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.filter-mode-tab.active {
+  background: var(--accent-lime);
+  color: #080808;
+  border-color: var(--accent-lime);
+  font-weight: 800;
+}
+
+/* Sort Selector */
+.sort-select-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+.sort-select {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Quick Add Button on Card */
+.btn-quick-cart {
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-quick-cart:hover {
+  background: var(--accent-lime);
+  color: #080808;
+  border-color: var(--accent-lime);
+}
+
+/* Toast Message */
+.toast-notice {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #111;
+  color: #FFF;
+  border: 1px solid var(--accent-lime);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 99999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.toast-notice.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Layout Containers */
+.shop-view-wrapper {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 24px 32px 80px;
+}
+
+/* =====================================================================
+   MODERN SHOP HEADER BAR (BREADCRUMB + THEME TOGGLE)
+   ===================================================================== */
+.shop-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.shop-headline-group h1 {
+  font-family: 'Syne', 'Space Grotesk', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+.shop-headline-group p {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.shop-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Theme Toggle Button (Light / Dark) */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.theme-toggle-btn:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.btn-back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.btn-back-home:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+/* =====================================================================
+   SHOP LAYOUT (SIDEBAR CATEGORY TILES + PRODUCT GRID)
+   ===================================================================== */
+.shop-core-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 36px;
+  align-items: flex-start;
+}
+
+/* Left Sidebar Filters */
+.shop-sidebar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 24px;
+  position: sticky;
+  top: 90px;
+  box-shadow: var(--shadow-card);
+}
+
+.sidebar-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 18px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.category-pill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.category-item-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  width: 100%;
+}
+.category-item-btn:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+.category-item-btn.active {
+  background: var(--bg-secondary);
+  border-color: var(--accent-lime);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.category-item-btn .cat-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.category-item-btn.active .cat-count {
+  color: var(--accent-lime);
+}
+
+/* Right Content Area */
+.shop-content-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Search & Utility Bar */
+.shop-search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 8px 16px;
+  box-shadow: var(--shadow-card);
+  gap: 16px;
+}
+
+.search-input-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.search-input-field svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.search-input-field input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+}
+.search-input-field input::placeholder {
+  color: var(--text-muted);
+}
+
+.catalog-metric-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+/* =====================================================================
+   REFINED PRODUCT CARD GRID (PREMIUM SWISS MONOCHROME)
+   ===================================================================== */
+.products-display-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.modern-product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.modern-product-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-float);
+  background: var(--bg-card-hover);
+}
+
+/* Image Frame */
+.product-image-stage {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 14px;
+  position: relative;
+}
+.product-image-stage img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+.modern-product-card:hover .product-image-stage img {
+  transform: scale(1.08);
+}
+
+/* Live Auction Badge */
+.live-auction-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--badge-live-bg);
+  border: 1px solid var(--accent-lime);
+  color: var(--badge-live-color);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Metadata */
+.product-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.product-brand-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.product-cond-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--accent-cyan);
+  background: rgba(0, 212, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.product-title-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 14px;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 42px;
+}
+
+/* Card Bottom Price & Action */
+.product-card-bottom {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+}
+.price-sub-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.price-bold-amount {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.is-auction-price .price-bold-amount {
+  color: var(--accent-lime);
+}
+
+.btn-card-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+.modern-product-card:hover .btn-card-action {
+  background: var(--accent-lime);
+  color: #080808;
+  border-color: var(--accent-lime);
+  transform: scale(1.05);
+}
+
+/* Pagination Row */
+.shop-pagination-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+.page-nav-btn {
+  padding: 8px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.page-nav-btn:hover:not(:disabled) {
+  border-color: var(--accent-lime);
+  color: var(--accent-lime);
+}
+.page-nav-btn.active {
+  background: var(--accent-lime);
+  color: #080808;
+  border-color: var(--accent-lime);
+}
+.page-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 992px) {
+  .shop-core-grid {
+    grid-template-columns: 1fr;
+  }
+  .shop-sidebar {
+    position: static;
+  }
+  .products-display-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}

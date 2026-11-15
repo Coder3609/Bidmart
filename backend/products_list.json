@@ -1,0 +1,1042 @@
+[
+  {
+    "id": 1,
+    "title": "iPhone 15 Pro",
+    "category_id": 3
+  },
+  {
+    "id": 2,
+    "title": "Ultrabook X1",
+    "category_id": 2
+  },
+  {
+    "id": 3,
+    "title": "Wireless Headphones",
+    "category_id": 4
+  },
+  {
+    "id": 4,
+    "title": "Smart Watch",
+    "category_id": 10
+  },
+  {
+    "id": 5,
+    "title": "PlayStation 5",
+    "category_id": 16
+  },
+  {
+    "id": 6,
+    "title": "iPhone 15 Pro (Auction Unit)",
+    "category_id": 3
+  },
+  {
+    "id": 7,
+    "title": "Rolex Watch (Pre-owned)",
+    "category_id": 10
+  },
+  {
+    "id": 8,
+    "title": "DSLR Camera",
+    "category_id": 5
+  },
+  {
+    "id": 9,
+    "title": "Samsung 55-inch 4K Smart TV",
+    "category_id": 1
+  },
+  {
+    "id": 10,
+    "title": "Sony Bravia 43-inch 4K LED TV",
+    "category_id": 1
+  },
+  {
+    "id": 11,
+    "title": "Xiaomi 43-inch 4K Smart TV",
+    "category_id": 1
+  },
+  {
+    "id": 12,
+    "title": "OnePlus 55-inch Ultra HD Smart TV",
+    "category_id": 1
+  },
+  {
+    "id": 13,
+    "title": "Philips Home Theatre Speaker System",
+    "category_id": 1
+  },
+  {
+    "id": 14,
+    "title": "LG 32-inch HD Ready Smart LED TV",
+    "category_id": 1
+  },
+  {
+    "id": 15,
+    "title": "Panasonic Lumix Digital Projector",
+    "category_id": 1
+  },
+  {
+    "id": 16,
+    "title": "TCL 50-inch 4K QLED Smart TV",
+    "category_id": 1
+  },
+  {
+    "id": 17,
+    "title": "BenQ Full HD Home Cinema Projector",
+    "category_id": 1
+  },
+  {
+    "id": 18,
+    "title": "Vu 55-inch Masterpiece 4K TV",
+    "category_id": 1
+  },
+  {
+    "id": 19,
+    "title": "HP Pavilion 15 Laptop",
+    "category_id": 2
+  },
+  {
+    "id": 20,
+    "title": "Lenovo IdeaPad Slim 3",
+    "category_id": 2
+  },
+  {
+    "id": 21,
+    "title": "ASUS Vivobook 15",
+    "category_id": 2
+  },
+  {
+    "id": 22,
+    "title": "Dell Inspiron 15",
+    "category_id": 2
+  },
+  {
+    "id": 23,
+    "title": "Acer Aspire 5",
+    "category_id": 2
+  },
+  {
+    "id": 24,
+    "title": "Apple MacBook Air M2",
+    "category_id": 2
+  },
+  {
+    "id": 25,
+    "title": "Dell 24-inch Full HD Monitor",
+    "category_id": 2
+  },
+  {
+    "id": 26,
+    "title": "Logitech MX Keys Wireless Keyboard",
+    "category_id": 2
+  },
+  {
+    "id": 27,
+    "title": "Logitech MX Master 3S Wireless Mouse",
+    "category_id": 2
+  },
+  {
+    "id": 28,
+    "title": "HP Wireless Multi-Function Printer",
+    "category_id": 2
+  },
+  {
+    "id": 29,
+    "title": "Samsung Galaxy S23 5G",
+    "category_id": 3
+  },
+  {
+    "id": 30,
+    "title": "OnePlus 11R 5G",
+    "category_id": 3
+  },
+  {
+    "id": 31,
+    "title": "Xiaomi Redmi Note 13 Pro",
+    "category_id": 3
+  },
+  {
+    "id": 32,
+    "title": "Motorola Edge 40 Neo",
+    "category_id": 3
+  },
+  {
+    "id": 33,
+    "title": "Realme 12 Pro+ 5G",
+    "category_id": 3
+  },
+  {
+    "id": 34,
+    "title": "Anker 20000mAh Power Bank",
+    "category_id": 3
+  },
+  {
+    "id": 35,
+    "title": "boAt 65W Fast Charger",
+    "category_id": 3
+  },
+  {
+    "id": 36,
+    "title": "Spigen Tough Armor Phone Case",
+    "category_id": 3
+  },
+  {
+    "id": 37,
+    "title": "Belkin Braided USB-C Cable",
+    "category_id": 3
+  },
+  {
+    "id": 38,
+    "title": "Wireless Fast Charging Pad 15W",
+    "category_id": 3
+  },
+  {
+    "id": 39,
+    "title": "Sony WH-1000XM5 Wireless Headphones",
+    "category_id": 4
+  },
+  {
+    "id": 40,
+    "title": "JBL Tune 760NC Noise Cancelling Headphones",
+    "category_id": 4
+  },
+  {
+    "id": 41,
+    "title": "boAt Airdopes 141 True Wireless",
+    "category_id": 4
+  },
+  {
+    "id": 42,
+    "title": "Samsung Galaxy Buds2 Pro",
+    "category_id": 4
+  },
+  {
+    "id": 43,
+    "title": "OnePlus Buds Pro 2",
+    "category_id": 4
+  },
+  {
+    "id": 44,
+    "title": "JBL Flip 6 Portable Bluetooth Speaker",
+    "category_id": 4
+  },
+  {
+    "id": 45,
+    "title": "Sony Extra Bass Bluetooth Speaker",
+    "category_id": 4
+  },
+  {
+    "id": 46,
+    "title": "boAt Stone 1200 Bluetooth Speaker",
+    "category_id": 4
+  },
+  {
+    "id": 47,
+    "title": "RealMe Buds Air 5 Pro",
+    "category_id": 4
+  },
+  {
+    "id": 48,
+    "title": "Noise TWS Earbuds with ENC",
+    "category_id": 4
+  },
+  {
+    "id": 49,
+    "title": "Canon EOS 1500D DSLR Camera",
+    "category_id": 5
+  },
+  {
+    "id": 50,
+    "title": "Nikon D5600 DSLR Camera",
+    "category_id": 5
+  },
+  {
+    "id": 51,
+    "title": "Sony Alpha ILCE-6400 Mirrorless Camera",
+    "category_id": 5
+  },
+  {
+    "id": 52,
+    "title": "GoPro HERO12 Black Action Camera",
+    "category_id": 5
+  },
+  {
+    "id": 53,
+    "title": "DJI Osmo Action 4 Camera",
+    "category_id": 5
+  },
+  {
+    "id": 54,
+    "title": "Canon EF 50mm f/1.8 STM Lens",
+    "category_id": 5
+  },
+  {
+    "id": 55,
+    "title": "SanDisk Extreme Pro 128GB Memory Card",
+    "category_id": 5
+  },
+  {
+    "id": 56,
+    "title": "Digitek Professional Camera Tripod",
+    "category_id": 5
+  },
+  {
+    "id": 57,
+    "title": "Vanguard DSLR Camera Backpack",
+    "category_id": 5
+  },
+  {
+    "id": 58,
+    "title": "Ring Light with Tripod Stand",
+    "category_id": 5
+  },
+  {
+    "id": 59,
+    "title": "Premium Cotton Casual T-Shirt",
+    "category_id": 6
+  },
+  {
+    "id": 60,
+    "title": "Classic Denim Jacket",
+    "category_id": 6
+  },
+  {
+    "id": 61,
+    "title": "Slim Fit Chino Trousers",
+    "category_id": 6
+  },
+  {
+    "id": 62,
+    "title": "Cotton Pullover Hoodie",
+    "category_id": 6
+  },
+  {
+    "id": 63,
+    "title": "Linen Casual Button-Down Shirt",
+    "category_id": 6
+  },
+  {
+    "id": 64,
+    "title": "Unisex Oversized Streetwear Hoodie",
+    "category_id": 6
+  },
+  {
+    "id": 65,
+    "title": "Classic Leather Belt",
+    "category_id": 6
+  },
+  {
+    "id": 66,
+    "title": "All-Weather Windbreaker Jacket",
+    "category_id": 6
+  },
+  {
+    "id": 67,
+    "title": "Casual Sweatshirt",
+    "category_id": 6
+  },
+  {
+    "id": 68,
+    "title": "Lightweight Summer Shorts",
+    "category_id": 6
+  },
+  {
+    "id": 69,
+    "title": "Raymond Slim Fit Formal Shirt",
+    "category_id": 7
+  },
+  {
+    "id": 70,
+    "title": "Peter England Regular Fit Jeans",
+    "category_id": 7
+  },
+  {
+    "id": 71,
+    "title": "Park Avenue Formal Suit Blazer",
+    "category_id": 7
+  },
+  {
+    "id": 72,
+    "title": "Manyavar Cotton Printed Kurta",
+    "category_id": 7
+  },
+  {
+    "id": 73,
+    "title": "Arrow Formal Trousers",
+    "category_id": 7
+  },
+  {
+    "id": 74,
+    "title": "Blackberrys Casual Polo T-Shirt",
+    "category_id": 7
+  },
+  {
+    "id": 75,
+    "title": "Flying Machine Slim Denim Jeans",
+    "category_id": 7
+  },
+  {
+    "id": 76,
+    "title": "Louis Philippe Silk Tie Set",
+    "category_id": 7
+  },
+  {
+    "id": 77,
+    "title": "Monte Carlo Winter Woolen Sweater",
+    "category_id": 7
+  },
+  {
+    "id": 78,
+    "title": "Mufti Casual Checkered Shirt",
+    "category_id": 7
+  },
+  {
+    "id": 79,
+    "title": "Biba Printed Cotton Anarkali Kurti",
+    "category_id": 8
+  },
+  {
+    "id": 80,
+    "title": "W for Woman Casual Top",
+    "category_id": 8
+  },
+  {
+    "id": 81,
+    "title": "Aurelia Ethnic Salwar Suit Set",
+    "category_id": 8
+  },
+  {
+    "id": 82,
+    "title": "Vero Moda Casual Summer Dress",
+    "category_id": 8
+  },
+  {
+    "id": 83,
+    "title": "Levis High-Rise Skinny Jeans",
+    "category_id": 8
+  },
+  {
+    "id": 84,
+    "title": "FabIndia Silk Blend Saree",
+    "category_id": 8
+  },
+  {
+    "id": 85,
+    "title": "ONLY Casual Denim Jacket",
+    "category_id": 8
+  },
+  {
+    "id": 86,
+    "title": "Forever 21 Floral Print Maxi Dress",
+    "category_id": 8
+  },
+  {
+    "id": 87,
+    "title": "Global Desi Printed Palazzo Pants",
+    "category_id": 8
+  },
+  {
+    "id": 88,
+    "title": "Allen Solly Women Formal Blazer",
+    "category_id": 8
+  },
+  {
+    "id": 89,
+    "title": "Nike Revolution 6 Running Shoes",
+    "category_id": 9
+  },
+  {
+    "id": 90,
+    "title": "Adidas Ultraboost Light Shoes",
+    "category_id": 9
+  },
+  {
+    "id": 91,
+    "title": "Puma Smash v2 Leather Sneakers",
+    "category_id": 9
+  },
+  {
+    "id": 92,
+    "title": "Reebok Zig Dynamica Running Shoes",
+    "category_id": 9
+  },
+  {
+    "id": 93,
+    "title": "Bata Leather Formal Shoes",
+    "category_id": 9
+  },
+  {
+    "id": 94,
+    "title": "Red Tape Casual Loafers",
+    "category_id": 9
+  },
+  {
+    "id": 95,
+    "title": "Woodland Outdoor Leather Boots",
+    "category_id": 9
+  },
+  {
+    "id": 96,
+    "title": "Skechers Go Walk 6 Slip-Ons",
+    "category_id": 9
+  },
+  {
+    "id": 97,
+    "title": "Converse Chuck Taylor All Star",
+    "category_id": 9
+  },
+  {
+    "id": 98,
+    "title": "Campus Oxyfit Sports Shoes",
+    "category_id": 9
+  },
+  {
+    "id": 99,
+    "title": "Wildcraft 45L Travel Backpack",
+    "category_id": 10
+  },
+  {
+    "id": 100,
+    "title": "American Tourister 32L Laptop Backpack",
+    "category_id": 10
+  },
+  {
+    "id": 101,
+    "title": "Tommy Hilfiger Genuine Leather Wallet",
+    "category_id": 10
+  },
+  {
+    "id": 102,
+    "title": "Lavie Women Handbag Set",
+    "category_id": 10
+  },
+  {
+    "id": 103,
+    "title": "Caprese Sling Bag for Women",
+    "category_id": 10
+  },
+  {
+    "id": 104,
+    "title": "Skybags 55cm Cabin Luggage Suitcase",
+    "category_id": 10
+  },
+  {
+    "id": 105,
+    "title": "Fossil Men Leather Card Holder",
+    "category_id": 10
+  },
+  {
+    "id": 106,
+    "title": "Safari Duffle Bag with Wheels",
+    "category_id": 10
+  },
+  {
+    "id": 107,
+    "title": "Ray-Ban Aviator Sunglasses",
+    "category_id": 10
+  },
+  {
+    "id": 108,
+    "title": "Fastrack UV Protected Wayfarer",
+    "category_id": 10
+  },
+  {
+    "id": 109,
+    "title": "Philips Digital Air Fryer HD9252",
+    "category_id": 11
+  },
+  {
+    "id": 110,
+    "title": "Prestige 1.5L Electric Kettle",
+    "category_id": 11
+  },
+  {
+    "id": 111,
+    "title": "Bajaj Rex 500W Mixer Grinder",
+    "category_id": 11
+  },
+  {
+    "id": 112,
+    "title": "Wonderchef Nutri-Blend Mixer",
+    "category_id": 11
+  },
+  {
+    "id": 113,
+    "title": "Pigeon Non-Stick Cookware 3-Piece Set",
+    "category_id": 11
+  },
+  {
+    "id": 114,
+    "title": "Borosil Opalware 35-Piece Dinner Set",
+    "category_id": 11
+  },
+  {
+    "id": 115,
+    "title": "Milton Thermosteel 1L Water Bottle",
+    "category_id": 11
+  },
+  {
+    "id": 116,
+    "title": "Kent Instant Egg Boiler",
+    "category_id": 11
+  },
+  {
+    "id": 117,
+    "title": "Morphy Richards 20L Microwave Oven",
+    "category_id": 11
+  },
+  {
+    "id": 118,
+    "title": "Panasonic Automatic Rice Cooker",
+    "category_id": 11
+  },
+  {
+    "id": 119,
+    "title": "Green Soul Ergonomic Office Chair",
+    "category_id": 12
+  },
+  {
+    "id": 120,
+    "title": "Sleepyhead Study & Computer Table",
+    "category_id": 12
+  },
+  {
+    "id": 121,
+    "title": "Wakefit 4-Tier Wooden Bookshelf",
+    "category_id": 12
+  },
+  {
+    "id": 122,
+    "title": "Nilkamal Plastic Dining Chair Set of 4",
+    "category_id": 12
+  },
+  {
+    "id": 123,
+    "title": "Urban Ladder Wooden Coffee Table",
+    "category_id": 12
+  },
+  {
+    "id": 124,
+    "title": "Solimo Wooden Shoe Rack Cabinet",
+    "category_id": 12
+  },
+  {
+    "id": 125,
+    "title": "Durian Recliner Armchair",
+    "category_id": 12
+  },
+  {
+    "id": 126,
+    "title": "Pepperfry Bedside Nightstand Table",
+    "category_id": 12
+  },
+  {
+    "id": 127,
+    "title": "Hometown 3-Door Wardrobe",
+    "category_id": 12
+  },
+  {
+    "id": 128,
+    "title": "Home Centre Foldable Laptop Desk",
+    "category_id": 12
+  },
+  {
+    "id": 129,
+    "title": "Nivea Soft Light Moisturizing Cream",
+    "category_id": 13
+  },
+  {
+    "id": 130,
+    "title": "Neutrogena Ultra Sheer Sunscreen SPF 50+",
+    "category_id": 13
+  },
+  {
+    "id": 131,
+    "title": "L'Oreal Paris Total Repair Shampoo 1L",
+    "category_id": 13
+  },
+  {
+    "id": 132,
+    "title": "Philips TouchSlim Hair Dryer",
+    "category_id": 13
+  },
+  {
+    "id": 133,
+    "title": "Philips Beard Trimmer Series 3000",
+    "category_id": 13
+  },
+  {
+    "id": 134,
+    "title": "Cetaphil Gentle Skin Cleanser Face Wash",
+    "category_id": 13
+  },
+  {
+    "id": 135,
+    "title": "Vaseline Intensive Care Body Lotion 400ml",
+    "category_id": 13
+  },
+  {
+    "id": 136,
+    "title": "Havells Cordless Hair Straightener",
+    "category_id": 13
+  },
+  {
+    "id": 137,
+    "title": "Titan Skinn Raw Eau De Parfum for Men",
+    "category_id": 13
+  },
+  {
+    "id": 138,
+    "title": "Bombay Shaving Company Grooming Kit",
+    "category_id": 13
+  },
+  {
+    "id": 139,
+    "title": "Boldfit Anti-Skid Yoga Mat 6mm",
+    "category_id": 14
+  },
+  {
+    "id": 140,
+    "title": "Cockatoo Rubber Dumbbell Set 10kg",
+    "category_id": 14
+  },
+  {
+    "id": 141,
+    "title": "Decathlon Resistance Band Set",
+    "category_id": 14
+  },
+  {
+    "id": 142,
+    "title": "SG Club Cricket Bat Short Handle",
+    "category_id": 14
+  },
+  {
+    "id": 143,
+    "title": "Nivia Storm Football Size 5",
+    "category_id": 14
+  },
+  {
+    "id": 144,
+    "title": "Cosco Tournament Basketball Size 7",
+    "category_id": 14
+  },
+  {
+    "id": 145,
+    "title": "Yonex Muscle Power 29 Badminton Racket",
+    "category_id": 14
+  },
+  {
+    "id": 146,
+    "title": "Vector X Speed Weighted Skipping Rope",
+    "category_id": 14
+  },
+  {
+    "id": 147,
+    "title": "Kore 20kg Home Gym Dumbbell Set",
+    "category_id": 14
+  },
+  {
+    "id": 148,
+    "title": "Cultsport Water-Resistant Gym Duffle Bag",
+    "category_id": 14
+  },
+  {
+    "id": 149,
+    "title": "Data Structures & Algorithms Made Easy",
+    "category_id": 15
+  },
+  {
+    "id": 150,
+    "title": "Clean Code: Handbook of Agile Software",
+    "category_id": 15
+  },
+  {
+    "id": 151,
+    "title": "Python Crash Course 3rd Edition",
+    "category_id": 15
+  },
+  {
+    "id": 152,
+    "title": "Designing Data-Intensive Applications",
+    "category_id": 15
+  },
+  {
+    "id": 153,
+    "title": "The Pragmatic Programmer",
+    "category_id": 15
+  },
+  {
+    "id": 154,
+    "title": "Atomic Habits",
+    "category_id": 15
+  },
+  {
+    "id": 155,
+    "title": "Rich Dad Poor Dad",
+    "category_id": 15
+  },
+  {
+    "id": 156,
+    "title": "Artificial Intelligence: A Modern Approach",
+    "category_id": 15
+  },
+  {
+    "id": 157,
+    "title": "Systems Performance: Enterprise and Cloud",
+    "category_id": 15
+  },
+  {
+    "id": 158,
+    "title": "Introduction to Algorithms CLRS 4th Ed",
+    "category_id": 15
+  },
+  {
+    "id": 159,
+    "title": "Razer DeathAdder Essential Gaming Mouse",
+    "category_id": 16
+  },
+  {
+    "id": 160,
+    "title": "Redragon K552 Mechanical Gaming Keyboard",
+    "category_id": 16
+  },
+  {
+    "id": 161,
+    "title": "HyperX Cloud Stinger Gaming Headset",
+    "category_id": 16
+  },
+  {
+    "id": 162,
+    "title": "Cosbyte Wireless RGB Gaming Controller",
+    "category_id": 16
+  },
+  {
+    "id": 163,
+    "title": "Cosmic Byte Extended RGB Mouse Pad",
+    "category_id": 16
+  },
+  {
+    "id": 164,
+    "title": "Green Soul Monster Gaming Chair",
+    "category_id": 16
+  },
+  {
+    "id": 165,
+    "title": "Fifine K669B USB Condenser Microphone",
+    "category_id": 16
+  },
+  {
+    "id": 166,
+    "title": "Logitech C922 Pro Stream HD Webcam",
+    "category_id": 16
+  },
+  {
+    "id": 167,
+    "title": "Sony DualSense Wireless Controller",
+    "category_id": 16
+  },
+  {
+    "id": 168,
+    "title": "Crucial X8 1TB Portable Gaming SSD",
+    "category_id": 16
+  },
+  {
+    "id": 169,
+    "title": "LEGO Classic Medium Creative Brick Box",
+    "category_id": 17
+  },
+  {
+    "id": 170,
+    "title": "Remote Control High-Speed Off-Road Car",
+    "category_id": 17
+  },
+  {
+    "id": 171,
+    "title": "Skillmatics Educational Wooden Puzzle",
+    "category_id": 17
+  },
+  {
+    "id": 172,
+    "title": "Hug 'n' Feel Teddy Bear 3 Feet",
+    "category_id": 17
+  },
+  {
+    "id": 173,
+    "title": "Barbie Ultimate Kitchen Play Set",
+    "category_id": 17
+  },
+  {
+    "id": 174,
+    "title": "Camlin 48-Shade Master Art Drawing Kit",
+    "category_id": 17
+  },
+  {
+    "id": 175,
+    "title": "Smartivity STEM Educational Robot Kit",
+    "category_id": 17
+  },
+  {
+    "id": 176,
+    "title": "Monopoly Board Game Deluxe Edition",
+    "category_id": 17
+  },
+  {
+    "id": 177,
+    "title": "Hero Sprint 16T Kids Bicycle",
+    "category_id": 17
+  },
+  {
+    "id": 178,
+    "title": "Hot Wheels 10-Car Gift Pack",
+    "category_id": 17
+  },
+  {
+    "id": 179,
+    "title": "Portronics Auto 10 Car Phone Holder Mount",
+    "category_id": 18
+  },
+  {
+    "id": 180,
+    "title": "Wavex Microfiber Car Cleaning Wash Kit",
+    "category_id": 18
+  },
+  {
+    "id": 181,
+    "title": "Godrej Aer Twist Car Air Freshener Gel",
+    "category_id": 18
+  },
+  {
+    "id": 182,
+    "title": "Bergmann Typhoon Digital Tyre Inflator",
+    "category_id": 18
+  },
+  {
+    "id": 183,
+    "title": "Qubo Smart Dash Cam Pro Full HD",
+    "category_id": 18
+  },
+  {
+    "id": 184,
+    "title": "Woscher High Power Car Vacuum Cleaner",
+    "category_id": 18
+  },
+  {
+    "id": 185,
+    "title": "Solimo All-Weather Motorcycle Bike Cover",
+    "category_id": 18
+  },
+  {
+    "id": 186,
+    "title": "Philips Ultinon Essential LED Headlight",
+    "category_id": 18
+  },
+  {
+    "id": 187,
+    "title": "Villsen Memory Foam Car Seat Cushion",
+    "category_id": 18
+  },
+  {
+    "id": 188,
+    "title": "Michelin Emergency Car Jumper Cable Kit",
+    "category_id": 18
+  },
+  {
+    "id": 189,
+    "title": "Wipro 12W Wi-Fi Smart LED Bulb B22",
+    "category_id": 19
+  },
+  {
+    "id": 190,
+    "title": "TP-Link Tapo Smart Wi-Fi Plug 16A",
+    "category_id": 19
+  },
+  {
+    "id": 191,
+    "title": "Realme Smart Door Window Sensor",
+    "category_id": 19
+  },
+  {
+    "id": 192,
+    "title": "Qubo Smart Wi-Fi 5-Meter LED Strip Light",
+    "category_id": 19
+  },
+  {
+    "id": 193,
+    "title": "Xiaomi Smart Camera C300 2K 360°",
+    "category_id": 19
+  },
+  {
+    "id": 194,
+    "title": "Anchor Panasonic Smart Touch Switch",
+    "category_id": 19
+  },
+  {
+    "id": 195,
+    "title": "Amazon Echo Dot 5th Gen Smart Speaker",
+    "category_id": 19
+  },
+  {
+    "id": 196,
+    "title": "Sonoff Smart Motion Sensor Zigbee",
+    "category_id": 19
+  },
+  {
+    "id": 197,
+    "title": "Qubo Smart Video Doorbell with Chime",
+    "category_id": 19
+  },
+  {
+    "id": 198,
+    "title": "Atomberg Renesa Smart BLDC Ceiling Fan",
+    "category_id": 19
+  },
+  {
+    "id": 199,
+    "title": "Classmate Pulse A4 Spiral Notebook 300P",
+    "category_id": 20
+  },
+  {
+    "id": 200,
+    "title": "Parker Jotter Stainless Steel Ballpoint Pen",
+    "category_id": 20
+  },
+  {
+    "id": 201,
+    "title": "Luxor Executive Leatherette Notebook Diary",
+    "category_id": 20
+  },
+  {
+    "id": 202,
+    "title": "Executive Expandable Office File Folder",
+    "category_id": 20
+  },
+  {
+    "id": 203,
+    "title": "Wooden Multi-Slot Office Desk Organizer",
+    "category_id": 20
+  },
+  {
+    "id": 204,
+    "title": "3M Post-it Sticky Notes Pastel Pack",
+    "category_id": 20
+  },
+  {
+    "id": 205,
+    "title": "Pragati Systems Magnetic Whiteboard 2x3 Ft",
+    "category_id": 20
+  },
+  {
+    "id": 206,
+    "title": "Kangaroo Heavy Duty Metal Stapler Set",
+    "category_id": 20
+  },
+  {
+    "id": 207,
+    "title": "Amazon Basics Document Tray Organizer",
+    "category_id": 20
+  },
+  {
+    "id": 208,
+    "title": "Wipro Garnet 6W LED Office Desk Lamp",
+    "category_id": 20
+  }
+]

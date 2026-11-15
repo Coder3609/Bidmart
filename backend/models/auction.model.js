@@ -8,11 +8,16 @@ const BASE_SELECT = `
     p.title, p.images, p.description, p.brand, p.\`condition\`, p.status AS product_status,
     p.seller_id, u.name AS seller_name,
     c.name AS category_name,
-    (SELECT COUNT(*) FROM bids b WHERE b.auction_id = au.id) AS bid_count
+    (SELECT COUNT(*) FROM bids b WHERE b.auction_id = au.id) AS bid_count,
+    (SELECT COUNT(DISTINCT b.bidder_id) FROM bids b WHERE b.auction_id = au.id) AS participant_count,
+    wb.amount AS winning_bid_amount,
+    COALESCE(wb.bidder_name, win_u.name) AS winner_name
   FROM auctions au
   JOIN products p ON p.id = au.product_id
   JOIN users u ON u.id = p.seller_id
   JOIN categories c ON c.id = p.category_id
+  LEFT JOIN bids wb ON wb.id = au.winning_bid_id
+  LEFT JOIN users win_u ON win_u.id = wb.bidder_id
 `;
 
 function parseImages(row) {
@@ -216,6 +221,26 @@ async function listDueToClose() {
   return rows.map((r) => r.id);
 }
 
+async function updateAuctionSettings(conn, id, { reservePrice, bidIncrement, endsAt }) {
+  const runner = conn || pool;
+  const sets = [];
+  const params = { id };
+  if (reservePrice !== undefined) {
+    sets.push('reserve_price = :reservePrice');
+    params.reservePrice = reservePrice ? Number(reservePrice) : null;
+  }
+  if (bidIncrement !== undefined) {
+    sets.push('bid_increment = :bidIncrement');
+    params.bidIncrement = Number(bidIncrement);
+  }
+  if (endsAt !== undefined) {
+    sets.push('ends_at = :endsAt');
+    params.endsAt = new Date(endsAt);
+  }
+  if (!sets.length) return;
+  await runner.query(`UPDATE auctions SET ${sets.join(', ')} WHERE id = :id`, params);
+}
+
 module.exports = {
   create,
   findById,
@@ -224,6 +249,7 @@ module.exports = {
   findLatestByProduct,
   findByAuctionIdRaw,
   updateStatus,
+  updateAuctionSettings,
   list,
   listBySeller,
   listDueToOpen,

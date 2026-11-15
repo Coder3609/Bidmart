@@ -175,12 +175,9 @@ function renderAuctionSidebar() {
       if (!window.auth || !window.auth.isLoggedIn()) {
         e.preventDefault();
         const targetHref = link.getAttribute('href');
-        if (window.buyerAuth) {
-          window.buyerAuth.open('login', {
-            message: 'Sign in to access your bidder dashboard & verification.',
-            onSuccess: () => {
-              window.location.href = targetHref;
-            }
+        if (window.bmExploreModal) {
+          window.bmExploreModal.open(() => {
+            window.location.href = targetHref;
           });
         } else {
           window.location.href = '/auth/login.html';
@@ -194,12 +191,9 @@ function renderAuctionSidebar() {
   if (manageBtn && (!user || !window.auth || !window.auth.isLoggedIn())) {
     manageBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (window.buyerAuth) {
-        window.buyerAuth.open('login', {
-          message: 'Sign in to access your bidder dashboard & KYC settings.',
-          onSuccess: () => {
-            window.location.href = '/auction/settings.html';
-          }
+      if (window.bmExploreModal) {
+        window.bmExploreModal.open(() => {
+          window.location.href = '/auction/settings.html';
         });
       } else {
         window.location.href = '/auth/login.html';

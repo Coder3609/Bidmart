@@ -91,7 +91,8 @@ async function uploadImages(req, res, next) {
 
 async function list(req, res, next) {
   try {
-    const { categoryId, search, page, limit } = req.query;
+    const categoryId = req.query.categoryId || req.query.category_id || req.query.category;
+    const { search, page, limit } = req.query;
     const result = await productService.listPublicProducts({ categoryId, search, page, limit });
     return success(res, result, 'Products fetched.');
   } catch (err) {

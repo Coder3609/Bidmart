@@ -8,25 +8,67 @@
 
 const TOKEN_KEY = 'marketplace_token';
 const USER_KEY = 'marketplace_user';
+const SELLER_TOKEN_KEY = 'bidmart_seller_token';
+const SELLER_USER_KEY = 'bidmart_seller_user';
+
+function isSellerPage() {
+  return window.location.pathname.startsWith('/seller/');
+}
 
 function getToken() {
+  if (isSellerPage()) {
+    return localStorage.getItem(SELLER_TOKEN_KEY) || localStorage.getItem(TOKEN_KEY);
+  }
   return localStorage.getItem(TOKEN_KEY);
 }
 
 function getUser() {
+  if (isSellerPage()) {
+    const sRaw = localStorage.getItem(SELLER_USER_KEY);
+    if (sRaw) {
+      try { return JSON.parse(sRaw); } catch(_) {}
+    }
+  }
   const raw = localStorage.getItem(USER_KEY);
   return raw ? JSON.parse(raw) : null;
 }
 
+function getSellerUser() {
+  const sRaw = localStorage.getItem(SELLER_USER_KEY);
+  return sRaw ? JSON.parse(sRaw) : null;
+}
+
 function setSession(token, user) {
+  if (user && (user.role === 'SELLER' || user.role === 'seller' || isSellerPage())) {
+    localStorage.setItem(SELLER_TOKEN_KEY, token);
+    localStorage.setItem(SELLER_USER_KEY, JSON.stringify(user));
+  } else {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+  document.dispatchEvent(new CustomEvent('bidmart:auth-change', { detail: { user } }));
+}
+
+function setBuyerSession(token, user) {
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(USER_KEY, JSON.stringify(user));
   document.dispatchEvent(new CustomEvent('bidmart:auth-change', { detail: { user } }));
 }
 
+function setSellerSession(token, user) {
+  localStorage.setItem(SELLER_TOKEN_KEY, token);
+  localStorage.setItem(SELLER_USER_KEY, JSON.stringify(user));
+  document.dispatchEvent(new CustomEvent('bidmart:auth-change', { detail: { user } }));
+}
+
 function clearSession() {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
+  if (isSellerPage()) {
+    localStorage.removeItem(SELLER_TOKEN_KEY);
+    localStorage.removeItem(SELLER_USER_KEY);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+  }
   document.dispatchEvent(new CustomEvent('bidmart:auth-change', { detail: { user: null } }));
 }
 
@@ -95,13 +137,33 @@ async function refreshProfile() {
 function redirectToDashboard() {
   const user = getUser();
   if (!user) return;
-  window.location.href = `/dashboards/${user.role.toLowerCase()}/dashboard.html`;
+  if (user.role === 'SELLER' || user.store_name) {
+    window.location.href = '/seller/products.html';
+  } else {
+    window.location.href = '/shop/profile.html';
+  }
+}
+
+/** Social Login (Google / Apple) seamless simulation or OAuth */
+async function loginWithSocial(provider) {
+  // If demo/simulation, log in as verified buyer
+  try {
+    const email = provider === 'google' ? 'rahul@bidmart.test' : 'priya@bidmart.test';
+    const user = await login({ email, password: 'Password123!' });
+    window.location.href = '/shop/shop.html';
+    return user;
+  } catch (err) {
+    alert(`Could not sign in with ${provider}: ${err.message}`);
+  }
 }
 
 window.auth = {
   getToken,
   getUser,
+  getSellerUser,
   setSession,
+  setBuyerSession,
+  setSellerSession,
   clearSession,
   isLoggedIn,
   hasRole,
@@ -109,6 +171,7 @@ window.auth = {
   requireAuth,
   register,
   login,
+  loginWithSocial,
   logout,
   refreshProfile,
   redirectToDashboard,

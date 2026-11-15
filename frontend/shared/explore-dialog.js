@@ -214,6 +214,28 @@
       submitBtn.innerHTML = '<span>Verifying…</span>';
 
       try {
+        // First check if this email already exists
+        let emailExists = false;
+        try {
+          const checkRes = await fetch('/api/auth/check-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const checkData = await checkRes.json();
+          emailExists = !!(checkData && checkData.exists);
+        } catch (_) {}
+
+        if (!emailExists) {
+          // New email! Transition directly to Step 2 dialog box
+          pendingCredentials = { email, password };
+          this.openStep2(email);
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Continue &rarr;</span>';
+          return;
+        }
+
+        // Existing email -> Attempt Login
         const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -222,7 +244,7 @@
         const data = await res.json();
 
         if (data.success && data.data && data.data.token) {
-          // Exists & credentials correct -> Direct instant entry!
+          // Credentials correct -> Direct instant entry!
           this.showNotice('✔ Welcome back! Signing you in…', false);
           localStorage.setItem('marketplace_token', data.data.token);
           localStorage.setItem('marketplace_user', JSON.stringify(data.data.user));
@@ -232,20 +254,10 @@
           return;
         }
 
-        // Check if wrong password vs new user
-        if (data.message && data.message.toLowerCase().includes('password')) {
-          this.showNotice('Incorrect password for this account. Please try again.', true);
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<span>Continue &rarr;</span>';
-          return;
-        }
-
-        // New user! Transition to Step 2
-        pendingCredentials = { email, password };
-        this.openStep2(email);
+        // Existing user but wrong password
+        this.showNotice('Incorrect password for this account. Please try again.', true);
 
       } catch (err) {
-        // Fallback for offline mode -> transition to Step 2
         pendingCredentials = { email, password };
         this.openStep2(email);
       } finally {

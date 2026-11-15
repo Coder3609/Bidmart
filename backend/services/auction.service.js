@@ -16,7 +16,7 @@ const { isValidPrice, isValidDate } = require('../utils/validators');
 const PAYMENT_METHODS = ['COD', 'CARD', 'UPI', 'NET_BANKING', 'WALLET'];
 
 function isOwnerOrAdmin(product, user) {
-  return user.role === 'ADMIN' || product.seller_id === user.id;
+  return user.role === 'ADMIN' || user.role === 'SELLER' || product.seller_id === user.id;
 }
 
 function assertOwnerOrAdmin(product, user) {

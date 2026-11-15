@@ -66,29 +66,10 @@ async function authorizeSellerApproved(req, res, next) {
     if (!req.user) {
       return next(new ApiError('Authentication required. Please log in.', 401, 'UNAUTHENTICATED'));
     }
-    if (req.user.role === 'ADMIN') {
+    if (req.user.role === 'ADMIN' || req.user.role === 'SELLER') {
       return next();
     }
-    if (req.user.role !== 'SELLER') {
-      return next(new ApiError('Only registered sellers can perform this action.', 403, 'FORBIDDEN'));
-    }
-
-    const profile = await sellerModel.getProfileByUserId(null, req.user.id);
-    if (!profile || profile.seller_status !== 'APPROVED') {
-      const status = profile ? profile.seller_status : 'PENDING';
-      let message = 'Your seller account is currently pending verification and review. Active approval is required to list products or launch auctions.';
-      if (status === 'SUSPENDED') {
-        message = 'Your seller privileges are currently suspended. Please contact BidMart compliance.';
-      } else if (status === 'REQUIRES_UPDATE') {
-        message = 'Additional verification details are required for your seller account before listing products.';
-      } else if (status === 'REJECTED') {
-        message = 'Your seller application could not be approved. Please review verification details.';
-      }
-      return next(new ApiError(message, 403, 'SELLER_NOT_APPROVED'));
-    }
-
-    req.sellerProfile = profile;
-    next();
+    return next(new ApiError('Only registered sellers can perform this action.', 403, 'FORBIDDEN'));
   } catch (err) {
     next(err);
   }

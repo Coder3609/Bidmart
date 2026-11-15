@@ -185,16 +185,11 @@
       }, 2600);
     }
 
-    // Quick Add to Cart (Guest or Logged In)
+    // Quick Add to Cart (Amazon-style: adds to cart, updates count, shows notification, does NOT open payment)
     async function quickAddToCart(event, productId, title, price, img) {
       if (event) {
         event.preventDefault();
         event.stopPropagation();
-      }
-
-      if (window.bmCheckout && typeof window.bmCheckout.addToCartAndOpen === 'function') {
-        window.bmCheckout.addToCartAndOpen(productId, title, price, img);
-        return;
       }
 
       try {
@@ -218,10 +213,26 @@
           });
         }
         localStorage.setItem('bidmart_guest_cart', JSON.stringify(guestCart));
-        showToast(`Added "${title}" to your cart!`);
+        showToast(`✔ Added "${title}" to your cart!`);
         updateCartBadge();
         if (window.bmCheckout && typeof window.bmCheckout.updateBadge === 'function') {
           window.bmCheckout.updateBadge();
+        }
+
+        // Visual feedback on button itself (Amazon style "Added ✓")
+        const targetBtn = event && event.currentTarget ? event.currentTarget : null;
+        if (targetBtn) {
+          const originalText = targetBtn.innerText;
+          targetBtn.innerText = 'Added ✓';
+          targetBtn.style.background = '#4BB543';
+          targetBtn.style.color = '#FFFFFF';
+          targetBtn.style.borderColor = '#4BB543';
+          setTimeout(() => {
+            targetBtn.innerText = originalText;
+            targetBtn.style.background = '';
+            targetBtn.style.color = '';
+            targetBtn.style.borderColor = '';
+          }, 1400);
         }
 
         if (window.auth && window.auth.isLoggedIn()) {

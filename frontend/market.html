@@ -946,17 +946,23 @@
         event.stopPropagation();
       }
 
+      if (window.bmCheckout && typeof window.bmCheckout.addToCartAndOpen === 'function') {
+        window.bmCheckout.addToCartAndOpen(productId, title, price, img);
+        return;
+      }
+
       try {
         let guestCart = [];
         try {
           guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
         } catch (_) {}
 
-        const existing = guestCart.find(i => i.productId === productId);
+        const existing = guestCart.find(i => (i.productId === productId || i.id === productId));
         if (existing) {
-          existing.quantity += 1;
+          existing.quantity = (existing.quantity || 1) + 1;
         } else {
           guestCart.push({
+            id: productId,
             productId,
             title: title || 'BidMart Item',
             price: price || 999,
@@ -966,8 +972,11 @@
           });
         }
         localStorage.setItem('bidmart_guest_cart', JSON.stringify(guestCart));
-        showToast(`Added "${title}" &bull; Opening Checkout...`);
+        showToast(`Added "${title}" • Cart Updated`);
         updateCartBadge();
+        if (window.bmCheckout && typeof window.bmCheckout.updateBadge === 'function') {
+          window.bmCheckout.updateBadge();
+        }
 
         // Also sync with backend if user has account
         if (window.auth && window.auth.isLoggedIn()) {
@@ -986,20 +995,28 @@
     }
 
     async function updateCartBadge() {
-      const badge = document.getElementById('bmCartBadge');
-      if (!badge) return;
+      const badges = document.querySelectorAll('#header-cart-badge, #bmCartBadge');
+      if (!badges.length) return;
       try {
+        let count = 0;
         if (window.auth && window.auth.isLoggedIn()) {
           const res = await window.api.get('/cart');
-          const count = res.items ? res.items.length : (res.itemCount || 0);
-          badge.innerText = count;
+          count = res.items ? res.items.length : (res.itemCount || 0);
         } else {
           const guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
-          badge.innerText = guestCart.length;
+          count = guestCart.reduce((acc, item) => acc + (Number(item.quantity) || 1), 0);
         }
+        badges.forEach(b => {
+          b.innerText = count;
+          b.hidden = count === 0;
+        });
       } catch (_) {
         const guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
-        badge.innerText = guestCart.length;
+        const count = guestCart.reduce((acc, item) => acc + (Number(item.quantity) || 1), 0);
+        badges.forEach(b => {
+          b.innerText = count;
+          b.hidden = count === 0;
+        });
       }
     }
 

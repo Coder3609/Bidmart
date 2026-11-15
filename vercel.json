@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/server.js"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "frontend/assets/$1"
+    },
+    {
+      "src": "/shared/(.*)",
+      "dest": "frontend/shared/$1"
+    },
+    {
+      "src": "/seller/(.*)",
+      "dest": "frontend/seller/$1"
+    },
+    {
+      "src": "/shop/(.*)",
+      "dest": "frontend/shop/$1"
+    },
+    {
+      "src": "/auction/(.*)",
+      "dest": "frontend/auction/$1"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "frontend/auth/$1"
+    },
+    {
+      "src": "/market.html",
+      "dest": "frontend/market.html"
+    },
+    {
+      "src": "/",
+      "dest": "frontend/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/$1"
+    }
+  ]
+}

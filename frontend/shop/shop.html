@@ -186,30 +186,46 @@
     }
 
     // Quick Add to Cart (Guest or Logged In)
-    async function quickAddToCart(event, productId, title) {
-      event.preventDefault();
-      event.stopPropagation();
+    async function quickAddToCart(event, productId, title, price, img) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      if (window.bmCheckout && typeof window.bmCheckout.addToCartAndOpen === 'function') {
+        window.bmCheckout.addToCartAndOpen(productId, title, price, img);
+        return;
+      }
 
       try {
-        if (window.auth && window.auth.isLoggedIn()) {
-          await window.api.post('/cart', { productId, quantity: 1 });
-          showToast(`Added "${title}" to your cart!`);
-          updateCartBadge();
+        let guestCart = [];
+        try {
+          guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
+        } catch (_) {}
+
+        const existing = guestCart.find(i => (i.productId === productId || i.id === productId));
+        if (existing) {
+          existing.quantity = (existing.quantity || 1) + 1;
         } else {
-          // Guest Cart support
-          let guestCart = [];
-          try {
-            guestCart = JSON.parse(localStorage.getItem('bidmart_guest_cart') || '[]');
-          } catch (_) {}
-          const existing = guestCart.find(i => i.productId === productId);
-          if (existing) {
-            existing.quantity += 1;
-          } else {
-            guestCart.push({ productId, quantity: 1, addedAt: Date.now() });
-          }
-          localStorage.setItem('bidmart_guest_cart', JSON.stringify(guestCart));
-          showToast(`Added "${title}" to cart (Guest)!`);
-          updateCartBadge();
+          guestCart.push({
+            id: productId,
+            productId,
+            title: title || 'BidMart Product',
+            price: Number(price) || 999,
+            img: img || '/assets/products/placeholder.svg',
+            quantity: 1,
+            addedAt: Date.now()
+          });
+        }
+        localStorage.setItem('bidmart_guest_cart', JSON.stringify(guestCart));
+        showToast(`Added "${title}" to your cart!`);
+        updateCartBadge();
+        if (window.bmCheckout && typeof window.bmCheckout.updateBadge === 'function') {
+          window.bmCheckout.updateBadge();
+        }
+
+        if (window.auth && window.auth.isLoggedIn()) {
+          try { await window.api.post('/cart', { productId, quantity: 1 }); } catch (_) {}
         }
       } catch (err) {
         console.error('Cart add error:', err);
@@ -376,7 +392,7 @@
 
             <div style="display:flex;align-items:center;gap:6px;">
               ${!isAuction ? `
-                <button type="button" class="btn-quick-cart" onclick="quickAddToCart(event, ${product.id}, '${product.title.replace(/'/g, "\\'")}')" title="Quick Add to Cart">
+                <button type="button" class="btn-quick-cart" onclick="quickAddToCart(event, ${product.id}, '${product.title.replace(/'/g, "\\'")}', ${price}, '${imageSrc}')" title="Quick Add to Cart">
                   + CART
                 </button>
               ` : `

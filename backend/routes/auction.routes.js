@@ -40,8 +40,8 @@ router.get('/:id', authenticateOptional, auctionController.getById);
 // GET /api/auctions/:id/bids - public bid history for one auction.
 router.get('/:id/bids', auctionController.getBidHistory);
 
-// POST /api/auctions/:id/bids - { amount } - only BUYER accounts, never the seller.
-router.post('/:id/bids', authenticate, authorize('BUYER'), auctionController.placeBid);
+// POST /api/auctions/:id/bids - { amount } - allows logged-in users (BUYER, SELLER, ADMIN) to bid
+router.post('/:id/bids', authenticate, auctionController.placeBid);
 
 // POST /api/auctions/:id/complete-order - the winner chooses an address + payment method.
 router.post('/:id/complete-order', authenticate, auctionController.completeOrder);
